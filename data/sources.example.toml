@@ -1,0 +1,8 @@
+# Copy to data/sources.toml (local-only) and fill in. One [[source]] per shared folder.
+# Files land in data/downloads/<name>/. Run: uv run downtempo download [name ...]
+
+[[source]]
+name = "my-band"                      # collection folder name, unique
+type = "onedrive"                     # onedrive (gdrive: planned, T17)
+url = "https://1drv.ms/f/c/..."       # sharing link of the folder
+subfolder = ""                        # optional: only this top-level folder of the share

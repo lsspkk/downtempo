@@ -1,0 +1,19 @@
+[project]
+name = "downtempo"
+version = "0.1.0"
+description = "Download song material (mp3, pdf) from shared folders and play it slower with pitch kept."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+dependencies = [
+    "msal>=1.39.0",
+    "requests>=2.34.2",
+]
+
+[project.scripts]
+downtempo = "downtempo.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.9.26,<0.10.0"]
+build-backend = "uv_build"

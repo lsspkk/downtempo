@@ -1,0 +1,17 @@
+# Local data and secrets: never commit. In data/ only the README and *.example.* files are tracked.
+.env
+.env.*
+!.env.example
+data/*
+!data/README.md
+!data/*.example.*
+
+# Tooling
+.venv/
+__pycache__/
+.ruff_cache/
+.claude/settings.local.json
+
+# Saved web pages (third-party content); only our index is tracked
+docs/web/*
+!docs/web/INDEX.md
