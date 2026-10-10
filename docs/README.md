@@ -4,6 +4,20 @@
 - [../data/README.md](../data/README.md): what lives in `data/` (sources, downloads, catalog, notes).
 - [onedrive.md](onedrive.md): OneDrive downloader: Entra app registration, MSAL device code flow, Graph calls, scopes, troubleshooting.
 - [why-not-share-link-hacks.md](why-not-share-link-hacks.md): why the anonymous link, cookie, and Badger approaches were dropped.
+- [songs.md](songs.md): song catalog `data/songs.json`: format, how `catalog` builds it.
 - [tempo-python.md](tempo-python.md): Python time-stretch options; pick pylibrb + sounddevice.
+- [stretch-theory.md](stretch-theory.md) → [stretch-app-flow.md](stretch-app-flow.md) → [stretch-rubberband.md](stretch-rubberband.md) → [stretch-research.md](stretch-research.md): how tempo changes without pitch change (theory, our engine, the library, open research); start at stretch-theory.md.
+- [player.md](player.md): the Python player: run, features, keyboard, what it remembers, files.
+- [loop-editor.md](loop-editor.md): loop editor plan: the user's wishes, sketch, decisions (select, seek, zoom, hear the edges, rendering).
+- [blocks.md](blocks.md): plan of the core blocks and their APIs (library, sync, providers, events) for the Downloader UI, Settings file, Folder structures and Projects.
+- [purpose.md](purpose.md): **why** projects, downloaders and song grouping exist, and what done looks like.
+- [song-grouping.md](song-grouping.md): plan: files → songs by names (cleaning, folder hints, scores, confidence), the user's fixes in `grouping.json`, stable song ids.
+- [project-screen.md](project-screen.md): UX plan: full-screen project view: sources, songs as rows of file chips, To sort tray, drag and drop, first-run flow.
+- [downloader-review.md](downloader-review.md): T84 review of the T53 plans against the purpose: findings R1–R16 and their tasks.
+- [settings-file.md](settings-file.md): plan: export/import of the download settings, format, import checks.
+- [projects.md](projects.md): plan: several projects, disk layout, moving today's data in.
+- [ux.md](ux.md): UX principles and checklist every UI task follows.
+- [practice-layout.md](practice-layout.md): small-laptop layout: song list, Full/Simple/Sheet controls, rotation, keys, settings.
+- [player-switching.md](player-switching.md): how the player should switch songs, recordings and sheets (user stories, design pick).
 - [ideas.md](ideas.md), [todo.md](todo.md), [log.md](log.md): workflow, see CLAUDE.md.
 - [web/INDEX.md](web/INDEX.md): index of every saved web page (`.txt` to read, `.html` original; local-only).

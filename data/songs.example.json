@@ -1,0 +1,22 @@
+{
+  "songs": [
+    {
+      "title": "Harbour Waltz",
+      "collection": "my-band",
+      "audio": [
+        {"label": "Full band", "path": "downloads/my-band/Harbour Waltz/Harbour Waltz.mp3"},
+        {"label": "Melody only", "path": "downloads/my-band/Harbour Waltz/Harbour Waltz melody.mp3"}
+      ],
+      "pdf": [
+        "downloads/my-band/Harbour Waltz/Harbour Waltz CHORDS-2026-02-01.pdf",
+        "downloads/my-band/Harbour Waltz/Harbour Waltz-2026-01-15.pdf"
+      ]
+    },
+    {
+      "title": "Rainy Polka",
+      "collection": "my-band",
+      "audio": [{"label": "Rainy Polka", "path": "downloads/my-band/Rainy Polka/Rainy Polka.mp3"}],
+      "pdf": []
+    }
+  ]
+}

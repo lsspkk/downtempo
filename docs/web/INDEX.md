@@ -41,3 +41,34 @@ Add pages only through `scripts/webfetch.py`, which appends one row here.
 | pypi-soundfile-json | 2026-10-08 | https://pypi.org/pypi/soundfile/json | PyPI JSON metadata for soundfile: versions, release dates, wheel files, license |
 | pypi-nicegui-json | 2026-10-08 | https://pypi.org/pypi/nicegui/json | PyPI JSON metadata for nicegui: versions, release dates, wheel files, license |
 | pypi-pytsmod-json | 2026-10-08 | https://pypi.org/pypi/pytsmod/json | PyPI JSON metadata for pytsmod: versions, release dates, wheel files, license |
+| pywebview-installation | 2026-10-08 | https://pywebview.flowrl.com/guide/installation.html | pywebview installation: Linux needs GTK (PyGObject) or QT (qtpy + PyQt/PySide) backend |
+| nicegui-native-mode | 2026-10-08 | https://raw.githubusercontent.com/zauberzeug/nicegui/main/website/documentation/content/section_configuration_deployment.py | NiceGUI docs source, configuration & deployment: native mode (ui.run(native=True), pywebview, window_size, app.native) |
+| design-transcribe-overview | 2026-10-08 | https://www.seventhstring.com/xscribe/overview.html | Transcribe! overview: music practice app features (loops, markers, speed, waveform) |
+| design-anytune | 2026-10-08 | https://www.anytune.app/ | Anytune: practice app features (slow down, loop, step-up trainer, marks) |
+| design-nng-heuristics | 2026-10-08 | https://www.nngroup.com/articles/ten-usability-heuristics/ | NN/g 10 usability heuristics |
+| design-youtube-shortcuts | 2026-10-08 | https://support.google.com/youtube/answer/7631406?hl=en | YouTube keyboard shortcuts: media player key conventions |
+| design-nng-sliders | 2026-10-08 | https://www.nngroup.com/articles/gui-slider-controls/ | NN/g slider design: when sliders fit, precise input, labels, steps |
+| wiki-audio-time-stretching | 2026-10-08 | https://en.wikipedia.org/wiki/Audio_time_stretching_and_pitch_scaling | Wikipedia: time stretching and pitch scaling; resampling, phase vocoder, time-domain (SOLA/WSOLA), artifacts |
+| wiki-phase-vocoder | 2026-10-08 | https://en.wikipedia.org/wiki/Phase_vocoder | Wikipedia: phase vocoder; STFT, phase coherence, phasiness, phase locking |
+| rubberband-technical | 2026-10-08 | https://breakfastquay.com/rubberband/technical.html | Rubber Band technical notes: how R2/R3 engines work, phase vocoder with transient handling |
+| rubberband-home | 2026-10-08 | https://breakfastquay.com/rubberband/ | Rubber Band Library home: features, R3 finer engine, license (GPL/commercial) |
+| soundtouch-readme | 2026-10-08 | https://www.surina.net/soundtouch/README.html | SoundTouch README: WSOLA-based tempo change, sequence/seek window parameters, LGPL |
+| bungee-readme | 2026-10-08 | https://raw.githubusercontent.com/bungee-audio-stretch/bungee/main/README.md | Bungee README: modern open-source real-time time stretch, MPL-2.0, frequency-domain with grains |
+| rubberband-integration | 2026-10-08 | https://breakfastquay.com/rubberband/integration.html | Rubber Band integration advice: R2 vs R3 engines, real-time vs offline, latency, CPU, options |
+| djay-tempo-per-song | 2026-10-08 | https://community.algoriddim.com/t/tempo-settings-persistence-per-song/15397 | djay community request: tempo settings should persist per song (practice use) |
+| anytune-basics | 2026-10-08 | https://de.anytune.us/user-guide/basics | Anytune user guide basics: per-song tempo/pitch saved, next/previous song navigation, playlists |
+| bungee-compare | 2026-10-08 | https://bungee.parabolaresearch.com/compare-audio-stretch-tempo-pitch-change.html | Bungee comparison page: listening comparison of time-stretch libraries (Bungee, Rubber Band, SoundTouch, ...) |
+| mdn-preservespitch | 2026-10-08 | https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/preservesPitch | MDN HTMLMediaElement.preservesPitch: pitch kept when playbackRate changes, browser support |
+| mdn-playbackrate | 2026-10-08 | https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/playbackRate | MDN HTMLMediaElement.playbackRate: range, muted outside 0.25-4 in some browsers |
+| chromium-audio-renderer-algorithm | 2026-10-08 | https://raw.githubusercontent.com/chromium/chromium/main/media/filters/audio_renderer_algorithm.h | Chromium media/filters/audio_renderer_algorithm.h: WSOLA used for playbackRate with pitch kept |
+| soundtouchjs-readme | 2026-10-08 | https://raw.githubusercontent.com/cutterbl/SoundTouchJS/master/README.md | SoundTouchJS README: JS port of SoundTouch for Web Audio, PitchShifter, licence |
+| rubberband-web-readme | 2026-10-08 | https://raw.githubusercontent.com/delude88/rubberband-web/main/README.md | rubberband-web README: Rubber Band compiled to WASM as an AudioWorklet (realtime) for the browser |
+| gecko-audiostream | 2026-10-08 | https://raw.githubusercontent.com/mozilla/gecko-dev/master/dom/media/AudioStream.cpp | Firefox dom/media/AudioStream.cpp: playbackRate with pitch kept uses SoundTouch (time-domain WSOLA-style) |
+| rubberband-v3-announcement | 2026-10-08 | https://breakfastquay.com/news/20220707.html | Rubber Band v3.0 announcement: new R3 (finer) engine, what it improves, CPU cost |
+| rubberband-v4-announcement | 2026-10-08 | https://breakfastquay.com/news/20241025.html | Rubber Band v4.0 announcement: simplified pitch-shifting API, changes |
+| signalsmith-stretch-npm-readme | 2026-10-08 | https://unpkg.com/signalsmith-stretch/README.md | Signalsmith Stretch npm package README: Web Audio (WASM AudioWorklet) node, API, live rate/pitch |
+| nng-hamburger-menus | 2026-10-09 | https://www.nngroup.com/articles/hamburger-menus/ | NN/g: hamburger menus hide navigation, lower discoverability; visible labels work better |
+| nng-icon-usability | 2026-10-09 | https://www.nngroup.com/articles/icon-usability/ | NN/g icon usability: few icons are universal, icons need text labels, the hamburger means menu |
+| forscore-basics | 2026-10-09 | https://forscore.co/documentation/basics/ | forScore 15 user guide, Basics: main toolbar icons (score menu, bookmarks, setlists, tools), title, page turns, half-page turns |
+| forscore-menus | 2026-10-09 | https://forscore.co/documentation/menus/ | forScore 15 user guide, Menus: library panels (scores, bookmarks, setlists) opened from labelled toolbar icons, sorting, search |
+| forscore-audio | 2026-10-09 | https://forscore.co/documentation/audio/ | forScore 15 user guide, Audio: tracks linked to a score, the compact player in the title bar, switching tracks, loops and rate |

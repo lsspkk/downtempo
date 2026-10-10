@@ -5,6 +5,7 @@ import sys
 
 import requests
 
+from downtempo.catalog import build_catalog
 from downtempo.config import load_env, load_sources
 from downtempo.downloaders import DOWNLOADERS
 
@@ -57,9 +58,13 @@ def main(argv: list[str] | None = None) -> int:
         "download", help="download every source in data/sources.toml"
     )
     download_parser.add_argument("names", nargs="*", help="only these sources")
+    commands.add_parser("catalog", help="scan data/downloads/ into data/songs.json")
     args = parser.parse_args(argv)
 
     match args.command:
         case "download":
             return download(args.names)
+        case "catalog":
+            build_catalog()
+            return 0
     return 2

@@ -82,7 +82,12 @@ def download_tree(
         elif Path(item["name"]).suffix.lower() in MEDIA_EXTENSIONS:
             # Pre-authenticated, short-lived URL: fetch it without the Graph token.
             if url := item.get("@microsoft.graph.downloadUrl"):
-                save_url(url, output_dir / item["name"], item.get("size"))
+                save_url(
+                    url,
+                    output_dir / item["name"],
+                    item.get("size"),
+                    item.get("lastModifiedDateTime"),
+                )
             else:
                 print(f"Skipping {item['name']}: no download URL")
 

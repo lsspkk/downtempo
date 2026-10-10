@@ -14,14 +14,17 @@ from pathlib import Path
 
 import requests
 
-
 WEB_DIR = Path(__file__).resolve().parent.parent / "docs" / "web"
 INDEX = WEB_DIR / "INDEX.md"
-USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/131.0 Safari/537.36"
+USER_AGENT = (
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/131.0 Safari/537.36"
+)
 
 
 def html_to_text(source: str) -> str:
-    text = re.sub(r"(?is)<(script|style|nav|header|footer|svg)[^>]*>.*?</\1>", " ", source)
+    text = re.sub(
+        r"(?is)<(script|style|nav|header|footer|svg)[^>]*>.*?</\1>", " ", source
+    )
     text = re.sub(r"(?i)<(br|/p|/div|/li|/h\d|/tr|/pre)[^>]*>", "\n", text)
     text = html.unescape(re.sub(r"<[^>]+>", " ", text))
     text = re.sub(r"[ \t]+", " ", text)
@@ -45,7 +48,9 @@ def main() -> int:
     if sys.argv[1:] == ["--text-only"]:
         for page in sorted(WEB_DIR.glob("*.html")):
             page.with_suffix(".txt").write_text(
-                html_to_text(page.read_text(encoding="utf-8", errors="ignore")), encoding="utf-8")
+                html_to_text(page.read_text(encoding="utf-8", errors="ignore")),
+                encoding="utf-8",
+            )
         return 0
     if len(sys.argv) != 4:
         print(__doc__, file=sys.stderr)

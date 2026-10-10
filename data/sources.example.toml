@@ -6,3 +6,5 @@ name = "my-band"                      # collection folder name, unique
 type = "onedrive"                     # onedrive (gdrive: planned, T17)
 url = "https://1drv.ms/f/c/..."       # sharing link of the folder
 subfolder = ""                        # optional: only this top-level folder of the share
+extra_folders = ["Rehearsal *"]       # optional: folders of recordings of several songs;
+                                      # each file joins the song its name starts with

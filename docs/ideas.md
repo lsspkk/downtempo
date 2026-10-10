@@ -1,16 +1,25 @@
 # Ideas
 
-Epics, one bullet each: `- I<n> title: goal`. Move to Done when no tasks are left.
+The big things, one line each. Tasks for them are grouped under the same names in [todo.md](todo.md).
 
 ## Not done
 
-- I2 Song set: one file, `data/songs.json`, lists the songs the players use (title, audio files, pdfs); both players read only this file, never scan folders themselves
-- I3 Python player MVP: `frontends/nicegui/`, NiceGUI UI, sound played and time-stretched in Python (`sounddevice`, not the browser), 0.5x–1.3x tempo with pitch kept
-- I4 Browser player MVP: local web page plays a song from the song set at 0.5x–1.3x tempo with pitch kept; compare with I3
-- I5 Sheet music view: show the song's PDF in the same program as the audio player
-- I6 Audio choice: UI to pick which audio file to play when a song has several recordings
-- I7 Multi-source downloader: `uv run downtempo download` fetches every source in `data/sources.toml` into `data/downloads/<name>/`; OneDrive done, Google Drive next
+- **Agent guide**: CLAUDE.md rules that keep a growing codebase readable: summaries first in every doc, small clean parts without enterprise overhead
+- **Python player**: tempo 50–130 % with pitch kept, loops, trainer ([player.md](player.md))
+- **Browser player**: same in a web page, to compare with the Python player
+- **Downloaders**: one per source type; OneDrive done, Google Drive next
+- **Downloader UI**: in the Python player: add a shared folder by pasting its link, sign in, download with progress, songs appear; no terminal or config files ([blocks.md](blocks.md))
+- **Song grouping**: files from any folder layout and any source become songs by their names; the user approves the song list (titles, also-called names, linked folders are the magnets), unsure files wait in To sort, the user drags files between songs in a full-screen project screen; sheet-only and audio-only songs are fine ([purpose.md](purpose.md), [song-grouping.md](song-grouping.md), [project-screen.md](project-screen.md))
+- **Project screen**: a full-screen view of the project: its sources (add a folder, update, sign in) and its songs as rows of files to drag between songs; the downloader UI and the sorting UI in one ([project-screen.md](project-screen.md))
+- **Parts of a file**: a song uses pages 4–5 of a songbook PDF or 12:30–16:10 of a long rehearsal recording (after Song grouping, which lets one file be in several songs)
+- **Settings file**: export the download settings to one file to email, import it on another computer ([settings-file.md](settings-file.md))
+- **Projects**: several music projects, each with its own sources and songs ([projects.md](projects.md))
 
 ## Done
 
-- I1 OneDrive downloader: fetch `.mp3`/`.pdf` from the shared folder (Entra + MSAL + Graph)
+- **Loop editor**: a full-screen view of the waveform to zoom, scroll and select a loop, like a DAW but simple
+- **Small-laptop practice**: hideable panes, simple controls, rotated sheet, footswitch keys ([practice-layout.md](practice-layout.md))
+- **Recording choice**: pick among a song's recordings
+- **Sheet music**: the song's PDFs beside the player
+- **Song catalog**: `data/songs.json`, the only thing players read
+- **OneDrive downloader**

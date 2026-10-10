@@ -8,7 +8,16 @@ license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dependencies = [
     "msal>=1.39.0",
+    "nicegui>=3.18.0",
+    "numpy>=2.5.3",
+    "pillow>=12.3.0",
+    "pylibrb>=0.1.2",
+    "pypdfium2>=5.14.0",
+    "pywebview>=6.2.1",
+    "pywebview[qt]>=6.2.1 ; sys_platform == 'linux'",
     "requests>=2.34.2",
+    "sounddevice>=0.5.6",
+    "soundfile>=0.14.0",
 ]
 
 [project.scripts]

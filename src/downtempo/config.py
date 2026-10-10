@@ -9,7 +9,11 @@ PROJECT_DIR = Path(__file__).resolve().parents[2]
 DATA_DIR = PROJECT_DIR / "data"
 DOWNLOADS_DIR = DATA_DIR / "downloads"
 SOURCES_FILE = DATA_DIR / "sources.toml"
-MEDIA_EXTENSIONS = {".mp3", ".pdf"}
+SONGS_FILE = DATA_DIR / "songs.json"
+# Lower case; file endings are compared lower-cased, so `.WAV` counts too.
+AUDIO_EXTENSIONS = {".mp3", ".wav"}
+SHEET_EXTENSIONS = {".pdf"}
+MEDIA_EXTENSIONS = AUDIO_EXTENSIONS | SHEET_EXTENSIONS
 
 
 @dataclass(frozen=True)
@@ -20,6 +24,7 @@ class Source:
     type: str
     url: str
     subfolder: str = ""
+    extra_folders: tuple[str, ...] = ()  # used by the catalog, see docs/songs.md
 
     @property
     def target(self) -> Path:
