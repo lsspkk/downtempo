@@ -332,9 +332,12 @@ le.animate = (now) => {
   } else {
     le.edgeSince = null;
   }
-  // While playing, turn a page when the playhead would leave the view (not while selecting).
+  // While playing, turn a page when the playhead would leave the view (not while selecting). Not
+  // while a loop edge is in view either: the user is fixing that edge, and the jump back to the
+  // loop start would pull the view away on every pass (Audacity warns of this: web/audacity-timeline.txt).
   const head = le.playhead(), v = le.view;
-  if (le.play.playing && !sel && (head > v.start + v.span || head < v.start)) {
+  const edgeInView = le.looping && le.loop?.some((t) => t >= v.start && t <= v.start + v.span);
+  if (le.play.playing && !sel && !edgeInView && (head > v.start + v.span || head < v.start)) {
     v.start = head - v.span * 0.05;
     le.clampView();
   }

@@ -1,5 +1,7 @@
 # Song catalog: `data/songs.json`
 
+**Summary**: Built. `data/songs.json` is the only file the players read: songs with recordings and sheets, paths relative to `data/`. `catalog` builds it (folder = song, plus `extra_folders`) and keeps hand edits. To be derived from grouping (T90).
+
 The one file the players read. Written by `uv run downtempo catalog`, then edited by hand if needed. Example: [data/songs.example.json](../data/songs.example.json).
 
 ```json

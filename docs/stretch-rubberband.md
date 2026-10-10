@@ -1,5 +1,7 @@
 # Stretch library: Rubber Band (via pylibrb)
 
+**Summary**: Built. Rubber Band R3 in real-time mode via pylibrb: live tempo and pitch, 2048-sample start pad and delay handled; GPL; `ChannelsTogether` not set yet.
+
 What the library does for us, the settings we use, and where its limits are. Previous: [stretch-app-flow.md](stretch-app-flow.md). Next: [stretch-research.md](stretch-research.md). Why we picked it: [tempo-python.md](tempo-python.md).
 
 ## What it is

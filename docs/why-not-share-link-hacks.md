@@ -1,5 +1,7 @@
 # Rejected approaches: anonymous share link, cookies, the "Badger" token
 
+**Summary**: Decided. Anonymous OneDrive share calls return 401 since late 2024; copying cookies or the "Badger" token was rejected as fragile and unsupported. Use Entra + MSAL + Graph ([onedrive.md](onedrive.md)).
+
 The first version of the downloader called
 `https://api.onedrive.com/v1.0/shares/u!.../driveItem` anonymously, with an optional copied
 browser `Cookie`. It now fails with **HTTP 401 Unauthorized**.

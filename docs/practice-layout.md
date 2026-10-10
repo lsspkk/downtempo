@@ -1,6 +1,8 @@
 # Practice layout on a small laptop
 
-Design for the small-laptop tasks (T24–T29, T33–T35): how the window is shared between song list, controls and sheet, and which keys do what. Code: [frontends/nicegui/app.py](../frontends/nicegui/app.py). User guide: [player.md](player.md).
+**Summary**: Built (T24–T35). The window has three regions with simple states: song list (shown / hidden), controls (Full / Simple / Sheet), sheet (fit width / page, rotation, full screen); big keys for hands-busy actions, settings for scroll and tempo steps.
+
+Design for the small-laptop tasks (T24–T29, T33–T35): how the window is shared between song list, controls and sheet, and which keys do what. Code: [frontends/nicegui/layout.py](../frontends/nicegui/layout.py), keys in [keys.py](../frontends/nicegui/keys.py). User guide: [player.md](player.md).
 
 ## User picture
 

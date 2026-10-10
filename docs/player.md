@@ -1,5 +1,7 @@
 # Python player
 
+**Summary**: Built; user-tested 2026-10-10. User guide of the Python player: how to run it, features, keys, what it remembers, files.
+
 The Python player: NiceGUI page in its own window, sound decoded, time-stretched and played in Python. Code: [frontends/nicegui/](../frontends/nicegui/).
 
 ```sh
@@ -52,7 +54,15 @@ Press `?` in the player for this list. Why these keys: [practice-layout.md](prac
 
 | File | What |
 |---|---|
-| `app.py` | page layout, actions, switching, keyboard |
+| `app.py` | puts the page together: builds the parts and wires them (only wiring) |
+| `player.py` | what plays and what's remembered: song, recording loading, tempo, pitch, volume, loop, trainer, autosave; no widgets |
+| `layout.py` | the window's frame: header, song-list drawer, controls / sheet grid, Full / Simple / Sheet, full screen, settings, dark mode |
+| `song_list.py` | the song list in the drawer: search, next / previous song |
+| `controls.py` | the controls pane (recordings, waveform, transport, tempo, trainer, loop, pitch, volume) and its short form in the header |
+| `sheet_pane.py` + `sheet_pane.js` | the sheet: PDF pages, tabs, zoom, fit, rotation; scrolling and fitting in the page |
+| `loop_editor.py` | the loop editor dialog: loop, undo, seek, talks to `loop_editor.js` |
+| `keys.py` | keyboard shortcuts: the key handler and the help table |
+| `common.py` | small shared helpers: tooltips, times, page events, CSS |
 | `engine.py` | Rubber Band real-time stretch in a worker thread → queue → `sounddevice` callback ([stretch-app-flow.md](stretch-app-flow.md)) |
 | `loop_editor.js` | loop editor in the page: canvases, select, zoom, scroll ([loop-editor.md](loop-editor.md)) |
 | `sheets.py` | PDF pages → cropped PNGs in `data/cache/pages/` (pypdfium2) |

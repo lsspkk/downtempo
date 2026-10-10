@@ -1,6 +1,8 @@
 # Loop editor
 
-Plan for the loop editor (T39–T44). **Status: implemented (T40–T43, 2026-10-09)**; T39 (pitfall check) and the user's test T44 remain. Code: [loop_editor.js](../frontends/nicegui/loop_editor.js) (drawing, gestures), [app.py](../frontends/nicegui/app.py) (dialog, loop, undo). Follows [ux.md](ux.md).
+**Summary**: Built (T40–T43), pitfalls checked (T39: one fix, the view no longer follows the playhead while a loop edge is in view); the user's test T44 remains. A full-window waveform: click start, click end (or drag), ⠿ handles, zoom by pinch / wheel / ruler drag, Hear end, Undo; `E` opens, Esc leaves.
+
+Plan for the loop editor (T39–T44). **Status: implemented (T40–T43, 2026-10-09), pitfalls checked (T39, 2026-10-10)**; the user's test T44 remains. Code: [loop_editor.js](../frontends/nicegui/loop_editor.js) (drawing, gestures), [loop_editor.py](../frontends/nicegui/loop_editor.py) (dialog, loop, undo). Follows [ux.md](ux.md).
 
 ## What the user wants (2026-10-09)
 
@@ -59,7 +61,7 @@ Plan for the loop editor (T39–T44). **Status: implemented (T40–T43, 2026-10-
 - **Whole song** and **Zoom to loop** (the loop plus 10 % on each side) are labelled buttons. The zoom shows as `4×`.
 - Zoom range: from the whole song down to 1 s across the view.
 - **Scroll**: two-finger swipe sideways (wheel `deltaX`, or Shift + wheel), dragging the window in the **overview strip** (the whole song, with the visible part as a box: it is the slider), or a click in the overview to jump there.
-- While playing, the view follows the playhead only when it would leave the view, by turning a page, and never during a selection or drag.
+- While playing, the view follows the playhead only when it would leave the view, by turning a page, and never during a selection or drag, nor while a playing loop has an edge in view: the jump back to the loop start would pull the view away from the edge being fixed on every pass (T39).
 
 ### Hear the edges
 
@@ -77,3 +79,11 @@ Plan for the loop editor (T39–T44). **Status: implemented (T40–T43, 2026-10-
 
 - The native window (Qt WebEngine on Linux) must pass pinch as Ctrl + wheel and two-finger sideways as `deltaX`, as Chrome and Firefox do. If pinch doesn't arrive, the zoom buttons and keys are enough.
 - The loop editor fits 1280×720 with the hint line visible.
+
+## Pitfall check (T39, 2026-10-10)
+
+Compared with a DAW ([audacity-selecting-audio](web/audacity-selecting-audio.txt), [audacity-zooming](web/audacity-zooming.txt), [audacity-timeline](web/audacity-timeline.txt)), waveform libraries ([peaksjs-readme](web/peaksjs-readme.txt), [wavesurfer-regions-example](web/wavesurfer-regions-example.txt)) and practice apps ([design-transcribe-overview](web/design-transcribe-overview.txt), [anytune-basics](web/anytune-basics.txt)).
+
+- **Changed**: the view following the playhead while a loop plays. Audacity says to turn following off "when using Quick-Play to adjust the start and end of loops", so the edges don't move away. Here, zoomed in on the end with Hear end, each pass jumped the view to the start. Now the view stays while a loop edge is in it.
+- **Already right**: Esc during a drag cancels it and keeps the old loop (as Audacity); dragging past the edge scrolls; edges are grabbed by hovering near them; a too-short loop is refused (0.2 s; wavesurfer has `minLength`); typed start / end with nudges (Audacity's Selection Toolbar); overview + zoomed view (peaks.js, Anytune's double waveform); zoom at the pointer, buttons at the edge being set; hearing the end of the selection (Audacity has keys for the selection's start and end).
+- **Different on purpose, kept**: a ruler drag zooms (Cubase, user's choice) where Audacity makes a loop region; a drag inside the loop makes a new loop where Audacity and wavesurfer move the whole region (a new loop is more common). No Shift-click to extend the nearest edge: click–move–click and the handles cover setting an edge that is off screen.

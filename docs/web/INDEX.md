@@ -72,3 +72,15 @@ Add pages only through `scripts/webfetch.py`, which appends one row here.
 | forscore-basics | 2026-10-09 | https://forscore.co/documentation/basics/ | forScore 15 user guide, Basics: main toolbar icons (score menu, bookmarks, setlists, tools), title, page turns, half-page turns |
 | forscore-menus | 2026-10-09 | https://forscore.co/documentation/menus/ | forScore 15 user guide, Menus: library panels (scores, bookmarks, setlists) opened from labelled toolbar icons, sorting, search |
 | forscore-audio | 2026-10-09 | https://forscore.co/documentation/audio/ | forScore 15 user guide, Audio: tracks linked to a score, the compact player in the title bar, switching tracks, loops and rate |
+| audacity-zooming | 2026-10-10 | https://manual.audacityteam.org/man/zooming.html | Audacity manual: zooming (Ctrl+wheel, zoom to selection, fit to width, zoom toggle) |
+| audacity-timeline | 2026-10-10 | https://manual.audacityteam.org/man/timeline.html | Audacity manual: timeline (ruler) click to play/seek, Quick-Play, looping region on the ruler |
+| peaksjs-readme | 2026-10-10 | https://raw.githubusercontent.com/bbc/peaks.js/master/README.md | BBC peaks.js README: zoomview + overview waveform, segments, points, zoom levels, waveform data precomputed |
+| wavesurfer-regions-example | 2026-10-10 | https://raw.githubusercontent.com/katspaugh/wavesurfer.js/main/examples/regions.js | wavesurfer.js regions example: drag to create, resize handles, loop region |
+| audacity-selecting-audio | 2026-10-10 | https://manual.audacityteam.org/man/audacity_selection.html | Audacity manual: making and adjusting selections (click/drag, Shift-click, edges, snapping) |
+| tomlkit-quickstart | 2026-10-10 | https://tomlkit.readthedocs.io/en/latest/quickstart/ | tomlkit quickstart: parse/dumps keep comments, whitespace and order; document behaves like a dict; add tables/comments |
+| pypi-tomlkit-json | 2026-10-10 | https://pypi.org/pypi/tomlkit/json | PyPI JSON metadata for tomlkit: versions, release dates, licence |
+| msal-python-api | 2026-10-10 | https://msal-python.readthedocs.io/en/latest/ | MSAL Python API reference: PublicClientApplication, initiate_device_flow, acquire_token_by_device_flow(exit_condition), token cache |
+| entra-public-confidential-clients | 2026-10-10 | https://learn.microsoft.com/en-us/entra/identity-platform/msal-client-applications | Microsoft: public vs confidential client apps; public clients can't keep secrets, client ID is not a secret |
+| nicegui-run-io-bound | 2026-10-10 | https://raw.githubusercontent.com/zauberzeug/nicegui/main/website/documentation/content/section_action_events.py | NiceGUI docs source, action & events: ui.timer, run.io_bound / run.cpu_bound, background_tasks, async handlers |
+| nicegui-background-tasks-src | 2026-10-10 | https://raw.githubusercontent.com/zauberzeug/nicegui/main/nicegui/background_tasks.py | NiceGUI background_tasks.py source: create, create_lazy, await_on_shutdown |
+| tomlkit-api | 2026-10-11 | https://tomlkit.readthedocs.io/en/latest/api/ | tomlkit API reference: parse, dumps, document, table, aot (array of tables), comment, nl, item types |

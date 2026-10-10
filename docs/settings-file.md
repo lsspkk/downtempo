@@ -1,5 +1,7 @@
 # Settings file: share the download settings (plan)
 
+**Summary**: Plan (T66–T69). One TOML text file per project with its sources, skipped folders and sorting (never tokens), sent by email or chat. Import is untrusted: checked, previewed per source, nothing written before the user confirms.
+
 Idea **Settings file**; part of [blocks.md](blocks.md); tasks in [todo.md](todo.md).
 
 ## User picture

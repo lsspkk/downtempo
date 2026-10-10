@@ -1,5 +1,7 @@
 # Stretch theory: slower without lower
 
+**Summary**: Background, no decisions. Slower without lower: resampling lowers pitch; OLA, WSOLA and the phase vocoder keep it, each with its typical artefact.
+
 How a recording can play at 0.5x and keep its pitch, explained with high-school math. Next: [stretch-app-flow.md](stretch-app-flow.md).
 
 Running example in all `stretch-*` files: 44 100 samples/s, a 440 Hz sine (the note A), speed 0.5x.

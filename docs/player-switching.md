@@ -1,6 +1,8 @@
 # Player: switching songs, recordings and sheets
 
-Study for the switching bug (T13.6 → T13.5): who switches, what they expect, what the code does, which design fits. **Status: C + D implemented (T13.5, 2026-10-08)**; "What the code does now" describes the code before the fix. One difference from the plan: the newest-wins check uses one ticket per part (audio, sheet) instead of `sel is s.selection`, so a sheet tab click doesn't cancel the song's audio load. Since T34 recordings switch with chips, a menu and `T` (option E: clicks only, nothing for code to set). Code: [frontends/nicegui/app.py](../frontends/nicegui/app.py).
+**Summary**: Built (T13.5). Code never sets a widget's value after creation (every change event is a user choice), and one loader per part works on a snapshot of the selection, newest wins.
+
+Study for the switching bug (T13.6 → T13.5): who switches, what they expect, what the code does, which design fits. **Status: C + D implemented (T13.5, 2026-10-08)**; "What the code does now" describes the code before the fix. One difference from the plan: the newest-wins check uses one ticket per part (audio, sheet) instead of `sel is s.selection`, so a sheet tab click doesn't cancel the song's audio load. Since T34 recordings switch with chips, a menu and `T` (option E: clicks only, nothing for code to set). Code: [frontends/nicegui/player.py](../frontends/nicegui/player.py) (audio), [sheet_pane.py](../frontends/nicegui/sheet_pane.py) (sheet).
 
 ## User picture
 

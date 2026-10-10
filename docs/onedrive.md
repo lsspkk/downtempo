@@ -1,5 +1,7 @@
 # Authenticating to OneDrive (Microsoft Entra + MSAL + Microsoft Graph)
 
+**Summary**: Built. OneDrive works only through a Microsoft Entra app registration (client ID in `.env`), MSAL device code sign-in (token cached in `data/`), and Microsoft Graph listing + download URLs. Anonymous share access broke in late 2024.
+
 ## Answer
 
 The supported way is OAuth through **Microsoft Entra**:

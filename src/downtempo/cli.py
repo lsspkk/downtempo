@@ -3,19 +3,19 @@
 import argparse
 import sys
 
-import requests
-
 from downtempo.catalog import build_catalog
 from downtempo.config import load_env, load_sources
 from downtempo.downloaders import DOWNLOADERS
+from downtempo.errors import UserError
+from downtempo.events import print_report
 
 
 def download(names: list[str]) -> int:
     load_env()
     try:
         sources = load_sources()
-    except RuntimeError as error:
-        print(error, file=sys.stderr)
+    except UserError as error:
+        print_error(error)
         return 2
     if unknown := set(names) - {source.name for source in sources}:
         print(
@@ -38,17 +38,17 @@ def download(names: list[str]) -> int:
             status = 2
             continue
         try:
-            downloader(source)
-        except requests.HTTPError as error:
-            print(
-                f"{source.name}: request failed: {error}\n{error.response.text}",
-                file=sys.stderr,
-            )
-            status = 1
-        except (requests.RequestException, RuntimeError) as error:
-            print(f"{source.name}: {error}", file=sys.stderr)
+            downloader(source, print_report)
+        except UserError as error:
+            print_error(error, source.name)
             status = 1
     return status
+
+
+def print_error(error: UserError, source: str = "") -> None:
+    print(f"{source}: {error.message}" if source else error.message, file=sys.stderr)
+    if error.hint:
+        print(f"  {error.hint}", file=sys.stderr)
 
 
 def main(argv: list[str] | None = None) -> int:

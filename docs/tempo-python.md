@@ -1,5 +1,7 @@
 # Python time-stretch (T5)
 
+**Summary**: Decided (T5). pylibrb (Rubber Band, real-time) + sounddevice + soundfile: tempo changes live while playing. Fallback: pedalboard, which can only re-render.
+
 Goal: play an mp3 at 0.5x–1.3x with pitch kept, tempo changeable **while playing**, sound from Python (`sounddevice`).
 
 ## Plan

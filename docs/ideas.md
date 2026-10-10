@@ -5,7 +5,6 @@ The big things, one line each. Tasks for them are grouped under the same names i
 ## Not done
 
 - **Agent guide**: CLAUDE.md rules that keep a growing codebase readable: summaries first in every doc, small clean parts without enterprise overhead
-- **Python player**: tempo 50–130 % with pitch kept, loops, trainer ([player.md](player.md))
 - **Browser player**: same in a web page, to compare with the Python player
 - **Downloaders**: one per source type; OneDrive done, Google Drive next
 - **Downloader UI**: in the Python player: add a shared folder by pasting its link, sign in, download with progress, songs appear; no terminal or config files ([blocks.md](blocks.md))
@@ -17,6 +16,7 @@ The big things, one line each. Tasks for them are grouped under the same names i
 
 ## Done
 
+- **Python player**: tempo 50–130 % with pitch kept, loops, trainer ([player.md](player.md))
 - **Loop editor**: a full-screen view of the waveform to zoom, scroll and select a loop, like a DAW but simple
 - **Small-laptop practice**: hideable panes, simple controls, rotated sheet, footswitch keys ([practice-layout.md](practice-layout.md))
 - **Recording choice**: pick among a song's recordings

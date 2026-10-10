@@ -1,5 +1,7 @@
 # Song grouping: files → songs (plan)
 
+**Summary**: Plan (T86–T91). Hybrid: the program proposes songs, the user approves the list. Songs' titles, also-called names and 📁 folder links are magnets for files with no song; exact, whole-word and small-typo matches join, the rest waits in To sort. Placement is sticky; drags never make rules, only one-time offers.
+
 The business logic behind [purpose.md](purpose.md): a project's files, from any folder layout and any number of sources, become songs. Decided with the user in T100 (questions 1–13); UI: [project-screen.md](project-screen.md). It replaces the folder-rules plan of T53.
 
 ## In short

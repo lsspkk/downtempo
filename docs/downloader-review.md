@@ -1,5 +1,7 @@
 # Review: downloader plans vs. the purpose (T84, 2026-10-10)
 
+**Summary**: Done 2026-10-10 (T84). The T53 plans made users configure folder rules and had no place to fix songs; replaced by name-based grouping, a full-screen project screen and a first-run flow. Findings R1–R16 each point to their task.
+
 The T53 plans ([blocks.md](blocks.md), the removed `folder-layouts.md`, [settings-file.md](settings-file.md), [projects.md](projects.md), tasks T46, T54–T83) and today's player, checked against [purpose.md](purpose.md). Each finding names the task that handles it.
 
 ## What holds
@@ -20,7 +22,7 @@ The T53 plans ([blocks.md](blocks.md), the removed `folder-layouts.md`, [setting
 | R6 | The **first run** went link → download everything → "4 new songs". The user never sees the grouping before 180 MB arrive, or after. | Link → sign-in → pick folder → "about 12 songs" preview → download → project screen. | T97 |
 | R7 | **New files after an update** only got a count. | They join songs by the same guesser; unsure ones wait in To sort, with a badge on the Songs button. | T96 |
 | R8 | **Files gone from the server** were counted, nothing more. | Their chips are marked "removed on server"; the local copy stays until the user removes it. | T96 |
-| R9 | **Sheet-only / audio-only songs**: the catalog allows them, but the player keeps a full controls pane for a sheet-only song and a big "No sheet music" box for an audio-only one (`app.py` `no_audio`, `sheet_message`). | Layout adapts to what the song has. | T98 |
+| R9 | **Sheet-only / audio-only songs**: the catalog allows them, but the player keeps a full controls pane for a sheet-only song and a big "No sheet music" box for an audio-only one (`controls.py` `no_audio`, `sheet_pane.py` `message`). | Layout adapts to what the song has. | T98 |
 | R10 | Vague names make sorting guesswork without **hearing or seeing a file**. | ▶ 15 s preview and 👁 first page on the chips. | T95 |
 | R11 | The **settings file** carried sources and folder rules only; T69 asked whether song edits should go too. | The grouping memory is part of the project and always exported: sharing the sorting is the point. Only practice memory stays optional (T69). | T66, T69 |
 | R12 | Matching words are language-bound (the real material is Finnish: *soinnut*, *harjoitukset*). | Built-in English + Finnish noise words, project-extendable; whole words only. | T88 |

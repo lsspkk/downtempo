@@ -5,6 +5,8 @@ import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
+from downtempo.errors import UserError
+
 PROJECT_DIR = Path(__file__).resolve().parents[2]
 DATA_DIR = PROJECT_DIR / "data"
 DOWNLOADS_DIR = DATA_DIR / "downloads"
@@ -45,8 +47,9 @@ def load_env(path: Path = PROJECT_DIR / ".env") -> None:
 
 def load_sources(path: Path = SOURCES_FILE) -> list[Source]:
     if not path.exists():
-        raise RuntimeError(
-            f"No {path.relative_to(PROJECT_DIR)}: copy data/sources.example.toml and fill it in."
+        raise UserError(
+            f"No {path.relative_to(PROJECT_DIR)}.",
+            "Copy data/sources.example.toml and fill it in.",
         )
     sources = [
         Source(**entry)
@@ -54,5 +57,7 @@ def load_sources(path: Path = SOURCES_FILE) -> list[Source]:
     ]
     names = [source.name for source in sources]
     if len(names) != len(set(names)):
-        raise RuntimeError(f"Source names must be unique: {names}")
+        raise UserError(
+            f"Source names must be unique: {names}", f"Rename one in {path.name}."
+        )
     return sources

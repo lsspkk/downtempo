@@ -1,5 +1,7 @@
 # Purpose: projects, downloaders, song grouping
 
+**Summary**: Why the next features exist. A musician gets a link to someone else's folder in any layout; Downtempo turns it into songs with their sheets and recordings, kept current. Downloaders only copy files; song grouping (by names) makes the songs; the user fixes the rest by dragging.
+
 Why these parts exist and what "done" means for them. UI plan: [project-screen.md](project-screen.md); grouping logic: [song-grouping.md](song-grouping.md); code blocks: [blocks.md](blocks.md).
 
 ## The user's situation

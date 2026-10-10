@@ -1,5 +1,7 @@
 # Stretch app flow: from mp3 to speaker
 
+**Summary**: Built. How the player streams: blocks through Rubber Band into a small queue (≈ 0.14–0.28 s delay), seeks tagged by generation, short fades at the loop seam and on pause.
+
 What the Python player does, step by step, while you play and move the tempo slider. Code: [frontends/nicegui/engine.py](../frontends/nicegui/engine.py). Previous: [stretch-theory.md](stretch-theory.md). Next: [stretch-rubberband.md](stretch-rubberband.md).
 
 ## The picture

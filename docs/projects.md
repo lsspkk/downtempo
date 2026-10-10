@@ -1,5 +1,7 @@
 # Projects: several music projects (plan)
 
+**Summary**: Plan (T78–T83). A project = one group's sources, songs, sorting and practice memory in `data/projects/<id>/`; sign-ins and layout stay global. Today's `data/` is moved in once, resumably; switching stops playback and reloads.
+
 Idea **Projects**; part of [blocks.md](blocks.md); tasks in [todo.md](todo.md).
 
 ## What a project is

@@ -1,5 +1,7 @@
 # UX principles
 
+**Summary**: Every UI task follows these 11 principles and the checklist: few things clearly, one key per frequent action, labels over icons, visible state, easy way back, 1280×720 first, don't move what the user is editing.
+
 Every UI task follows these. They come from the saved articles (principles, not layouts to copy) and from decisions already made in this project. A task that learns a new principle adds it here, with its source.
 
 ## The user
@@ -15,9 +17,10 @@ An amateur musician practising alone on a small laptop (about 1280×720), instru
 5. **Exact values don't come from sliders.** A slider is for a rough range; next to it go −/+ steps, presets or typed values ([design-nng-sliders](web/design-nng-sliders.txt)). The value label sits beside the control, not under the hand.
 6. **Direct manipulation where it's natural**: click the waveform to seek, drag to loop, drag pages to scroll; every drag has a button or key alternative (heuristics #7).
 7. **Nothing surprising happens by itself.** Switching songs stops and waits for Play; code never fires a user action (widgets set by code don't trigger their handlers) ([player-switching.md](player-switching.md)).
-8. **Easy way back.** Esc, the same key again, or a visible button undoes a mode (full screen, sheet only); the remembered layout is untouched by temporary modes (heuristics #3).
+8. **Easy way back.** Esc, the same key again, or a visible button undoes a mode (full screen, sheet only); the remembered layout is untouched by temporary modes (heuristics #3). Esc also aborts a drag or selection in progress and keeps what was there before ([audacity-selecting-audio](web/audacity-selecting-audio.txt)).
 9. **Remember the practice, not the accident.** Per song: tempo, pitch, recording, sheet; per recording: position and loops; the layout. Only choices that loaded are remembered (heuristics #6).
 10. **Fit the small screen first.** Check every UI change at 1280×720 (`scripts/screenshot.py --size 1280x720`): no wrapping toolbars, long names shorten with "…" and show in full in a tooltip.
+11. **Don't move what the user is working on.** A view that follows playback stops following while the user is editing in it (a loop edge in view); when zoomed, an overview always shows where the view is in the whole song ([audacity-timeline](web/audacity-timeline.txt), [peaksjs-readme](web/peaksjs-readme.txt), [anytune-basics](web/anytune-basics.txt)).
 
 ## Checklist for a UI task
 

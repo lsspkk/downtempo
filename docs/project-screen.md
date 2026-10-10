@@ -1,5 +1,7 @@
 # Project screen: sources and songs (UX plan)
 
+**Summary**: Plan (T93–T97, T61–T63, T101). A full-screen view with sources in the header and two tabs: To sort (☑ list of suggested songs, Create selected, drop on your songs) and Songs (rows of file chips, drag between songs, one-time offers). Every drag has a key / click alternative and Undo.
+
 A full-screen view of the current project: where its files come from, and which files make up each song. It's the downloader UI and the song-grouping UI in one place, because the user's question is "are my group's songs here and right?", not "what did the downloader do". Purpose: [purpose.md](purpose.md); logic and words (magnet, To sort, offers): [song-grouping.md](song-grouping.md); principles: [ux.md](ux.md). Decisions from the T100 interview. Replaces the planned Sources dialog (T46).
 
 ## User picture

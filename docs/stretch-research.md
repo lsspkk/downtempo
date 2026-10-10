@@ -1,5 +1,7 @@
 # Stretch research: what would make the best stretch
 
+**Summary**: Researched (T12.6). Keep Rubber Band R3 in Python; for a browser player Signalsmith Stretch Web is the best candidate, with plain `playbackRate` as the baseline. A blind listening test (T31) decides.
+
 **Status: researched 2026-10-08 (T12.6)** from docs, READMEs and source comments only; nothing installed or benchmarked. Previous: [stretch-rubberband.md](stretch-rubberband.md). Theory terms: [stretch-theory.md](stretch-theory.md).
 
 ## Question
