@@ -150,8 +150,9 @@ class LoopEditor:
         if self.is_open:
             return
         if not self.player.audio:
-            ui.notify("No recording loaded")
-            return
+            if self.player.loading:
+                ui.notify("The recording is still loading")
+            return  # a song without a recording: E does nothing
         self.is_open = True
         self.dialog.open()
         await self.show()

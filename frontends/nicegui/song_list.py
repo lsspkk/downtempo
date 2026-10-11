@@ -1,30 +1,34 @@
-"""The song list in the left drawer: search, the songs, next and previous song."""
+"""The song list in the left drawer: search, the songs (the only part of the drawer that
+scrolls), next and previous song."""
 
 from nicegui import ui
 from player import Player
 
 from downtempo.catalog import Song
 
+CSS = """
+.new-dot { width: 8px; height: 8px; border-radius: 50%; background: #4f5bd5; flex: none; }
+.body--dark .new-dot { background: #8f98ff; }
+"""
+
 
 class SongList:
     def __init__(self, drawer: ui.left_drawer, player: Player) -> None:
         self.player = player
+        ui.add_css(CSS)
         with drawer:
             self.search = (
                 ui.input(placeholder="Search songs  ( / )", on_change=self.show)
                 .props("dense outlined clearable")
-                .classes("w-full")
+                .classes("w-full flex-none")
             )
-            self.list = ui.list().props("dense").classes("w-full")
+            with ui.element("div").classes("w-full grow min-h-0 overflow-y-auto"):
+                self.list = ui.list().props("dense").classes("w-full")
         player.on("selection", lambda new_song: new_song and self.show())
 
     def filtered(self) -> list[Song]:
         text = (self.search.value or "").casefold()
-        return [
-            x
-            for x in self.player.songs
-            if text in f"{x['title']} {x['collection']}".casefold()
-        ]
+        return [x for x in self.player.songs if text in x["title"].casefold()]
 
     async def step(self, offset: int) -> None:
         await self.player.step_song(self.filtered(), offset)
@@ -33,10 +37,10 @@ class SongList:
         self.search.run_method("focus")
 
     def show(self) -> None:
-        songs, player = self.player.songs, self.player
-        many_collections = len({x["collection"] for x in songs}) > 1
+        player = self.player
         self.list.clear()
         shown = self.filtered()
+        new = player.library.songs_with_new()
         with self.list:
             if not shown:
                 ui.label("No songs match").classes("p-4 text-grey")
@@ -50,12 +54,17 @@ class SongList:
                         + (" song-active text-primary" if current else "")
                     )
                 ):
-                    with ui.item_section():
+                    with (
+                        ui.item_section(),
+                        ui.row().classes("items-center gap-1 no-wrap"),
+                    ):
                         ui.item_label(song["title"]).classes(
                             "font-medium" if current else ""
                         )
-                        if many_collections:
-                            ui.item_label(song["collection"]).props("caption")
+                        if song["id"] in new:
+                            ui.element("span").classes("new-dot").tooltip(
+                                "New files since you last opened it"
+                            )
                     with (
                         ui.item_section().props("side"),
                         ui.row().classes("gap-1 items-center"),

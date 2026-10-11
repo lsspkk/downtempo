@@ -4,6 +4,7 @@ full screen button. Scrolling and fitting run in the page (sheet_pane.js)."""
 import json
 import re
 import webbrowser
+from collections.abc import Awaitable, Callable
 from pathlib import Path
 
 import pypdfium2 as pdfium
@@ -12,8 +13,7 @@ from layout import Shell
 from nicegui import run, ui
 from player import Player, Selection
 from sheets import page_images
-
-from downtempo.config import DATA_DIR
+from waveform import Waveform
 
 SHEET_JS = (Path(__file__).parent / "sheet_pane.js").read_text(encoding="utf-8")
 # The frame is a size container: 100cqw/100cqh are its width/height.
@@ -39,16 +39,23 @@ CSS = """
 
 
 def sheet_label(pdf: str, title: str) -> str:
-    """`<Title> SOINNUT-2026-10-07.pdf` -> `SOINNUT · 2026-10-07`; the title is shown elsewhere."""
+    """`<Title> SOINNUT-2026-10-07.pdf` -> `SOINNUT · 2026-10-07`, `<Title>-2026-10-07.pdf` ->
+    `2026-10-07`; the title is shown elsewhere."""
     rest = Path(pdf).stem.replace(title, "").strip(" -_")
     if match := re.search(r"(\d{4}-\d{2}-\d{2})$", rest):
         name = rest[: match.start()].strip(" -_")
-        return f"{name} · {match[1]}" if name else f"Sheet · {match[1]}"
+        return f"{name} · {match[1]}" if name else match[1]
     return rest or "Sheet"
 
 
 class SheetPane:
-    def __init__(self, column: ui.column, shell: Shell, player: Player) -> None:
+    def __init__(
+        self,
+        column: ui.column,
+        shell: Shell,
+        player: Player,
+        open_editor: Callable[[], Awaitable[None]],
+    ) -> None:
         self.player, self.shell, self.state = player, shell, player.state
         ui.add_head_html(
             f"<script>{SHEET_JS.replace('__SETTINGS__', json.dumps(shell.settings))}</script>"
@@ -62,48 +69,71 @@ class SheetPane:
                 # long sheet names get "…" (full name in the tooltip); the buttons keep their room
                 self.tabs_box = ui.element("div").classes("min-w-0 flex")
                 ui.space()
-                ui.button(icon="zoom_out", on_click=lambda: self.zoom_by(-10)).props(
-                    "flat round dense"
-                ).tooltip("Smaller (−)")
-                self.zoom_label = ui.label("100 %").classes(
-                    "text-caption w-12 text-center whitespace-nowrap"
-                )
-                ui.button(icon="zoom_in", on_click=lambda: self.zoom_by(10)).props(
-                    "flat round dense"
-                ).tooltip("Larger (+)")
-                self.fit_width_button = ui.button(
-                    icon="expand", on_click=lambda: self.set_zoom(100)
-                ).props("flat round dense")
-                self.fit_width_button.classes("turn-90").tooltip("Fit width (W)")
-                self.fit_page_button = ui.button(
-                    icon="expand", on_click=self.fit_page
-                ).props("flat round dense")
-                self.fit_page_button.tooltip("Fit page: the whole page in view (H)")
-                ui.button(
-                    icon="fullscreen", on_click=lambda: shell.set_fullscreen(True)
-                ).props("flat round dense").tooltip("Full screen (F)")
-                # set once (how the laptop stands) or rarely: kept out of the way
-                with ui.button(icon="more_vert").props("flat round dense"):
-                    ui.tooltip("Rotate, open the PDF")
-                    with ui.menu():
-                        ui.menu_item(
-                            "Rotate right (O)",
-                            on_click=lambda: self.set_rotation(view["rotate"] + 90),
-                            auto_close=False,
-                        )
-                        ui.menu_item(
-                            "Rotate left",
-                            on_click=lambda: self.set_rotation(view["rotate"] - 90),
-                            auto_close=False,
-                        )
-                        ui.separator()
-                        self.open_pdf = ui.menu_item(
-                            "Open in PDF viewer",
-                            on_click=lambda: webbrowser.open(
-                                (DATA_DIR / player.selection.pdf).as_uri()
-                            ),
-                        )
-            with ui.element("div").classes("w-full grow sheet-frame sheet-bg"):
+                # sheet tools; a song without sheets hides them
+                with ui.row().classes("items-center gap-2 no-wrap") as self.tools:
+                    ui.button(
+                        icon="zoom_out", on_click=lambda: self.zoom_by(-10)
+                    ).props("flat round dense").tooltip("Smaller (−)")
+                    self.zoom_label = ui.label("100 %").classes(
+                        "text-caption w-12 text-center whitespace-nowrap"
+                    )
+                    ui.button(icon="zoom_in", on_click=lambda: self.zoom_by(10)).props(
+                        "flat round dense"
+                    ).tooltip("Larger (+)")
+                    self.fit_width_button = ui.button(
+                        icon="expand", on_click=lambda: self.set_zoom(100)
+                    ).props("flat round dense")
+                    self.fit_width_button.classes("turn-90").tooltip("Fit width (W)")
+                    self.fit_page_button = ui.button(
+                        icon="expand", on_click=self.fit_page
+                    ).props("flat round dense")
+                    self.fit_page_button.tooltip("Fit page: the whole page in view (H)")
+                    ui.button(
+                        icon="fullscreen", on_click=lambda: shell.set_fullscreen(True)
+                    ).props("flat round dense").tooltip("Full screen (F)")
+                    # set once (how the laptop stands) or rarely: kept out of the way
+                    with ui.button(icon="more_vert").props("flat round dense"):
+                        ui.tooltip("Rotate, open the PDF")
+                        with ui.menu():
+                            ui.menu_item(
+                                "Rotate right (O)",
+                                on_click=lambda: self.set_rotation(view["rotate"] + 90),
+                                auto_close=False,
+                            )
+                            ui.menu_item(
+                                "Rotate left",
+                                on_click=lambda: self.set_rotation(view["rotate"] - 90),
+                                auto_close=False,
+                            )
+                            ui.separator()
+                            self.open_pdf = ui.menu_item(
+                                "Open in PDF viewer",
+                                on_click=lambda: webbrowser.open(
+                                    player.library.path(player.selection.pdf).as_uri()
+                                ),
+                            )
+            # A song without sheets: its waveform, large, in the sheet's place.
+            with (
+                ui.column().classes(
+                    "w-full grow sheet-bg items-center justify-center gap-3 p-8"
+                ) as self.wave_box,
+                ui.column().classes("w-full max-w-[1100px] gap-2"),
+            ):
+                with ui.row().classes("w-full items-center gap-2 text-grey"):
+                    ui.icon("music_off", size="20px")
+                    ui.label("No sheet music for this song")
+                    ui.space()
+                    ui.button(
+                        "Loop editor", icon="open_in_full", on_click=open_editor
+                    ).props("flat dense no-caps").tooltip(
+                        "Zoom in, set the loop exactly (E)"
+                    )
+                self.wave = Waveform(player, height=360, classes="shadow-md bg-white")
+            self.wave_box.set_visibility(False)
+            self.wave.active = False
+            with ui.element("div").classes(
+                "w-full grow sheet-frame sheet-bg"
+            ) as self.frame:
                 exit_button = ui.button(
                     icon="fullscreen_exit", on_click=lambda: shell.set_fullscreen(False)
                 ).props("round unelevated dense color=grey-8")
@@ -143,6 +173,12 @@ class SheetPane:
                 tip(tabs, " / ".join(labels.values()))
         self.pages.clear()
 
+    def show_wave(self, on: bool) -> None:
+        self.wave_box.set_visibility(on)
+        self.wave.active = on
+        self.frame.set_visibility(not on)
+        self.tools.set_visibility(not on)
+
     def message(self, icon: str, text: str) -> None:
         self.pages.clear()
         with self.pages, ui.column().classes("w-full items-center mt-16 text-grey"):
@@ -154,11 +190,12 @@ class SheetPane:
         if ticket != tickets["sheet"]:
             return  # another sheet was picked while this song's audio loaded
         self.open_pdf.set_visibility(bool(sel.pdf))
+        self.show_wave(not sel.pdf and bool(sel.audio))
         if not sel.pdf:
-            self.message("music_off", "No sheet music for this song")
+            self.pages.clear()
             return
         try:
-            names = await run.io_bound(page_images, DATA_DIR / sel.pdf)
+            names = await run.io_bound(page_images, self.player.library.path(sel.pdf))
         except (OSError, pdfium.PdfiumError) as error:
             if ticket == tickets["sheet"]:
                 self.message("broken_image", f"Cannot show {Path(sel.pdf).name}")

@@ -1,6 +1,6 @@
 # Practice layout on a small laptop
 
-**Summary**: Built (T24–T35). The window has three regions with simple states: song list (shown / hidden), controls (Full / Simple / Sheet), sheet (fit width / page, rotation, full screen); big keys for hands-busy actions, settings for scroll and tempo steps.
+**Summary**: Built (T24–T35, T118, T120). The window has three regions with simple states: song list (shown / hidden), controls (Full / Simple / Sheet), sheet (fit width / page, rotation, full screen); big keys for hands-busy actions, settings for scroll and tempo steps.
 
 Design for the small-laptop tasks (T24–T29, T33–T35): how the window is shared between song list, controls and sheet, and which keys do what. Code: [frontends/nicegui/layout.py](../frontends/nicegui/layout.py), keys in [keys.py](../frontends/nicegui/keys.py). User guide: [player.md](player.md).
 
@@ -12,7 +12,7 @@ A 13" laptop (about 1280×720 usable) on a music stand or a chair, the accordion
 
 | Region | States | Switch | Default |
 |---|---|---|---|
-| Song list (left drawer) | shown / hidden | **Songs** button, `Q` | shown; remembered |
+| Song list (left drawer) | shown / hidden | the sidebar icon next to ☰, `Q` | shown; remembered |
 | Controls (middle pane) | **Full** / **Simple** / **Hidden** | header toggle; `V` cycles | Full; remembered |
 | Sheet (right, takes the rest) | zoom, fit width / fit page, rotation 0° / 90° / 180° / 270° | toolbar; `+` / `−`, `W` / `H`; ⋮ menu, `O` | fit width, 0°; remembered |
 | Full screen | on / off | toolbar button, `F`; Esc or the corner button back | off; not remembered |
@@ -57,10 +57,33 @@ Scroll keys run in the page's own script (no server round trip), call `preventDe
 
 Study (T35). The song list was opened by ☰, which reads as the app's main menu. [nng-icon-usability](web/nng-icon-usability.txt): the 3-line icon mostly means the navigation menu, and "a text label must be present alongside an icon … visible at all times". [nng-hamburger-menus](web/nng-hamburger-menus.txt): hidden navigation behind an icon is found less often, worst on desktops ("low information scent"). forScore, a sheet-music reader, opens its library from named toolbar items (scores, bookmarks, setlists) on the left, and on desktop shows menus as a sidebar beside the music ([forscore-basics](web/forscore-basics.txt), [forscore-menus](web/forscore-menus.txt)).
 
-- **Pick**: a labelled **Songs** button with a music-list icon, at the left where the drawer opens, tinted while the list is shown. The tooltip names the key (`Q`).
+- **Pick (T35)**: a labelled **Songs** button with a music-list icon, at the left where the drawer opens, tinted while the list is shown. The tooltip names the key (`Q`).
+- **Changed (T120)**: ☰ became the app's main menu (projects, project and player settings, shortcuts, dark mode: [project-screen.md](project-screen.md#project-menu)), which is what the icon means. The song list then got the usual sidebar toggle of desktop apps (macOS, VS Code, Notion, Outlook): the panel icon, no label, showing the state (`left_panel_close` while shown, `left_panel_open` while hidden), tooltip "Hide / Show song list (Q)", right after ☰ with a gap. Apps where ☰ toggles the sidebar (Gmail) have no other main menu; here it would mean two things.
 - **Recordings stay with the player, not in the list.** forScore links audio tracks to the score and shows them in its media panel ([forscore-audio](web/forscore-audio.txt)). The list is hidden most of the practice time anyway. So the list only shows a count badge, and the switch (T34) is where playback is: chips in the controls pane (Full and Simple), a "♪ 1/2" menu in the sheet-only bar, and `T` everywhere.
 
-## Settings (gear button)
+## Song list
+
+Decided with the user (T119, T120), built T118, T120. The header is ☰, the song list toggle, the song's title and Full / Simple / Sheet; no app name, and the player's settings, shortcuts and dark mode are in ☰ (view controls used while practising stay visible, the rest goes in the main menu).
+
+```
+┌──────────────────────────┐
+│ PROJECT               ⟳  │   caption; ⟳ check for new files (spins; again = stop)
+│ My band                │   the name, plain text (not a button)
+│ Checked 2 h ago          │   one line, always the same height (+ a 2 px bar while downloading)
+│ [Search songs ( / )    ] │
+│   songs…   (only this    │
+│            part scrolls) │
+│──────────────────────────│
+│ Edit song list (3 unknown)│  pinned
+└──────────────────────────┘
+```
+
+- **Why at the top**: ⟳ and the project's things belong next to its name, and a footer under a long list scrolled out of sight. The status line keeps its height, so progress and results never push the songs down (ux #11).
+- **No menu here**: the project's actions are in ☰ (T120), so this part only shows state.
+- **No list of folders**: most projects have one or two, often named like the project. What matters is their state, which the status line carries: "Checked 2 h ago" (the oldest check), "Downloading 3 of 7 · 45 %", "5 new files: …", or "⚠ folder: what went wrong" in red, which opens Project settings at that folder.
+- Code: `project_panel.py`, `song_list.py`, `layout.py` (the header part).
+
+## Player settings (☰ → Player settings…)
 
 | Setting | Options | Default |
 |---|---|---|

@@ -1,4 +1,6 @@
-# Saved web pages
+# Good material from the web
+
+Local-only (git-ignored, like the whole `docs/web/` folder and `scripts/webfetch.py`): copies of the public pages this project learned from, one line each.
 
 Read the `.txt` copy, not the `.html` (the raw HTML is the original, kept for reference).
 Add pages only through `scripts/webfetch.py`, which appends one row here.
@@ -84,3 +86,16 @@ Add pages only through `scripts/webfetch.py`, which appends one row here.
 | nicegui-run-io-bound | 2026-10-10 | https://raw.githubusercontent.com/zauberzeug/nicegui/main/website/documentation/content/section_action_events.py | NiceGUI docs source, action & events: ui.timer, run.io_bound / run.cpu_bound, background_tasks, async handlers |
 | nicegui-background-tasks-src | 2026-10-10 | https://raw.githubusercontent.com/zauberzeug/nicegui/main/nicegui/background_tasks.py | NiceGUI background_tasks.py source: create, create_lazy, await_on_shutdown |
 | tomlkit-api | 2026-10-11 | https://tomlkit.readthedocs.io/en/latest/api/ | tomlkit API reference: parse, dumps, document, table, aot (array of tables), comment, nl, item types |
+| rapidfuzz-pypi | 2026-10-11 | https://pypi.org/project/rapidfuzz/ | rapidfuzz on PyPI: licence, Python versions, wheels, release date, feature list |
+| rapidfuzz-levenshtein | 2026-10-11 | https://rapidfuzz.github.io/RapidFuzz/Usage/distance/Levenshtein.html | rapidfuzz Levenshtein.distance with score_cutoff, weights, processor |
+| rapidfuzz-fuzz | 2026-10-11 | https://rapidfuzz.github.io/RapidFuzz/Usage/fuzz.html | rapidfuzz fuzz: ratio, partial_ratio, token_sort_ratio, token_set_ratio, WRatio |
+| python-difflib | 2026-10-11 | https://docs.python.org/3/library/difflib.html | difflib SequenceMatcher.ratio, autojunk; no edit distance |
+| python-unicodedata | 2026-10-11 | https://docs.python.org/3/library/unicodedata.html | unicodedata.normalize NFC NFD NFKC NFKD and is_normalized |
+| unicode-uax15 | 2026-10-11 | https://unicode.org/reports/tr15/ | Unicode normalization forms UAX 15: NFC composes, NFKC folds compatibility characters |
+| beets-distance | 2026-10-11 | https://raw.githubusercontent.com/beetbox/beets/master/beets/autotag/distance.py | beets string distance: what it strips (articles, brackets, punctuation) and how it weights |
+| picard-util | 2026-10-11 | https://raw.githubusercontent.com/metabrainz/picard/master/picard/util/__init__.py | MusicBrainz Picard util: resolves a file name by its NFC and NFD spellings |
+| picard-similarity | 2026-10-11 | https://raw.githubusercontent.com/metabrainz/picard/master/picard/similarity.py | MusicBrainz Picard similarity: similarity2 / similarity, what it normalises |
+| nicegui-trello-dnd | 2026-10-11 | https://raw.githubusercontent.com/zauberzeug/nicegui/main/examples/trello_cards/draganddrop.py | NiceGUI example: drag and drop of cards between columns with HTML5 dragstart/dragover/drop events on elements |
+| mdn-html-drag-drop | 2026-10-11 | https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API | MDN: HTML Drag and Drop API: draggable, dragstart/dragover/drop, dataTransfer, dropEffect, drag image |
+| nicegui-pages-routing | 2026-10-11 | https://raw.githubusercontent.com/zauberzeug/nicegui/main/website/documentation/content/section_pages_routing.py | NiceGUI docs source, pages & routing: add_static_files, add_media_files, add_static_file, add_media_file, FastAPI routes |
+| uv-installation | 2026-10-11 | https://docs.astral.sh/uv/getting-started/installation/ | uv install commands: curl script (Linux/macOS), PowerShell script and winget (Windows) |

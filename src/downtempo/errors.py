@@ -1,4 +1,4 @@
-"""Failures the user can act on: a plain message and what to do about it."""
+"""Failures the user can act on (a plain message and what to do), and a cancel by the user."""
 
 
 class UserError(Exception):
@@ -11,3 +11,7 @@ class UserError(Exception):
 
     def __str__(self) -> str:
         return f"{self.message} {self.hint}".strip()
+
+
+class Cancelled(Exception):
+    """The user stopped the work; nothing to show, finished files are kept."""

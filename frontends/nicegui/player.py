@@ -26,15 +26,16 @@ from nicegui import run, ui
 from state import save_state
 
 from downtempo.catalog import Song
-from downtempo.config import DATA_DIR
+from downtempo.library import Library
 
 SPEEDS = (0.5, 1.3)  # min, max
-TRAINER = {"step": 0.05, "every": 2, "target": 1.0}  # defaults; remembered per song
+# defaults; remembered per song
+TRAINER = {"step": 0.05, "every": 2, "target": 1.0}
 SAVE_EVERY = 20  # ticks: 2 s
 
 
 def song_key(song: Song) -> str:
-    return f"{song['collection']}/{song['title']}"
+    return song["id"]
 
 
 @dataclass(frozen=True, eq=False)
@@ -47,10 +48,9 @@ class Selection:
 
 
 class Player:
-    def __init__(
-        self, engine: Engine, state: dict[str, Any], songs: list[Song]
-    ) -> None:
-        self.engine, self.state, self.songs = engine, state, songs
+    def __init__(self, engine: Engine, state: dict[str, Any], library: Library) -> None:
+        self.engine, self.state, self.library = engine, state, library
+        self.songs: list[Song] = library.songs()
         self.selection: Selection | None = None
         self.audio = ""  # path of the loaded recording; "" while loading
         self.loading = False
@@ -62,6 +62,9 @@ class Player:
         self.muted = False
         self.trainer: dict[str, Any] = {"on": False, **TRAINER}
         self.dirty = False  # state changed since the last save
+        self.retired = (
+            False  # the page is being rebuilt for another project: no more saves
+        )
         # Newest-wins tickets per part, separate so a sheet tab click doesn't cancel the song's
         # audio load (and the other way).
         self.tickets = {"audio": 0, "sheet": 0}
@@ -130,15 +133,31 @@ class Player:
         audio = saved.get("audio")
         if audio not in audios:
             audio = audios[0] if audios else ""
-        pdf = saved.get("pdf")
+        # The newest sheet (first), unless the user picked another one for this song.
+        pdf = saved.get("pdf") if saved.get("pdf_picked") else None
         if pdf not in song["pdf"]:
             pdf = song["pdf"][0] if song["pdf"] else ""
         sel = self.selection = Selection(song, audio, pdf)
         self.audio = ""
+        self.library.mark_seen(song_key(song))  # its new files have been seen
         audio_ticket, sheet_ticket = self.ticket("audio"), self.ticket("sheet")
         self.emit("selection", True)
         await self.load_audio(sel, audio_ticket)
         await self.emit_async("sheet", sel, sheet_ticket)
+
+    async def reload_songs(self) -> None:
+        """Read the catalog again (after a download). The open song stays open and keeps
+        playing; if it's gone, the first song opens paused."""
+        self.songs = self.library.songs()
+        if not self.selection:
+            return
+        key = song_key(self.selection.song)
+        same = next((x for x in self.songs if song_key(x) == key), None)
+        if same is not None:
+            self.selection = replace(self.selection, song=same)
+            self.emit("selection", False)
+        elif self.songs:
+            await self.open_song(self.songs[0])
 
     async def step_song(self, shown: list[Song], offset: int) -> None:
         if not shown:
@@ -172,6 +191,8 @@ class Player:
         if not pdf or not self.selection or pdf == self.selection.pdf:
             return
         sel = self.selection = replace(self.selection, pdf=pdf)
+        # a pick of the newest is no pick: a newer version will replace it
+        self.remember(pdf_picked=pdf != sel.song["pdf"][0])
         await self.emit_async("sheet", sel, self.ticket("sheet"))
 
     def ticket(self, part: str) -> int:
@@ -186,9 +207,13 @@ class Player:
         await self.emit_async("audio")
         if not sel.audio:
             await run.io_bound(self.engine.close)
+            self.loop, self.looping = None, False  # not the last song's loop
+            self.emit("loop")
             return
         try:
-            done = await run.io_bound(self.engine.load, DATA_DIR / sel.audio, wanted)
+            done = await run.io_bound(
+                self.engine.load, self.library.path(sel.audio), wanted
+            )
         except (OSError, RuntimeError, sd.PortAudioError) as error:
             if wanted():
                 ui.notify(
@@ -286,6 +311,8 @@ class Player:
         self.apply_loop()
 
     def set_a(self) -> None:
+        if not self.audio:
+            return
         now = self.now
         b = (
             self.loop[1]
@@ -295,6 +322,8 @@ class Player:
         self.set_loop(now, b)
 
     def set_b(self) -> None:
+        if not self.audio:
+            return
         now = self.now
         a = self.loop[0] if self.loop and self.loop[0] < now - 0.2 else 0.0
         self.set_loop(a, now)
@@ -306,6 +335,8 @@ class Player:
             self.set_loop(*loop)
 
     def toggle_loop(self) -> None:
+        if not self.audio:
+            return
         if not self.loop:
             ui.notify("Set a loop first: press A and B, or drag over the waveform")
             return
@@ -313,6 +344,8 @@ class Player:
         self.apply_loop()
 
     def clear_loop(self) -> None:
+        if not self.audio:
+            return
         self.loop, self.looping = None, False
         self.apply_loop()
 
@@ -365,6 +398,8 @@ class Player:
     # ------------------------------------------------------------ every 0.1 s
 
     def tick(self) -> None:
+        if self.retired:
+            return
         engine, t = self.engine, self.trainer
         if (
             self.audio

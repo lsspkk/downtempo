@@ -1,5 +1,7 @@
-"""Small helpers every part of the player page uses: tooltips, times, page events, shared CSS."""
+"""Small helpers every part of the player page uses: tooltips, times, page events, shared CSS,
+copying text."""
 
+import json
 from typing import Any
 
 from nicegui import events, ui
@@ -51,3 +53,14 @@ def parse_clock(text: str) -> float | None:
 def event_arg(e: events.GenericEventArguments) -> Any:
     """The single argument of a page event (emitEvent)."""
     return e.args[0] if isinstance(e.args, list) else e.args
+
+
+def copy_text(text: str) -> None:
+    """Copy to the clipboard. Not `ui.clipboard`: the Clipboard API asks for a permission, which the
+    native window (pywebview on Qt) refuses with an error; a selected textarea + execCommand works
+    in the window and in browsers."""
+    ui.run_javascript(
+        f"""const t = document.createElement('textarea'); t.value = {json.dumps(text)};
+        t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t);
+        t.select(); document.execCommand('copy'); t.remove();"""
+    )

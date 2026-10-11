@@ -1,10 +1,12 @@
-# Copy to data/sources.toml (local-only) and fill in. One [[source]] per shared folder.
-# Files land in data/downloads/<name>/. Run: uv run downtempo download [name ...]
+# A project's project.toml (data/projects/<id>/). Usually written by `uv run downtempo project new`
+# and `add '<link>'`; editing by hand is fine. One [[source]] per shared folder.
+# Files land in data/projects/<id>/downloads/<name>/. Run: uv run downtempo download [name ...]
+name = "My band"                      # the project's name; its folder (id) never changes
 
 [[source]]
 name = "my-band"                      # collection folder name, unique
 type = "onedrive"                     # onedrive (gdrive: planned, T17)
 url = "https://1drv.ms/f/c/..."       # sharing link of the folder
-subfolder = ""                        # optional: only this top-level folder of the share
+folder = "Songs/2026"                 # optional: only this folder inside the share (any depth)
 extra_folders = ["Rehearsal *"]       # optional: folders of recordings of several songs;
                                       # each file joins the song its name starts with

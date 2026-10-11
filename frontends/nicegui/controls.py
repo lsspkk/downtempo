@@ -4,32 +4,21 @@ volume) and its short form in the header while the pane is hidden (sheet only)."
 from collections.abc import Awaitable, Callable
 from typing import Any
 
-from common import BLUR_SELECT, LOOP_COLOR, clock, tip
+from common import BLUR_SELECT, clock, tip
 from layout import Shell
-from nicegui import events, ui
+from nicegui import ui
 from player import SPEEDS, TRAINER, Player
+from waveform import Waveform
 
-PRESETS = (0.5, 0.6, 0.7, 0.75, 0.8, 0.9, 1.0)
-WAVE_W, WAVE_H = 1000, 200
-CSS = ".loop-edge { background: rgba(245, 158, 11, 0.08); }"
-
-
-def wave_svg(peaks) -> str:
-    """The waveform as an SVG data URL: mirrored bars, one per peak bin."""
-    mid = WAVE_H / 2
-    bars = " ".join(
-        f"M{x} {mid - p * mid * 0.95:.1f}V{mid + p * mid * 0.95:.1f}"
-        for x, p in enumerate(peaks)
-    )
-    svg = (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{WAVE_W}" height="{WAVE_H}" '
-        f'viewBox="0 0 {WAVE_W} {WAVE_H}"><path d="{bars}" stroke="%238a94b0" '
-        'stroke-width="1"/></svg>'
-    )
-    return "data:image/svg+xml;utf8," + svg.replace("#", "%23").replace('"', "'")
-
-
-BLANK_WAVE = wave_svg([0] * WAVE_W)
+TEMPO_MARKS = range(50, 131, 10)  # % under the slider, each where the slider has it
+CSS = """
+.loop-edge { background: rgba(245, 158, 11, 0.08); }
+.tempo-mark { position: absolute; transform: translateX(-50%); cursor: pointer; padding: 0 4px;
+  border-radius: 4px; font-size: 13px; opacity: 0.65; }
+.tempo-mark:hover { opacity: 1; background: rgba(79, 91, 213, 0.10); }
+.tempo-mark.on { opacity: 1; color: #4f5bd5; font-weight: 700; }
+.body--dark .tempo-mark.on { color: #8f98ff; }
+"""
 
 
 def recording_name(label: str, title: str) -> str:
@@ -66,10 +55,8 @@ class Controls:
     def __init__(
         self, shell: Shell, player: Player, open_editor: Callable[[], Awaitable[None]]
     ) -> None:
-        self.player, self.engine = player, player.engine
-        self.drag_from: float | None = None
-        self.drag_to: float | None = None
-        self.last: dict[str, Any] = {"overlay": "", "time": "", "playing": None}
+        self.player, self.engine, self.shell = player, player.engine, shell
+        self.last: dict[str, Any] = {"time": "", "playing": None}
         ui.add_css(CSS)
         self.build_mini_bar(shell.mini_bar, open_editor)
         with shell.pane:
@@ -90,6 +77,10 @@ class Controls:
     ) -> None:
         player = self.player
         with bar:
+            self.mini_no_audio = ui.label("No recording").classes("text-grey mx-2")
+            self.mini_no_audio.set_visibility(False)
+            self.mini_audio = ui.row().classes("items-center gap-1 no-wrap")
+        with self.mini_audio:
             self.mini_play = ui.button(
                 icon="play_arrow", on_click=player.toggle_play
             ).props("round unelevated dense")
@@ -110,6 +101,7 @@ class Controls:
                 "flat round dense"
             ).tooltip("Loop editor (E)")
             self.mini_recordings = ui.element("div")  # on_selection()
+        with bar:
             ui.separator().props("vertical").classes("mx-1")
 
     def build_pane(
@@ -123,18 +115,21 @@ class Controls:
             self.loading = ui.spinner(size="sm")
             self.loading.set_visibility(False)
 
-        self.no_audio = ui.label("This song has no recording.").classes("text-grey")
+        # A song with only sheets: the pane narrows to this, the sheet gets the room (layout.py).
+        with ui.column().classes("w-full gap-1 pt-2") as self.no_audio:
+            self.no_audio_title = ui.label("").classes("text-h6 leading-tight")
+            with ui.row().classes("items-center gap-1 text-grey no-wrap"):
+                ui.icon("volume_off", size="20px")
+                ui.label("No recording")
+            ui.label("This song has only sheet music.").classes(
+                "text-caption text-grey"
+            )
         self.no_audio.set_visibility(False)
 
         with ui.column().classes("w-full gap-3") as self.player_box:
             # Waveform + transport
             with ui.card().classes("w-full p-3 gap-2"):
-                self.wave = ui.interactive_image(
-                    BLANK_WAVE,
-                    events=["mousedown", "mousemove", "mouseup", "mouseleave"],
-                    on_mouse=self.on_wave_mouse,
-                ).classes("w-full cursor-pointer rounded")
-                self.wave.tooltip("Click: play from here · Drag: set a loop")
+                Waveform(player)
                 with ui.row().classes("w-full items-center justify-between"):
                     self.time_label = ui.label("0:00 / 0:00").classes("font-mono")
                     self.speed_hint = ui.label("").classes("text-caption text-grey")
@@ -192,13 +187,15 @@ class Controls:
                         else None
                     ),
                 ).props(":markers=5")
-                with ui.row().classes("w-full gap-1 justify-between") as presets:
-                    self.preset_chips = {
-                        preset: ui.chip(
-                            f"{round(preset * 100)}",
-                            on_click=lambda preset=preset: player.set_speed(preset),
-                        ).props("outline dense clickable")
-                        for preset in PRESETS
+                # Absolute, at the slider's own positions: its track has no side padding.
+                low, high = round(SPEEDS[0] * 100), round(SPEEDS[1] * 100)
+                with ui.element("div").classes("relative w-full h-6 -mt-2") as presets:
+                    self.tempo_marks = {
+                        mark: ui.label(str(mark))
+                        .classes("tempo-mark")
+                        .style(f"left: {(mark - low) / (high - low) * 100}%")
+                        .on("click", lambda mark=mark: player.set_speed(mark / 100))
+                        for mark in TEMPO_MARKS
                     }
 
                 with (
@@ -269,22 +266,18 @@ class Controls:
                                 "text-caption text-grey"
                             )
                             with ui.row().classes("items-center gap-0 no-wrap"):
-                                ui.button(
-                                    icon="chevron_left",
-                                    on_click=lambda edge=edge: player.nudge(edge, -0.1),
-                                ).props("flat dense round size=sm").tooltip(
-                                    "0.1 s earlier"
+                                self.nudge_button(
+                                    edge, -1.0, "keyboard_double_arrow_left"
                                 )
+                                self.nudge_button(edge, -0.1, "chevron_left")
                                 loop_times.append(
                                     ui.label("–").classes(
                                         "font-mono text-subtitle1 w-16 text-center"
                                     )
                                 )
-                                ui.button(
-                                    icon="chevron_right",
-                                    on_click=lambda edge=edge: player.nudge(edge, 0.1),
-                                ).props("flat dense round size=sm").tooltip(
-                                    "0.1 s later"
+                                self.nudge_button(edge, 0.1, "chevron_right")
+                                self.nudge_button(
+                                    edge, 1.0, "keyboard_double_arrow_right"
                                 )
                 self.loop_a, self.loop_b = loop_times
                 with ui.row().classes("w-full items-center gap-1"):
@@ -347,8 +340,17 @@ class Controls:
 
     # ------------------------------------------------------------ actions with a dialog
 
+    def nudge_button(self, edge: int, seconds: float, icon: str) -> None:
+        """Moves the loop's start (edge 0) or end (1): ‹ › by 0.1 s, « » by 1 s."""
+        step = f"{abs(seconds):g} s {'earlier' if seconds < 0 else 'later'}"
+        ui.button(icon=icon, on_click=lambda: self.player.nudge(edge, seconds)).props(
+            "flat dense round size=sm"
+        ).tooltip(step)
+
     def save_loop_dialog(self) -> None:
         player = self.player
+        if not player.audio:
+            return
         if not player.loop:
             ui.notify("Set a loop first: press A and B, or drag over the waveform")
             return
@@ -412,25 +414,24 @@ class Controls:
     def on_audio(self) -> None:
         player = self.player
         self.loading.set_visibility(player.loading)
-        if player.audio:
-            self.wave.set_source(wave_svg(self.engine.peaks))
-        else:
-            self.wave.set_source(BLANK_WAVE)
-            self.wave.content = self.last["overlay"] = ""
         has_audio = bool(player.selection.audio)
         self.player_box.set_visibility(has_audio and not player.failed)
         self.no_audio.set_visibility(not has_audio)
+        self.no_audio_title.text = player.song["title"]
+        self.mini_audio.set_visibility(has_audio)
+        self.mini_no_audio.set_visibility(not has_audio)
+        self.shell.set_audio_less(not has_audio)
 
     def show_tempo(self) -> None:
         engine = self.engine
         percent = round(engine.speed * 100)
         self.speed_label.text = self.mini_speed.text = f"{percent} %"
         self.speed_slider.value = percent
-        for preset, chip in self.preset_chips.items():
-            if round(preset * 100) == percent:
-                chip.props(remove="outline")
+        for mark, label in self.tempo_marks.items():
+            if mark == percent:
+                label.classes(add="on")
             else:
-                chip.props("outline")
+                label.classes(remove="on")
         if self.player.audio:
             self.speed_hint.text = (
                 f"Song takes {clock(engine.duration / engine.speed)} at this tempo"
@@ -502,9 +503,6 @@ class Controls:
             return
         if player.trainer["on"]:
             self.show_status()
-        overlay = self.wave_overlay()
-        if overlay != last["overlay"]:
-            self.wave.content = last["overlay"] = overlay
         now = f"{clock(player.now)} / {clock(engine.duration)}"
         if now != last["time"]:
             self.time_label.text = self.mini_time.text = last["time"] = now
@@ -515,60 +513,3 @@ class Controls:
             self.play_tip.text = self.mini_play_tip.text = (
                 "Pause (Space)" if engine.playing else "Play (Space)"
             )
-
-    # ------------------------------------------------------------ waveform
-
-    def wave_overlay(self) -> str:
-        player, engine = self.player, self.engine
-        if not player.audio or not engine.duration:
-            return ""
-        x = lambda seconds: seconds / engine.duration * WAVE_W
-        parts = [
-            (
-                f'<rect x="0" y="0" width="{x(player.now):.1f}" '
-                f'height="{WAVE_H}" fill="#4f5bd5" fill-opacity="0.18"/>'
-            )
-        ]
-        region = (
-            sorted((self.drag_from, self.drag_to))
-            if self.drag_from is not None and self.drag_to is not None
-            else player.loop
-        )
-        if region:
-            a, b = x(region[0]), x(region[1])
-            opacity = 0.3 if player.looping or self.drag_to is not None else 0.12
-            parts.append(
-                f'<rect x="{a:.1f}" y="0" width="{b - a:.1f}" height="{WAVE_H}" '
-                f'fill="{LOOP_COLOR}" fill-opacity="{opacity}"/>'
-                f'<line x1="{a:.1f}" x2="{a:.1f}" y1="0" y2="{WAVE_H}" stroke="{LOOP_COLOR}" stroke-width="2"/>'
-                f'<line x1="{b:.1f}" x2="{b:.1f}" y1="0" y2="{WAVE_H}" stroke="{LOOP_COLOR}" stroke-width="2"/>'
-                f'<text x="{a + 4:.1f}" y="14" font-size="13" font-weight="bold" fill="{LOOP_COLOR}">A</text>'
-                f'<text x="{b - 13:.1f}" y="14" font-size="13" font-weight="bold" fill="{LOOP_COLOR}">B</text>'
-            )
-        head = x(player.now)
-        parts.append(
-            f'<line x1="{head:.1f}" x2="{head:.1f}" y1="0" y2="{WAVE_H}" stroke="#4f5bd5" stroke-width="2.5"/>'
-        )
-        return "".join(parts)
-
-    def on_wave_mouse(self, e: events.MouseEventArguments) -> None:
-        player, engine = self.player, self.engine
-        if not player.audio:
-            return
-        seconds = min(max(e.image_x, 0), WAVE_W) / WAVE_W * engine.duration
-        match e.type:
-            case "mousedown":
-                self.drag_from, self.drag_to = seconds, None
-            case "mousemove" if self.drag_from is not None and e.buttons & 1:
-                if abs(seconds - self.drag_from) / engine.duration * WAVE_W > 4:
-                    self.drag_to = seconds
-            case "mouseup" if self.drag_from is not None:
-                if self.drag_to is None:
-                    player.seek(seconds)
-                else:
-                    player.set_loop(self.drag_from, seconds)
-                    if player.loop:
-                        player.seek(player.loop[0])
-                self.drag_from = self.drag_to = None
-            case "mouseleave":
-                self.drag_from = self.drag_to = None

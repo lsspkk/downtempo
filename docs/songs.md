@@ -1,34 +1,47 @@
-# Song catalog: `data/songs.json`
+# Song catalog: `projects/<id>/songs.json`
 
-**Summary**: Built. `data/songs.json` is the only file the players read: songs with recordings and sheets, paths relative to `data/`. `catalog` builds it (folder = song, plus `extra_folders`) and keeps hand edits. To be derived from grouping (T90).
+**Summary**: Built (T90). `songs.json` is the only file the players read: songs with recordings and sheets, paths relative to the project folder. It is **derived** from the downloaded files and the project's sorting (`grouping.json`, [song-grouping.md](song-grouping.md)); it is never edited by hand. Rebuilt after every download, after every sorting change, and by `uv run downtempo catalog`.
 
-The one file the players read. Written by `uv run downtempo catalog`, then edited by hand if needed. Example: [data/songs.example.json](../data/songs.example.json).
+Example: [data/songs.example.json](../data/songs.example.json).
 
 ```json
 {
   "songs": [
     {
+      "id": "harbour-waltz",
       "title": "Harbour Waltz",
-      "collection": "my-band",
-      "audio": [{"label": "Harbour Waltz", "path": "downloads/my-band/Harbour Waltz/Harbour Waltz.mp3"}],
+      "audio": [{ "label": "Harbour Waltz", "path": "downloads/my-band/Harbour Waltz/Harbour Waltz.mp3" }],
       "pdf": ["downloads/my-band/Harbour Waltz/Harbour Waltz-2026-01-15.pdf"]
     }
   ]
 }
 ```
 
-| Field | What |
-|---|---|
-| `title` | shown in the players; default: the song's folder name |
-| `collection` | the source name = folder in `data/downloads/` |
-| `audio` | recordings, first = default; `label` tells them apart (default: file name without the ending) |
-| `pdf` | sheet music, chords etc., sorted by name |
+| Field   | What                                                                                                                                                |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`    | the song's id (a slug of its first title, `-2` when taken); never changes on a rename. The player's memory (tempo, loops, last song) is keyed by it |
+| `title` | shown in the players                                                                                                                                |
+| `audio` | recordings in display order, the default first; `label` tells them apart                                                                            |
+| `pdf`   | sheets, the newest version first, older versions after                                                                                              |
 
-- Paths are relative to `data/`, with `/`.
-- Songs are in title order. Players play `audio[0]` unless the user picks another.
+- Paths are relative to the project folder, with `/`: `downloads/<source>/<path as on the server>`.
+- Songs are in title order; a song with no file isn't listed. A file can be in several songs.
+- A song's recordings and sheets come from any of the project's sources.
 
-## How `catalog` builds it
+## How it is built
 
-- Every folder under `data/downloads/<collection>/` with audio (mp3, wav) or pdf files directly in it is one song (endings in any case, `.WAV` too), also nested ones (a nested folder is its own song).
-- **Extra folders**: a folder whose name matches a pattern in the source's `extra_folders` (`data/sources.toml`, e.g. `["Rehearsal *"]`, any case, also nested) is not a song. It holds recordings of several songs, e.g. a rehearsal. Each of its files joins the song whose title the file name starts with, as whole words, any case; the longest title wins. Recordings are added after the song's own, labelled `<folder> · <rest of the name>` (`Rehearsal 3.10 · 2`); pdfs join the song's sheets. Files that match no song stay together as a song named after the folder.
-- Re-run keeps hand edits: a scanned song that shares a file with an old entry keeps its `title`, the `label` of each recording still there, and any extra keys. Songs whose files are all gone are dropped.
+`Library.rebuild()` (after a download and by `catalog`; `catalog.build_catalog` is the last step):
+
+1. `catalog.list_files` lists the audio and sheet files under `downloads/<source>/` (endings in any case), leaving out skipped folders.
+2. `grouping.group` puts every file in a song, To sort or the not-song list, using `grouping.json`; the matches it made now are saved there as automatic placements.
+3. The songs are written to `songs.json` (whole or not at all). Files that joined a song in this run get a mark in `new.json`.
+
+Nothing is read from folder names alone: how files become songs is [song-grouping.md](song-grouping.md). A project that has never been sorted gets a song of every suggestion on its first rebuild (temporary until the To sort screen, T96).
+
+## `new.json`: this computer's
+
+`projects/<id>/new.json`: `{file id: date}` of files that joined a song since the song was last opened. Written only by the Library (the player's periodic state save never touches it); `library.new_marks()`, `songs_with_new()`, `mark_seen(song id)`. Not exported in the settings file.
+
+## From before song grouping
+
+Projects whose `songs.json` has no `id` (folder = song, with `collection` and the source's `extra_folders`) are moved once, when the data folder is opened (`upgrade.py`): each old song becomes a song with its folder linked and its files placed, labels that were edited by hand are kept, the practice memory (`<collection>/<title>` keys) moves to the ids, `extra_folders` leaves `project.toml`, and the old catalog stays as `songs.json.before-grouping`.

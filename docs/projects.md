@@ -1,6 +1,6 @@
-# Projects: several music projects (plan)
+# Projects: several music projects (built)
 
-**Summary**: Plan (T78–T83). A project = one group's sources, songs, sorting and practice memory in `data/projects/<id>/`; sign-ins and layout stay global. Today's `data/` is moved in once, resumably; switching stops playback and reloads.
+**Summary**: Built: core and CLI (T78, T79), the player's ☰ main menu (T82, T120: top left in the player and the project screen; switch, new, Project settings, delete) and Project settings (T116: name, links, folders); the user's try-out T83 waits. A project = one group's sources, songs, sorting and practice memory in `data/projects/<id>/`; sign-ins and layout stay global. Today's `data/` is moved in once, resumably; switching saves, stops playback and builds the page again for the other project (`app.py` `current()` loads the current project per page; the old page's player is `retired` so it can't write into the new one).
 
 Idea **Projects**; part of [blocks.md](blocks.md); tasks in [todo.md](todo.md).
 
@@ -26,12 +26,12 @@ Each project folder is one `Library` ([blocks.md](blocks.md#apis)): code built b
 
 ## Moving today's data in
 
-On first start after the change, if `data/sources.toml` exists and `data/projects/` doesn't:
+`migrate` runs whenever a `Workspace` is made (CLI, player) and does something only while any of `data/sources.toml`, `downloads/`, `songs.json`, `player-state.json` exists:
 
-1. Create a project named after the first source (the user can rename it).
-2. Move `sources.toml` → `project.toml`, `downloads/`, `songs.json` into it. Moves, not copies (hundreds of MB).
+1. Create a project named after the first source (the user can rename it); its id goes into `app.json` before anything moves, so a rerun finds it.
+2. Copy `sources.toml` → `project.toml` (+ `name`) and `songs.json` in; move `downloads/` one source folder at a time (no copies: hundreds of MB).
 3. Split `player-state.json`: the layout keys to `app.json`, `songs` and `recordings` to `practice.json`.
-4. Keep the old JSON files as `*.before-projects` until the user deletes them.
+4. Keep the old `sources.toml` and JSON files as `*.before-projects` until the user deletes them.
 
 Each step checks whether it's already done, so an interrupted move continues on the next start. `songs.json` paths don't change because they are relative to the library root.
 
@@ -48,14 +48,16 @@ class Workspace:                                  # data/
 def migrate(data_dir: Path) -> None               # the move above, safe to re-run
 ```
 
-CLI: a global `--project <name>`; `downtempo project list | new <name> | use <name> | rename <name> <new>`.
+Built in `src/downtempo/projects.py`; `current()` falls back to the first project, or makes "My songs" when there are none. `find(name)` takes a name or id, any case. Names: at most 60 printable characters, unique (any case).
+
+CLI: a global `--project <name>`; `downtempo project list | new <name> | use <name> | rename <name> <new> | delete <name> [--yes]`.
 
 ## Player
 
 - The current project's name is in the [project screen](project-screen.md)'s header, with a menu: switch to another project, New project, Rename, Export (the settings file), Delete. The song list shows the name and opens the same menu.
 - Switching stops playback (ux.md #7), swaps the `Library`, reloads the songs and practice memory, and opens that project's last song paused.
 - With one project the menu still shows, so the feature can be found, but nothing else changes.
-- UX plan: T81.
+- UX plan (T81): [project-screen.md](project-screen.md#project-menu).
 
 ## Not planned
 

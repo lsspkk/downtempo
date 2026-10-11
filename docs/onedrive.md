@@ -1,6 +1,6 @@
 # Authenticating to OneDrive (Microsoft Entra + MSAL + Microsoft Graph)
 
-**Summary**: Built. OneDrive works only through a Microsoft Entra app registration (client ID in `.env`), MSAL device code sign-in (token cached in `data/`), and Microsoft Graph listing + download URLs. Anonymous share access broke in late 2024.
+**Summary**: Built. OneDrive works only through a Microsoft Entra app registration (Downtempo ships its client ID; `.env` can override it), MSAL device code sign-in (token cached in `data/tokens/onedrive.json`), and Microsoft Graph listing + content download. Anonymous share access broke in late 2024.
 
 ## Answer
 
@@ -18,6 +18,9 @@ not supported. Microsoft broke anonymous share access in late 2024 (that's the `
 Unauthorized` this project got). See [why-not-share-link-hacks.md](why-not-share-link-hacks.md).
 
 ## 1. Register the app in Microsoft Entra
+
+Downtempo already ships a registration, so users skip this. It's needed only to use your own
+(then put its ID in `.env` as `ONEDRIVE_CLIENT_ID`).
 
 Source: [entra-register-app](web/entra-register-app.txt)
 
@@ -61,8 +64,14 @@ token = result["access_token"]
 
 - Authority `/consumers` means personal Microsoft accounts only. Use `/common` for both personal
   and work or school accounts, or `/organizations` / `/<tenant-id>` for work or school only.
-- The token cache is saved to `data/.onedrive_token.json` (git-ignored, mode 600). Later runs refresh
-  silently, so you only sign in once, until the refresh token expires (roughly 90 days of inactivity).
+- The token cache is saved to `data/tokens/onedrive.json` (git-ignored, mode 600; an old
+  `data/.onedrive_token.json` is moved there on first use). Later runs refresh silently, also during a
+  long download, so you only sign in once, until the refresh token expires (roughly 90 days of
+  inactivity). `uv run downtempo sign-out` forgets it.
+- The sign-in waits in a worker thread; Cancel sets `flow["expires_at"] = 0`, which MSAL documents
+  as the way to stop polling.
+- Client ID: Downtempo ships its own (`DOWNTEMPO_CLIENT_ID` in `onedrive.py`, public on purpose: it
+  names the app, it is not a secret); `ONEDRIVE_CLIENT_ID` in `.env` overrides it.
 
 ## 3. Permissions (scopes)
 
@@ -103,6 +112,10 @@ GET https://graph.microsoft.com/v1.0/drives/{driveId}/items/{itemId}/children
 GET <@microsoft.graph.downloadUrl>          # NO Authorization header; valid for only a few minutes
 ```
 
+The downloader asks `GET /drives/{d}/items/{i}/content` with the token just before each file instead:
+Graph redirects to a fresh download URL, and `requests` drops the Authorization header on the redirect
+to another host. So a long download never meets an expired URL.
+
 To encode the share id, base64-encode the sharing URL, convert it to URL-safe base64 with no `=`
 padding, and prefix `u!`. If the link is `onedrive.live.com/?...&redeem=<b64>`, decode `redeem`
 first to get the original `1drv.ms` link and encode that.
@@ -110,9 +123,8 @@ first to get the original `1drv.ms` link and encode that.
 ## 5. Running it
 
 ```sh
-cp .env.example .env                            # fill ONEDRIVE_CLIENT_ID
-cp data/sources.example.toml data/sources.toml  # add the sharing link, type = "onedrive"
-uv run downtempo download                       # first run: follow the device-login prompt
+uv run downtempo add '<sharing link>'           # first run: follow the device-login prompt
+uv run downtempo download
 ```
 
 ## Troubleshooting
@@ -121,6 +133,6 @@ uv run downtempo download                       # first run: follow the device-l
 |---|---|
 | `AADSTS7000218 ... client_assertion or client_secret` | Turn on **Allow public client flows** in the app registration. |
 | `AADSTS50020` / `AADSTS700016` | Wrong account type or authority. The app must allow personal accounts and use `/consumers` or `/common`. |
-| `401` from Graph | Token is missing or expired. Delete `data/.onedrive_token.json` and sign in again. |
+| `401` from Graph | Token is missing or expired. Run `uv run downtempo sign-out` and sign in again. |
 | `403 accessDenied` on `/shares` | The signed-in account can't use the link. Check that the link still works in a browser for that account, and that the scope includes `Files.ReadWrite`. |
 | `404 itemNotFound` on `/shares` | The share id is wrong. Check the decoded `1drv.ms` URL. |

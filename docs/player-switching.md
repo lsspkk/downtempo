@@ -18,7 +18,7 @@ Comparable apps: Anytune "saves settings for each song … tempo, pitch, marks, 
 | S2 | browse fast: N N N N | the highlight follows each press immediately; only the song I stop on is shown and ready | never stuck "loading"; nothing from skipped songs shows up later |
 | S3 | pick another recording of the song | same song, same tempo; that recording's loops and position come back; the sheet stays | one load, no reload loop |
 | S4 | pick another sheet tab | only the sheet changes; playback is not interrupted | audio continues |
-| S5 | restart the app | the last song and its settings return | `data/player-state.json` holds only working choices |
+| S5 | restart the app | the last song and its settings return | `practice.json` / `app.json` hold only working choices |
 | S6 | a file is missing or broken | a clear message; the rest keeps working; the bad choice is not remembered | next start isn't stuck on the broken file |
 | S7 | a song without mp3 or without pdf | the part that exists works; the other part says "none" | no errors |
 

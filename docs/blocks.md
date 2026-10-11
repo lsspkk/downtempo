@@ -1,6 +1,6 @@
 # Blocks: the core behind the CLI and the players (plan)
 
-**Summary**: Plan; `events.py` + `errors.py` built (T55), the rest not built; library choices for TOML writing, MSAL sign-in from a thread, a built-in client ID and NiceGUI background jobs decided (T54). The core splits into parts with one job each (events, sources, providers, sync, grouping, catalog, library, bundle, projects); frontends call only `Library`, never downloaders. The core never prints, long work is cancellable and off the UI thread, writes are atomic, nothing is deleted without asking.
+**Summary**: Plan; built: `events.py`, `errors.py` (T55), providers + `sync.py` (T56), `sources.py` (T57), `library.py` (T58), sign-in for a window (T59), folder listing (T85), player jobs (T60); projects core + CLI (T78, T79), bundle core + CLI (T66, T80); not built: grouping; library choices for TOML writing, MSAL sign-in from a thread, a built-in client ID and NiceGUI background jobs decided (T54). The core splits into parts with one job each (events, sources, providers, sync, grouping, catalog, library, bundle, projects); frontends call only `Library`, never downloaders. The core never prints, long work is cancellable and off the UI thread, writes are atomic, nothing is deleted without asking.
 
 Plan for four ideas: **Downloader UI**, **Settings file**, **Song grouping** and **Projects**; why they exist: [purpose.md](purpose.md). Tasks are in [todo.md](todo.md). Details: [song-grouping.md](song-grouping.md), [project-screen.md](project-screen.md) (the UI), [settings-file.md](settings-file.md), [projects.md](projects.md); review of this plan: [downloader-review.md](downloader-review.md). Once a block is built, its rules move into [architecture.md](architecture.md).
 
@@ -31,8 +31,8 @@ Each block has one job. Lower blocks never import upper ones.
 | `grouping.py` | files → songs by names, folders as hints, the user's fixes on top; pure (file refs in, songs out), so it also runs on a listing before download ([song-grouping.md](song-grouping.md)) | providers, disk, JSON |
 | `catalog.py` | list a library's files, run `grouping`, keep `grouping.json` (fixes, song ids), write the derived `songs.json`, return a diff | providers, UI |
 | `library.py` | **the API**: one folder holding sources, downloads, catalog, practice memory | UI, which provider |
-| `bundle.py` | the settings file: export, read (untrusted), preview, apply | UI |
-| `projects.py` | many libraries in `data/projects/`, the current one, moving old data in | UI |
+| `bundle.py` | the settings file: export, read (untrusted), preview, apply (built, T66) | UI |
+| `projects.py` | many libraries in `data/projects/`, the current one, moving old data in (built, T78) | UI |
 | CLI, players | front doors: call `library` / `bundle` / `projects`, show events | providers' internals |
 
 ```
@@ -64,14 +64,14 @@ class Provider(Protocol):
     def owns(self, url: str) -> bool             # link detection, no network
     def account(self) -> str | None              # "Signed in as …", from the token cache
     def sign_out(self) -> None
-    def connect(self, report: Report, cancel: Event) -> Connection   # signs in when needed
+    def connect(self, report: Report, cancel: Event) -> Connection   # signs in when needed; Cancelled
 class Connection(Protocol):
     def open(self, url: str, folder: str = "") -> RemoteFolder        # folder path inside the share; raises UserError
     def folders(self, folder: RemoteFolder) -> list[RemoteFolderInfo]  # the folder picker: name, path, ♪/📄 counts
     def files(self, folder: RemoteFolder) -> Iterator[RemoteFile]    # media files only, recursive
 class RemoteFolder: name: str; ref: Any
-class RemoteFile:   path: PurePosixPath; size: int | None; modified: datetime | None
-                                            url: str; headers: Mapping[str, str] = {}
+class RemoteFile:   path: PurePosixPath; size: int | None; modified: datetime | None; ref: Any
+    # built: Connection.request(file) -> (url, headers), asked just before each download (fresh token)
 def provider_for(url: str) -> Provider | None
 
 # sync.py

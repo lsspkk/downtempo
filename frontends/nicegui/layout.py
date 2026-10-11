@@ -1,5 +1,6 @@
-"""The window's frame: header, song-list drawer, the controls | sheet grid, Full / Simple / Sheet
-controls, full screen, settings and dark mode (docs/practice-layout.md).
+"""The window's frame: header (☰ slot, the song list toggle, the song's title, Full / Simple /
+Sheet), song-list drawer, the controls | sheet grid, full screen; the player's items of the ☰
+menu: settings, keyboard shortcuts, dark mode (docs/practice-layout.md).
 
 The parts put themselves in: the controls fill `pane` and `mini_bar` and list what Full or Simple
 shows; the sheet lists what full screen hides or shows.
@@ -13,6 +14,7 @@ from keys import help_dialog
 from nicegui import app, ui
 from player import Player
 
+DRAWER_WIDTH = 290
 # Both remembered: state["view"] and state["settings"].
 VIEW = {"library": True, "controls": "full", "rotate": 0}
 SETTINGS = {"scroll_step": 20, "page_mode": "screen", "tempo_step": 5, "smooth": True}
@@ -33,6 +35,9 @@ class Shell:
         self.view = state["view"] = {**VIEW, **state.get("view", {})}
         self.settings = state["settings"] = {**SETTINGS, **state.get("settings", {})}
         self.fullscreen = False  # only the sheet; not remembered
+        self.audio_less = (
+            False  # the song has no recording: a narrow pane; not remembered
+        )
         self.full_only: list[ui.element] = []  # hidden in Simple controls
         self.simple_only: list[ui.element] = []  # shown only in Simple controls
         self.fullscreen_hidden: list[ui.element] = []
@@ -40,20 +45,21 @@ class Shell:
         self.pane: ui.column | None = None
         ui.add_head_html(FULLSCREEN_JS)
         self.help = help_dialog()
-        settings_dialog = self.settings_dialog()
+        self.player_settings = self.settings_dialog()
         self.dark = ui.dark_mode(state.get("dark", False))
 
         with ui.header(elevated=False).classes(
             "app-header items-center gap-2 px-3 py-1 no-wrap"
         ) as self.header:
-            # Labelled, not ☰: that reads as the app menu (docs/practice-layout.md#song-list-button)
-            self.songs_button = ui.button(
-                "Songs", icon="queue_music", on_click=lambda: self.drawer.toggle()
-            ).props("flat no-caps")
-            tip(self.songs_button, "Song list (Q)")
-            ui.label("Downtempo").classes("text-subtitle1 font-bold text-primary gt-md")
-            ui.separator().props("vertical").classes("mx-1 gt-md")
-            self.title = ui.label("").classes("text-h6 truncate min-w-0")
+            self.menu_slot = ui.element("div")  # ☰, filled by the page (main_menu.py)
+            # The usual sidebar toggle; ☰ is the main menu (docs/practice-layout.md#song-list-button)
+            self.songs_button = ui.button(on_click=lambda: self.drawer.toggle()).props(
+                "flat round"
+            )
+            self.songs_button.classes("ml-1")
+            self.songs_tip = tip(self.songs_button, "")
+            # ml-3: the same space between the toggle's icon and the title as between the icons
+            self.title = ui.label("").classes("text-h6 truncate min-w-0 ml-3")
             ui.space()
             # The basics while the controls are hidden (sheet only); the controls fill it.
             self.mini_bar = ui.row().classes("items-center gap-1 no-wrap")
@@ -67,20 +73,11 @@ class Shell:
                 .classes("border")
             )
             tip(self.controls_toggle, "Controls: full / simple / sheet only (V)")
-            ui.button(icon="settings", on_click=settings_dialog.open).props(
-                "flat round"
-            ).tooltip("Settings")
-            ui.button(icon="keyboard", on_click=self.help.open).props(
-                "flat round"
-            ).tooltip("Keyboard shortcuts (?)")
-            ui.button(icon="dark_mode", on_click=self.flip_dark).props(
-                "flat round"
-            ).tooltip("Dark / light")
 
         with (
             ui.left_drawer(value=self.view["library"], bordered=True)
-            .props("width=290")
-            .classes("p-2 gap-2") as self.drawer
+            .props(f"width={DRAWER_WIDTH}")
+            .classes("p-2 gap-2 no-wrap") as self.drawer
         ):
             self.drawer.on_value_change(lambda e: self.on_drawer(bool(e.value)))
         self.show_library_button(self.view["library"])
@@ -114,6 +111,8 @@ class Shell:
             "full": "minmax(360px, 460px) 1fr",
             "simple": "minmax(250px, 290px) 1fr",
         }
+        if self.audio_less:
+            columns = {"full": "220px 1fr", "simple": "220px 1fr"}
         height = "100vh" if self.fullscreen else "calc(100vh - 52px)"
         self.layout.style(
             f"grid-template-columns: {columns.get(mode, '1fr')}; height: {height}"
@@ -130,6 +129,12 @@ class Shell:
             element.set_visibility(not self.fullscreen)
         for element in self.fullscreen_only:
             element.set_visibility(self.fullscreen)
+
+    def set_audio_less(self, on: bool) -> None:
+        """Per song, so the remembered layout stays (docs/ux.md #8)."""
+        if on != self.audio_less:
+            self.audio_less = on
+            self.show_layout()
 
     def set_controls(self, mode: str) -> None:
         if mode not in ("full", "simple", "hidden"):
@@ -156,10 +161,28 @@ class Shell:
             ui.run_javascript(f"shell.fullscreen({json.dumps(on)})")
 
     def show_library_button(self, shown: bool) -> None:
-        if shown:
-            self.songs_button.classes(add="song-active text-primary")
-        else:
-            self.songs_button.classes(remove="song-active text-primary")
+        """The icon shows the list's state: a panel to close, or one to open."""
+        icon = "sym_o_left_panel_close" if shown else "sym_o_left_panel_open"
+        self.songs_button.props(f"icon={icon}")
+        self.songs_tip.text = f"{'Hide' if shown else 'Show'} song list (Q)"
+
+    def menu_items(self) -> None:
+        """The player's part of the ☰ menu."""
+        ui.menu_item("Player settings…", on_click=self.player_settings.open)
+        with (
+            ui.menu_item(on_click=self.help.open),
+            ui.row().classes("w-full items-center no-wrap"),
+        ):
+            ui.label("Keyboard shortcuts").classes("grow")
+            ui.label("?").classes("text-grey")
+        with (
+            ui.menu_item(on_click=self.flip_dark),
+            ui.row().classes("w-full items-center no-wrap"),
+        ):
+            ui.label("Dark mode").classes("grow")
+            ui.icon(
+                "toggle_on" if self.dark.value else "toggle_off", size="28px"
+            ).classes("text-primary" if self.dark.value else "text-grey")
 
     def on_drawer(self, shown: bool) -> None:
         self.show_library_button(shown)
@@ -182,7 +205,7 @@ class Shell:
     def settings_dialog(self) -> ui.dialog:
         settings = self.settings
         with ui.dialog() as dialog, ui.card().classes("min-w-[380px] gap-3"):
-            ui.label("Settings").classes("text-h6")
+            ui.label("Player settings").classes("text-h6")
             for key, label, options in (
                 (
                     "scroll_step",

@@ -13,6 +13,7 @@ if TYPE_CHECKING:  # the parts import this module for help_dialog
     from layout import Shell
     from loop_editor import LoopEditor
     from player import Player
+    from project_screen import ProjectScreen
     from sheet_pane import SheetPane
     from song_list import SongList
 
@@ -75,8 +76,13 @@ def install(
     controls: "Controls",
     sheet: "SheetPane",
     editor: "LoopEditor",
+    screen: "ProjectScreen",
 ) -> None:
     async def on_key(e: events.KeyEventArguments) -> None:
+        if screen.is_open:  # the project screen has its own keys; the player's are off
+            if is_owner():
+                await screen.on_key(e)
+            return
         if (
             not e.action.keydown
             or e.modifiers.ctrl

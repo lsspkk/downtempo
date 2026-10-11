@@ -1,36 +1,16 @@
-"""Project paths, `.env` loading and the source list in `data/sources.toml`."""
+"""Where things live (the data folder, sign-ins), which file endings count, `.env` loading."""
 
 import os
-import tomllib
-from dataclasses import dataclass
 from pathlib import Path
 
-from downtempo.errors import UserError
-
 PROJECT_DIR = Path(__file__).resolve().parents[2]
-DATA_DIR = PROJECT_DIR / "data"
-DOWNLOADS_DIR = DATA_DIR / "downloads"
-SOURCES_FILE = DATA_DIR / "sources.toml"
-SONGS_FILE = DATA_DIR / "songs.json"
+# DOWNTEMPO_DATA points everything at another folder: a scratch copy, a fresh start.
+DATA_DIR = Path(os.environ.get("DOWNTEMPO_DATA") or PROJECT_DIR / "data").resolve()
+TOKENS_DIR = DATA_DIR / "tokens"  # sign-ins belong to the computer, not to a library
 # Lower case; file endings are compared lower-cased, so `.WAV` counts too.
 AUDIO_EXTENSIONS = {".mp3", ".wav"}
 SHEET_EXTENSIONS = {".pdf"}
 MEDIA_EXTENSIONS = AUDIO_EXTENSIONS | SHEET_EXTENSIONS
-
-
-@dataclass(frozen=True)
-class Source:
-    """One shared folder to download; its files go to `data/downloads/<name>/`."""
-
-    name: str
-    type: str
-    url: str
-    subfolder: str = ""
-    extra_folders: tuple[str, ...] = ()  # used by the catalog, see docs/songs.md
-
-    @property
-    def target(self) -> Path:
-        return DOWNLOADS_DIR / self.name
 
 
 def load_env(path: Path = PROJECT_DIR / ".env") -> None:
@@ -43,21 +23,3 @@ def load_env(path: Path = PROJECT_DIR / ".env") -> None:
             continue
         key, value = line.split("=", 1)
         os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
-
-
-def load_sources(path: Path = SOURCES_FILE) -> list[Source]:
-    if not path.exists():
-        raise UserError(
-            f"No {path.relative_to(PROJECT_DIR)}.",
-            "Copy data/sources.example.toml and fill it in.",
-        )
-    sources = [
-        Source(**entry)
-        for entry in tomllib.loads(path.read_text(encoding="utf-8")).get("source", [])
-    ]
-    names = [source.name for source in sources]
-    if len(names) != len(set(names)):
-        raise UserError(
-            f"Source names must be unique: {names}", f"Rename one in {path.name}."
-        )
-    return sources
