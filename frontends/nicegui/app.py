@@ -190,7 +190,7 @@ def root() -> None:
     if session.pop("download", False):  # a settings file was imported as a new project
         ui.timer(0.5, lambda: updates.start(), once=True)
     if not player.songs:
-        welcome(player.library, adder.open, screen.open, updates.start)
+        welcome(player.library, adder.open, screen.open, updates)
         return
 
     editor = LoopEditor(player)

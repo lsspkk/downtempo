@@ -5,13 +5,13 @@ The big things, one line each. Tasks for them are grouped under the same names i
 ## Not done
 
 - **Project screen**: a full-screen view of the project: its sources (add a folder, update, sign in) and its songs as rows of files to drag between songs; the downloader UI and the sorting UI in one ([project-screen.md](project-screen.md))
+- **Browser player**: the player as a web page; research done ([browser-research.md](browser-research.md): OneDrive yes, Google Drive yes for a band in Testing mode, storage fine); next test pages on GitHub Pages ([todo.md](todo.md#browser-player))
 - **Parts of a file**: a song uses pages 4–5 of a songbook PDF or 12:30–16:10 of a long rehearsal recording (after Song grouping, which lets one file be in several songs)
 
 ## Later
 
 Not now (the user's call, 2026-10-11).
 
-- **Browser player**: same in a web page, to compare with the Python player
 - **Downloaders**: one per source type; OneDrive done, Google Drive next
 
 ## Done

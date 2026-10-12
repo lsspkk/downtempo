@@ -16,6 +16,7 @@
 - [downloader-review.md](downloader-review.md): T84 review: folder rules dropped for name grouping and a project screen; findings R1–R16 and their tasks.
 - [settings-file.md](settings-file.md): one TOML file with a project's sources, skipped folders and sorting to email; import is checked and previewed before anything is written; built (core, CLI, player).
 - [projects.md](projects.md): one folder per project under `data/projects/`, the current one in `data/app.json`; old data moved in once; built (core, CLI, the player's ☰ menu and Project settings).
+- [browser-research.md](browser-research.md): plan: can a web page sign in to OneDrive / Google Drive, download the files and keep them; GitHub Pages hosting; what T132 tests.
 - [ux.md](ux.md): the 11 UX principles and the checklist every UI task follows.
 - [practice-layout.md](practice-layout.md): small-laptop layout (built): three regions with simple states, keys, rotation, settings; the song list's top (Project ⟳, name, status line) and the ☰ main menu.
 - [player-switching.md](player-switching.md): switching (built): code never sets widgets, loaders work on a snapshot, newest wins.

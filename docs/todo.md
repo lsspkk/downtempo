@@ -20,16 +20,20 @@ Plan: [project-screen.md](project-screen.md). Replaces the Sources dialog (T46 d
 
 - [ ] T44 Manual UX test by the user on the real laptop (mouse and trackpad): `E`, click start / end with a two-finger swipe between, pinch zoom in the native window (unknown whether Qt WebEngine passes it), ⠿ handles, Hear end, Undo, Esc back; findings become tasks
 
-## Later
-
-Not now (the user's call, 2026-10-11).
-
 ### Browser player
 
+The user's call (2026-10-11): find out first whether a browser version can sign in and get the files at all, by research, then small test pages on GitHub Pages that the user tries. Each test page says clearly that it is only for testing a browser version of Downtempo. No real links, names or files in the repo: the user pastes a link in the page.
+
+- [ ] T132 Test pages on GitHub Pages, per [browser-research.md](browser-research.md#what-t132-tests) (tests 1–6 there; `frontends/browser-tests/`, plain HTML + JS, no build step; published by a GitHub Actions workflow, since branch publishing takes only the root or `/docs`; the banner "Test pages for trying a browser version of Downtempo. Not the app." on every page; client ids and API key in one settings file, links pasted in the page). First the user's setup in [browser-research.md](browser-research.md#what-the-user-sets-up-for-t132): Entra single-page-app redirect, a Google Cloud project in Testing mode, Pages source = GitHub Actions
+- [ ] T133 Manual test by the user on the published pages: a real OneDrive link and a Google Drive folder, in Chrome and Firefox (and a phone if handy); findings → tasks, and the decision whether the browser player goes on (then T4, T31, T8, T6)
 - [ ] T4 Browser research, the rest after [stretch-research.md](stretch-research.md): pick the worklet for T6 (Signalsmith Stretch Web vs SoundTouchJS vs plain `playbackRate`), check Safari and whether rubberband-web is maintained → short `docs/tempo-browser.md`
 - [ ] T6 `frontends/browser/index.html` MVP: load `data/songs.json`, song dropdown, tempo slider 0.5–1.3x; served by `uv run downtempo serve`, which exposes only the page, the catalog and its files (not the project root: `.env`)
 - [ ] T31 Listening test per [stretch-research.md](stretch-research.md#then-listening-test-t31): same 20 s excerpts (drums, solo melody) at 0.5x / 0.75x / 1.3x with R3, R3 + ChannelsTogether, R2, Signalsmith, browser `playbackRate` → `data/scratch/tempo-tests/`; blind listening by the user
 - [ ] T8 Compare Python vs browser by ear (uses T31); write the pick and why into `docs/tempo-decision.md`
+
+## Later
+
+Not now (the user's call, 2026-10-11).
 
 ### Downloaders
 

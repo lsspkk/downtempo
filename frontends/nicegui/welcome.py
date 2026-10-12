@@ -1,10 +1,12 @@
 """What the page shows before there are songs: on the first start "Paste a link to your group's
 shared folder" (the Add folder flow takes it from there); with folders but no songs yet, the way
-to the unknown files or a download (docs/project-screen.md#getting-there)."""
+to the unknown files or a download (docs/project-screen.md#getting-there). While a download runs
+its button is off and says so; when it ends the page shows what's there now."""
 
 from collections.abc import Callable
 
 from nicegui import ui
+from updates import Updates
 
 from downtempo.library import Library
 
@@ -13,7 +15,21 @@ def welcome(
     library: Library,
     add_folder: Callable[[str], None],
     open_screen: Callable[[], None],
-    download: Callable[[], None],
+    updates: Updates,
+) -> None:
+    @ui.refreshable
+    def page() -> None:
+        content(library, add_folder, open_screen, updates)
+
+    page()
+    updates.finished.append(lambda _: page.refresh())
+
+
+def content(
+    library: Library,
+    add_folder: Callable[[str], None],
+    open_screen: Callable[[], None],
+    updates: Updates,
 ) -> None:
     with ui.column().classes("w-full items-center mt-20 gap-3 px-4"):
         ui.icon("library_music", size="64px").classes("text-primary")
@@ -54,6 +70,17 @@ def welcome(
             ui.label("Download the files of your shared folders.").classes(
                 "text-body1 text-grey"
             )
-            ui.button("Check for new files", icon="sync", on_click=download).props(
-                "unelevated no-caps"
-            )
+            button = ui.button(
+                "Check for new files", icon="sync", on_click=lambda: updates.start()
+            ).props("unelevated no-caps")
+
+            def show() -> None:
+                if button.is_deleted:  # the page was redrawn after a download
+                    return
+                button.set_enabled(not updates.running)
+                button.text = (
+                    "Downloading…" if updates.running else "Check for new files"
+                )
+
+            updates.changed.append(show)
+            show()
