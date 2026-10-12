@@ -2,7 +2,7 @@
 
 **Summary**: Plan (T131, from documentation only; the test pages are T132). A browser version can work. **OneDrive: yes**: the docs confirm sign-in from a page, Graph calls from a page and file downloads through each file's own download link. **Google Drive: yes for a band, with limits**: reading a shared folder needs a "restricted" permission that public apps must get reviewed, but in Testing mode up to 100 listed people may use it (a warning screen, sign in again every 7 days). Whether Google's picker or an API key can do it without that permission is not in the docs: T132 tests it. **Storage: fine**: the browser's private file system holds hundreds of MB in every major browser. **Hosting**: GitHub Pages through a GitHub Actions workflow.
 
-Idea **Browser player**; tasks in [todo.md](todo.md#browser-player). Today's Python downloader for comparison: [onedrive.md](onedrive.md).
+Idea **Browser player**; tasks in [todo.md](todo.md#browser-player). Today's Python downloader for comparison: [onedrive.md](onedrive.md). The OneDrive test page is built: [browser-tests.md](browser-tests.md).
 
 ## OneDrive in a web page
 

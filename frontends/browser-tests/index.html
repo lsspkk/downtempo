@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Downtempo browser tests</title>
+<style>
+  :root { --bg: #fff; --fg: #1d1d1f; --muted: #666; --line: #ddd; --accent: #2a6df4; --warn: #fff3cd; --bad: #b00020; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #18181a; --fg: #eee; --muted: #aaa; --line: #333; --accent: #6d9cff; --warn: #4a3d10; --bad: #ff6b81; }
+  }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.45 system-ui, sans-serif; margin: 0 auto; max-width: 52rem; padding: 0 16px 3rem; }
+  .banner { background: var(--warn); padding: .6rem 1rem; margin: 0 -16px 1rem; font-weight: 600; text-align: center; }
+  section { border-top: 1px solid var(--line); padding: .5rem 0 1rem; }
+  h2 { font-size: 1.1rem; margin: .5rem 0; }
+  button { font: inherit; padding: .35rem .8rem; cursor: pointer; }
+  input[type=url] { font: inherit; width: 100%; box-sizing: border-box; padding: .4rem; margin: .3rem 0; }
+  table { border-collapse: collapse; width: 100%; }
+  td { padding: .25rem .4rem; border-bottom: 1px solid var(--line); vertical-align: middle; overflow-wrap: anywhere; }
+  td.n { text-align: right; white-space: nowrap; color: var(--muted); }
+  .muted { color: var(--muted); }
+  .bad { color: var(--bad); }
+  audio { width: 100%; margin-top: .5rem; }
+  pre { background: color-mix(in srgb, var(--fg) 6%, transparent); padding: .5rem; white-space: pre-wrap; font-size: .85rem; max-height: 16rem; overflow: auto; }
+</style>
+</head>
+<body>
+<div class="banner">Test pages for trying a browser version of Downtempo. Not the app.</div>
+
+<section>
+  <h2>1. Sign in to OneDrive</h2>
+  <p id="sign-status" class="muted">…</p>
+  <button id="sign-in">Sign in</button> <button id="sign-out">Sign out</button>
+</section>
+
+<section>
+  <h2>2. A shared folder</h2>
+  <label for="link">Paste a OneDrive share link to a folder:</label>
+  <input id="link" type="url" placeholder="https://1drv.ms/f/…">
+  <button id="list">List files</button>
+  <p id="list-status" class="muted"></p>
+  <table id="files"></table>
+</section>
+
+<section>
+  <h2>3. On this device</h2>
+  <p id="storage-status" class="muted">…</p>
+  <button id="keep">Ask the browser to keep the files</button>
+  <p class="muted">To test that files stay: reload the page (or close and reopen the browser), then press Play on a saved file.</p>
+  <table id="saved"></table>
+  <audio id="player" controls></audio>
+</section>
+
+<section>
+  <h2>Log</h2>
+  <p class="muted">What happened, for reporting. <button id="copy-log">Copy log</button></p>
+  <pre id="log"></pre>
+</section>
+
+<script type="module" src="page.js"></script>
+</body>
+</html>

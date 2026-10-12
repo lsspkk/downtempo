@@ -2,6 +2,7 @@
 
 Finished tasks, newest first. `- YYYY-MM-DD T<n> what was done: note`. Older entries carry the retired idea numbers (I1–I8).
 
+- 2026-10-13 T132 OneDrive browser test page → [browser-tests.md](browser-tests.md): `frontends/browser-tests/` (hand-written PKCE, no library; list a share, stream a file into the private file system, play, storage used / kept, a log to copy) and a Pages workflow; Google Drive tests skipped for now (T132.1 under Later)
 - 2026-10-11 T131 Browser research → [browser-research.md](browser-research.md): OneDrive works from a page (SPA redirect, Graph CORS, each file's downloadUrl since /content redirects; SPA refresh tokens last 24 h; MSAL's CDN is gone: ESM CDN or hand-written PKCE); Google: drive.readonly is restricted, Testing mode serves up to 100 listed users with weekly re-consent, picker + drive.file on a folder and API-key-only access are open questions for T132; storage: the private file system is everywhere, quotas far above a band's size; Pages: an Actions workflow (branch publishing is root or /docs only); the user's setup listed
 - 2026-10-11 T130 Browser player back from Later (the user's call): research first (T131), then test pages on GitHub Pages saying they are only for testing (T132), the user's try-out (T133); T4, T31, T8, T6 after that
 - 2026-10-11 T129 Welcome page's Check for new files (after an import, folders but no songs): off and reading "Downloading…" while any download runs, on again when it ends or fails; after a download that brought files the page redraws itself (then: Edit song list)
