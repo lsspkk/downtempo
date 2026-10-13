@@ -1,0 +1,46 @@
+# Publishes the browser app (frontends/browser/, tested and built) to GitHub Pages at /downtempo/,
+# with the OneDrive test page (frontends/browser-tests/) at /downtempo/tests/.
+# Settings → Pages → Source: GitHub Actions.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths: ["frontends/browser/**", "frontends/browser-tests/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    defaults:
+      run:
+        working-directory: frontends/browser
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontends/browser/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: cp -r ../browser-tests dist/tests
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontends/browser/dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

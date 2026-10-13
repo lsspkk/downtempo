@@ -1,0 +1,367 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "app_intro": "Harjoittele kappaleita: lataa nuotit ja äänitteet jaetusta kansiosta, ja hidasta äänitteitä tarpeen mukaan.",
+  "new_project": "Uusi projekti",
+  "project_is": "Projekti, jossa soitat: bändi, kuoro, kurssi.",
+  "name": "Nimi",
+  "first_project_name": "Bändini",
+  "default_project_name": "Kappaleeni",
+  "link_hint": "OneDrivesta: Jaa → Kopioi linkki. Voit lisätä myöhemminkin.",
+  "cancel": "Peruuta",
+  "stays_here": "Tiedostot tallennetaan selaimen levytilaan tälle laitteelle, jotta musiikkia voi hidastaa. Mitään ei lähetetä muualle.",
+  "ok": "OK",
+  "link_label": "Jaetun kansion linkki (OneDrive)",
+  "link_bad": "Tämä ei näytä OneDrive-linkiltä.",
+  "add_folder": "Lisää kansio",
+  "get_songs_of": "Hae kappaleet: {project}",
+  "downloading_file": "Ladataan {file}…",
+  "about": "Tietoja",
+  "n_songs": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} kappale",
+        "countPlural=other": "{count} kappaletta"
+      }
+    }
+  ],
+  "from_files": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} tiedostosta, {size}.",
+        "countPlural=other": "{count} tiedostosta, {size}."
+      }
+    }
+  ],
+  "saved_offline": "Tiedostot tallentuvat selaimen levytilaan, joten kappaleet soivat myöhemmin ilman verkkoakin.",
+  "download": "Lataa",
+  "choose_other_folders": "Valitse muut kansiot",
+  "sign_in_once": "OneDrive pyytää kirjautumaan kerran, millä tahansa Microsoft-tilillä, ennen kuin se näyttää jaetun kansion.",
+  "only_reads": "Downtempo vain lukee kansiota. Palaat tänne kirjautumisen jälkeen.",
+  "sign_in_onedrive": "Kirjaudu OneDriveen",
+  "look_hint": "Katso jaetusta kansiosta, mitä kappaleita siellä on.",
+  "look": "Katso kansiosta",
+  "choose_folders": "Valitse kansiot…",
+  "change_link": "Vaihda linkki…",
+  "look_in_these": "Katso näistä kansioista",
+  "which_folders": "Mitä kansioita tarvitset?",
+  "which_folders_from": "Mitä kansioita tarvitset kansiosta {name}?",
+  "tick_hint": "Rastita ladattavat kansiot; rastitettu kansio tuo mukanaan kaiken sisältönsä. Rastitetun kansion sisällä klikkaa kansiota jättääksesi sen pois.",
+  "no_folders_top": "Sisällä ei ole kansioita: koko jaettu kansio otetaan.",
+  "n_folders": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} kansio",
+        "countPlural=other": "{count} kansiota"
+      }
+    }
+  ],
+  "nothing_ticked": "Ei rasteja: koko jaettu kansio.",
+  "clear_ticks": "Poista rastit",
+  "open_folder": "Avaa {name}",
+  "close_folder": "Sulje {name}",
+  "n_items": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} kohde",
+        "countPlural=other": "{count} kohdetta"
+      }
+    }
+  ],
+  "no_folders_inside": "Ei kansioita sisällä",
+  "opening": "Avataan…",
+  "songs": "Kappaleet",
+  "show_list": "Näytä kappalelista (Q)",
+  "hide_list": "Piilota kappalelista (Q)",
+  "checked_ago": "Synkronoitu {ago}",
+  "update_title": "Tarkista, onko jaetuissa kansioissa uusia tiedostoja",
+  "progress": "{done} / {total} · {bytes} / {all}",
+  "sign_in": "Kirjaudu",
+  "ready_to_download": "Valmis lataamaan",
+  "menu": "Valikko",
+  "projects": "Projektit",
+  "new_project_menu": "Uusi projekti…",
+  "settings_menu": "Asetukset…",
+  "language_reloads": "Sivu latautuu uudelleen valitulla kielellä.",
+  "language_wait": "Odota ensin, että lataus päättyy.",
+  "settings": "Asetukset",
+  "signed_in_since": "Kirjautunut {time} alkaen.",
+  "not_signed_in": "Ei kirjautunut.",
+  "asks_again": "OneDrive kysyy uudelleen, jos sitä ei ole käytetty päivään.",
+  "sign_out": "Kirjaudu ulos",
+  "shared_folders": "Jaetut kansiot",
+  "not_opened": "Ei vielä avattu",
+  "only_folders": "Vain {folders}",
+  "all_of_it": "Kaikki",
+  "folders_not_chosen": "Kansioita ei ole vielä valittu",
+  "n_files": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} tiedosto",
+        "countPlural=other": "{count} tiedostoa"
+      }
+    }
+  ],
+  "folders_button": "Kansiot…",
+  "remove": "Poista",
+  "confirm_remove_source": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "Poistetaanko “{name}” ja sen {count} tiedosto tältä laitteelta?",
+        "countPlural=other": "Poistetaanko “{name}” ja sen {count} tiedostoa tältä laitteelta?"
+      }
+    }
+  ],
+  "no_shared_folders": "Ei vielä jaettuja kansioita.",
+  "use_these": "Käytä näitä kansioita",
+  "confirm_left_out": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} ladattu tiedosto on näiden kansioiden ulkopuolella. Poistetaanko se tältä laitteelta?",
+        "countPlural=other": "{count} ladattua tiedostoa on näiden kansioiden ulkopuolella. Poistetaanko ne tältä laitteelta?"
+      }
+    }
+  ],
+  "delete_project": "Poista projekti",
+  "confirm_delete": "Poistetaanko projekti “{name}” lopullisesti? Sen linkki, valitut kansiot, ladatut tiedostot, valinnat ja kaikki muistettu poistuvat. OneDriven jaettuihin kansioihin ei kosketa.",
+  "this_device": "Tämä laite",
+  "device_all": "Tässä selaimessa on Downtempon tiedostoja {used}; selain sallii enintään {allowed}.",
+  "kept": "Tiedostot pysyvät: selain ei poista niitä itsestään, vaikka levy täyttyisi.",
+  "may_clear": "Selain voi poistaa tiedostot itsestään, kun levy täyttyy. Pidä tiedostot pyytää selainta säilyttämään ne.",
+  "keep_files": "Pidä tiedostot",
+  "keyboard": "Näppäimet",
+  "key_play": "soita / tauko",
+  "key_tempo": "tempo hitaammin / nopeammin",
+  "key_5s": "taakse / eteen 5 s",
+  "key_10s": "taakse / eteen 10 s",
+  "key_jump": "alkuun (valinnan alkuun), 10 … 90 %",
+  "key_ab": "valinnan alku / loppu tähän",
+  "key_loop": "valinta päälle / pois, poista",
+  "key_recording": "seuraava äänite",
+  "key_scroll": "vieritä nuottia",
+  "key_zoom": "nuotin zoomaus",
+  "key_song": "seuraava / edellinen kappale",
+  "key_list": "kappalelista, haku",
+  "no_songs": "Ei vielä kappaleita.",
+  "search_songs": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "Hae {count} kappaleesta  ( / )",
+        "countPlural=other": "Hae {count} kappaleesta  ( / )"
+      }
+    }
+  ],
+  "song_has": "Äänitteitä {audio}, nuotteja {sheets}",
+  "no_match": "Mikään kappale ei vastaa hakua “{query}”.",
+  "no_recording": "Tällä kappaleella ei ole äänitettä.",
+  "opening_sheet": "Avataan nuottia…",
+  "no_sheet": "Tällä kappaleella ei ole nuottia.",
+  "play": "Soita",
+  "pause": "Tauko",
+  "loop_toggle": "Valinta päälle / pois (R)",
+  "clear_loop": "Poista valinta",
+  "position": "Kohta",
+  "tempo": "Tempo",
+  "cant_play_file": "Tämä selain ei pysty soittamaan tiedostoa.",
+  "click_first": "Selain haluaa ensin klikkauksen: paina ▶.",
+  "cant_play": "Ei voi soittaa: {reason}",
+  "file_gone": "Tiedosto ei ole enää tällä laitteella: paina ⟳ Päivitä.",
+  "cant_open_pdf": "PDF:ää ei voi avata: {reason}",
+  "zoom_out": "Pienennä",
+  "zoom_in": "Suurenna",
+  "fit_width": "Sovita leveyteen (W)",
+  "opening_share": "Avataan jaettua kansiota…",
+  "looking_in": "Katsotaan kansiota {folder}…",
+  "n_downloaded": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} tiedosto ladattu",
+        "countPlural=other": "{count} tiedostoa ladattu"
+      }
+    }
+  ],
+  "up_to_date": "Ajan tasalla",
+  "n_gone": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} ei enää jaetussa kansiossa (säilyy täällä)",
+        "countPlural=other": "{count} ei enää jaetussa kansiossa (säilyvät täällä)"
+      }
+    }
+  ],
+  "stopped": "Pysäytetty. Valmiiksi ladatut tiedostot säilyvät.",
+  "download_failed": "Tiedoston {file} lataus vastasi {status}",
+  "signin_refused": "Kirjautuminen hylättiin: {reason}",
+  "signin_mismatch": "Kirjautumisen vastaus ei sovi tähän välilehteen; kirjaudu uudelleen.",
+  "signin_again_code": "Kirjaudu OneDriveen uudelleen ({code}).",
+  "signin_first": "Kirjaudu ensin OneDriveen.",
+  "signin_asks": "OneDrive pyytää kirjautumaan uudelleen.",
+  "onedrive_answered": "OneDrive vastasi {status}: {reason}",
+  "link_is_file": "Linkki avaa tiedoston, ei kansiota.",
+  "cant_save": "Tämä selain ei pysty tallentamaan tiedostoja tänne (ei createWritablea).",
+  "unsafe_name": "Vaarallinen tiedostonimi: {path}",
+  "other_files": "Muut tiedostot",
+  "edit_loop": "Muokkaa valittua aluetta (E)",
+  "whole_song": "Koko kappale",
+  "zoom_to_loop": "Zoomaa valintaan",
+  "hear_end": "Kuuntele loppu",
+  "hear_end_title": "Soita viimeiset 2 s ja paluu alkuun",
+  "editor_hint": "Valitse kahdella klikkauksella tai vetämällä · rulla zoomaa · aikajanan klikkaus siirtää kohtaa",
+  "click_end": "Klikkaa loppukohta · Esc peruu",
+  "loop_start": "Alku",
+  "loop_end": "Loppu",
+  "minus_tenth": "−0,1 s",
+  "plus_tenth": "+0,1 s",
+  "saved_loops": "Tallennetut alueet",
+  "save_loop": "Tallenna",
+  "loop_name_placeholder": "Valinta {n}",
+  "delete_saved": "Poista {name}",
+  "no_saved": "Ei vielä valittuja alueita: Valitse alue ja tallenna se.",
+  "waveform_failed": "Aaltomuotoa ei voi piirtää: {reason}",
+  "key_edit": "Valitun alueen muokkaus, Esc sulkee",
+  "project": "Projekti",
+  "stop_download": "Pysäytä lataus",
+  "close_editor": "Sulje alueen muokkaus (E, Esc)",
+  "not_downloaded": "Ei vielä ladattu",
+  "audio_n": "Äänite {n}/{count}",
+  "recordings": "Äänitteet (T)",
+  "uploaded": "lisätty {date}",
+  "fit_page": "Sovita sivu: koko sivu näkyviin (H)",
+  "full_screen": "Koko näyttö (F)",
+  "sheet_more": "Käännä, avaa PDF",
+  "rotate_right": "Käännä oikealle (O)",
+  "rotate_left": "Käännä vasemmalle",
+  "open_pdf": "Avaa PDF uudessa välilehdessä",
+  "key_screen": "ruudullinen alas / ylös (jalkakytkin)",
+  "key_ends": "nuotin alku / loppu",
+  "key_fit": "sovita leveys / koko sivu",
+  "key_rotate": "käännä nuottia",
+  "key_full": "koko näyttö: vain nuotti (Esc takaisin)",
+  "leave_out": "Klikkaa jättääksesi tämän kansion pois latauksesta",
+  "take_back": "Klikkaa ladataksesi tämän kansion sittenkin",
+  "n_left_out": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} kansio jätetty pois",
+        "countPlural=other": "{count} kansiota jätetty pois"
+      }
+    }
+  ],
+  "without_folders": "ilman: {folders}",
+  "step_of": "Vaihe {n}/{total}",
+  "next": "Seuraava",
+  "back": "Takaisin",
+  "skip_link": "Ohita, lisään myöhemmin",
+  "ask_name": "Mikä on ryhmän nimi?",
+  "ask_link": "Missä ryhmän kappaleet ovat?",
+  "dark_theme": "Tumma teema",
+  "light_theme": "Vaalea teema",
+  "delete_files": "Poista tiedostot",
+  "delete_files_hint": "Poistaa ladatut tiedostot tältä laitteelta ja vapauttaa {size}. Projekti, sen kansiot ja valintasi säilyvät; ⟳ lataa tiedostot uudelleen.",
+  "confirm_delete_files": "Poistetaanko projektin “{name}” {files} ({size}) tältä laitteelta? Projekti, sen kansiot ja valintasi säilyvät; ⟳ lataa tiedostot uudelleen.",
+  "delete_project_hint": "Poistaa projektin valikosta: linkin, kansiot, tiedostot, valinnat ja kaiken muistetun.",
+  "key_space": "Välilyönti",
+  "unkeep_hint": "Tätä ei voi perua täältä: tämän sivuston tietojen tyhjentäminen selaimen asetuksista poistaa sekä tiedostot että pysyvyyden.",
+  "slower": "Hitaammin",
+  "faster": "Nopeammin",
+  "sheet_view": "Nuotin näkymä: zoomaus, sovitus, kääntö",
+  "whole_song_short": "Kappale",
+  "zoom_to_loop_short": "Valinta",
+  "recordings_title": "Äänitteet",
+  "sheet_title": "Nuotti",
+  "loop_editor_title": "Valinnan muokkaus",
+  "trim_margins": "Laajenna sivua",
+  "trim_off": "Ei laajennusta",
+  "trim_small": "Pieni, 0,5 cm",
+  "trim_medium": "Keski, 1 cm",
+  "trim_large": "Suuri, 2 cm",
+  "sheet_only_hint": "Napauta reunoja kääntääksesi, keskeltä tämä palkki",
+  "full_screen_title": "Koko näyttö",
+  "about_intro": "Harjoittele ryhmäsi kappaleita: nuotti ja äänite yhdessä, äänite hidastettuna sävelkorkeuden pysyessä ennallaan.",
+  "about_demo": "Tämä verkkoversio on esittelyä varten. Säännölliseen tai laajaan käyttöön ota käyttöön oma kopiosi: lähdekoodi on avoimesti GitHubissa.",
+  "about_data_title": "Tilisi ja tiedostosi",
+  "about_signin": "Kirjaudut sisään Microsoftin omalla kirjautumissivulla. Downtempo ei koskaan näe salasanaasi.",
+  "about_kept": "Kirjautuminen säilyy vain tässä selaimessa, tällä laitteella.",
+  "about_reads": "Downtempo avaa vain lisäämäsi jaetut kansiot ja vain lukee niitä. Microsoft pyytää luku- ja kirjoitusoikeutta OneDriveen, koska henkilökohtainen tili tarvitsee sen jaetun linkin avaamiseen; Downtempo ei kirjoita sinne mitään.",
+  "about_copies": "Tiedostot kopioidaan vain tämän selaimen omaan tallennustilaan, tälle laitteelle.",
+  "about_no_server": "Downtempolla ei ole palvelinta. Sovellus on yhteydessä vain Microsoftiin kirjautumista ja tiedostojasi varten; mitään avaamaasi, soittamaasi tai asettamaasi ei lähetetä muualle, eikä käyttöä seurata.",
+  "about_remove_title": "Tietojen poistaminen",
+  "about_remove": "Asetuksissa Poista projekti poistaa sen tiedostot tältä laitteelta, ja Kirjaudu ulos päättää kirjautumisen. Tämän sivuston tietojen tyhjentäminen selaimesta poistaa kaiken.",
+  "about_source": "Lähdekoodi GitHubissa"
+}

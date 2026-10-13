@@ -66,7 +66,7 @@ async function listFiles() {
     for (const file of share.files) {
       const status = document.createElement("span");
       status.className = "muted";
-      row($("files"), file.path, megabytes(file.size), button("Download", () => download(file, status)), status)
+      row($("files"), file.path, megabytes(file.size), button("Download & play", () => download(file, status)), status)
         .cells[1].className = "n";
     }
   } catch (error) {
@@ -110,7 +110,9 @@ async function showSaved() {
     (kept ? "Kept: the browser won't clear these files by itself." : "May be cleared by the browser when the disk fills.");
   $("keep").hidden = kept;
   $("saved").replaceChildren();
-  for (const file of await storage.list()) {
+  const saved = await storage.list();
+  if (!saved.length) row($("saved"), "No files on this device yet: press Download & play on a file above.");
+  for (const file of saved) {
     row(
       $("saved"),
       file.name,
@@ -131,7 +133,9 @@ async function play(name) {
     if (name.toLowerCase().endsWith(".pdf")) window.open(url);
     else {
       $("player").src = url;
-      await $("player").play();
+      // Browsers refuse to start sound a while after the click (a long download); the player
+      // then shows the file and ▶ starts it.
+      await $("player").play().catch(() => log("Loaded in the player below: press ▶ to start."));
     }
     log(`Opened ${name} from the device.`);
   } catch (error) {

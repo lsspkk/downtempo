@@ -1,13 +1,28 @@
 # Downtempo
 
-A practice tool for musicians in a band, choir or course. Paste the link to your group's shared OneDrive folder; Downtempo downloads the sheets and recordings, sorts them into songs, and keeps them up to date. Then practise: slower tempo with the pitch kept, loops, the sheet music beside the player.
+Practise your group's songs at your own speed. For musicians in a band, a choir or a course whose sheets and recordings live in a shared OneDrive folder.
+
+- **Songs, not files.** Downtempo downloads the shared folder and groups the files into songs by their names: each song's recordings and sheets together, whatever the folder layout.
+- **Slower, same pitch.** Tempo 50–130 % with the pitch unchanged; an A–B loop set exactly on the waveform, saved loops for the hard bars.
+- **The sheet beside the recording.** Zoom, fit width or page, trim wide margins, rotate for a laptop on the music stand; page turns from the keyboard or a footswitch.
+- **Easy to browse and practise.** A searchable song list, the next song with one key or tap, and each song remembers its tempo, loop, recording and zoom.
+- **Always up to date.** ⟳ fetches what's new or changed in the shared folder; nothing on your side is ever deleted by it.
+
+## Two versions
+
+- **The player** (this repository; Windows, macOS, Linux) sounds best: the tempo is changed by [Rubber Band](https://breakfastquay.com/rubberband/), the time-stretcher of professional audio software, so slowed-down music stays clean. It has everything: waveform, loop editor, tempo trainer, pitch, the project screen for sorting songs. Install below.
+- **The browser version**, <https://lsspkk.github.io/downtempo/>, needs nothing installed and works on a laptop or a phone, in English and Finnish. It is a demonstration: the tempo uses the browser's own stretch, fine for moderate slowing but not as clean as the player's, and for regular use you should run your own copy ([docs/browser-app.md](docs/browser-app.md)).
+
+## Where the songs come from: OneDrive
+
+Downtempo reads a group's material from a **OneDrive shared folder**; other services aren't supported yet. Whoever leads the group shares the folder in OneDrive (Share → Copy link) and sends the link around. Each musician pastes it into Downtempo, signs in once with any Microsoft account (Microsoft needs that to open a shared link), and ticks the folders to download. Downtempo only reads the shared folder; the files are copied to your own computer or browser and play without a network afterwards. A **project** is one group, with its own shared folders and songs; you can have several.
 
 Why it exists: [docs/purpose.md](docs/purpose.md). What's built and what's next: [docs/ideas.md](docs/ideas.md).
 
 
 # Install and start
 
-Downtempo runs with [uv](https://docs.astral.sh/uv/), which fetches the right Python and every library by itself on the first start (a few minutes, once). Install commands: [uv docs](https://docs.astral.sh/uv/getting-started/installation/).
+The player runs with [uv](https://docs.astral.sh/uv/), which fetches the right Python and every library by itself on the first start (a few minutes, once).
 
 ## Linux and macOS
 
@@ -18,13 +33,11 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 uv run python frontends/nicegui/app.py
 ```
 
-Linux: the window uses Qt, which uv installs. If there's no sound, install PortAudio from the system: `sudo apt install libportaudio2` (Debian, Ubuntu). macOS has everything built in.
+No sound on Linux? `sudo apt install libportaudio2` (Debian, Ubuntu).
 
 ## Windows
 
-Windows 10 or 11, 64-bit.
-
-Open **PowerShell** (Start menu → type *PowerShell*), paste this whole block and press Enter:
+Windows 10 or 11, 64-bit. Open **PowerShell** (Start menu → *PowerShell*), paste this block and press Enter:
 
 ```powershell
 # 1. Install uv, and let this window find it:
@@ -40,9 +53,7 @@ cd "$HOME\Documents\downtempo"
 uv run python frontends\nicegui\app.py
 ```
 
-The first start downloads Python and the libraries; later starts take a few seconds. The player opens in its own window; closing the window quits it. To start it again later, run only the last two lines (the `cd` and `uv run`) in a new PowerShell. If `uv` is not found there, run `winget install --id=astral-sh.uv -e` once. To update, repeat the block after deleting the old folder (keep its `data` folder: copy it into the new one), or use [Git for Windows](https://git-scm.com/download/win) and `git clone https://github.com/lsspkk/downtempo.git` instead of step 2, then `git pull` to update.
-
-The window uses Microsoft Edge WebView2, which Windows 10 and 11 already have; if the window stays empty, install the *Evergreen WebView2 Runtime* from Microsoft. Your songs, settings and sign-in stay in the `data` folder inside Downtempo's folder.
+Later starts take a few seconds: run only the last two lines in a new PowerShell (if `uv` isn't found, `winget install --id=astral-sh.uv -e` once). To update, repeat the block into a fresh folder and copy the old `data` folder over, or use [Git](https://git-scm.com/download/win) (`git clone https://github.com/lsspkk/downtempo.git`, then `git pull`). An empty window means the *Evergreen WebView2 Runtime* from Microsoft is missing. Your songs, settings and sign-in stay in the `data` folder.
 
 # Use the player
 

@@ -1,0 +1,83 @@
+/* Tailwind and the theme: the Python player's indigo accent and amber loop; dark mode by a class. */
+@import "tailwindcss";
+
+/* Tests name classes too (tailwind.test.ts checks one is absent): not app styles. */
+@source not "./**/*.test.ts";
+/* The generated texts are words, not class names. */
+@source not "./paraglide";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* The Python player's colours: indigo #4f5bd5 (accent-600) for play and choices, amber for the loop. */
+  --color-accent-50: oklch(0.97 0.02 275);
+  --color-accent-100: oklch(0.93 0.045 275);
+  --color-accent-400: oklch(0.72 0.15 278);
+  --color-accent-500: oklch(0.62 0.17 275);
+  --color-accent-600: oklch(0.55 0.18 275);
+  --color-accent-700: oklch(0.48 0.17 275);
+  --color-accent-900: oklch(0.32 0.1 275);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+  }
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+/* The tempo and seek sliders: a thin track, a round thumb in the accent colour. */
+@utility range {
+  @apply h-4 w-full cursor-pointer appearance-none bg-transparent accent-accent-600;
+  &::-webkit-slider-runnable-track {
+    @apply h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700;
+  }
+  &::-moz-range-track {
+    @apply h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700;
+  }
+  &::-webkit-slider-thumb {
+    @apply -mt-[5px] size-4 appearance-none rounded-full bg-accent-600 shadow ring-2 ring-white dark:ring-zinc-900;
+  }
+  &::-moz-range-thumb {
+    @apply size-4 rounded-full border-0 bg-accent-600 shadow ring-2 ring-white dark:ring-zinc-900;
+  }
+}
+
+/* The loop band on the position waveform is only a picture: clicks in it seek like anywhere else. */
+.position-wave ::part(region) {
+  pointer-events: none;
+}
+
+/* WaveBuilding (parts.tsx): its bars show only under a soft-edged spotlight (a mask fading in and
+   out) that sweeps left to right and back; the rest stays hidden. */
+@keyframes wave-building {
+  from {
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+  }
+  to {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+}
+.wave-building {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 50%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 50%, transparent);
+  -webkit-mask-size: 45% 100%;
+  mask-size: 45% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: wave-building 1.6s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wave-building {
+    animation: none;
+  }
+}

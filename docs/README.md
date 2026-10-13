@@ -17,8 +17,11 @@
 - [settings-file.md](settings-file.md): one TOML file with a project's sources, skipped folders and sorting to email; import is checked and previewed before anything is written; built (core, CLI, player).
 - [projects.md](projects.md): one folder per project under `data/projects/`, the current one in `data/app.json`; old data moved in once; built (core, CLI, the player's ☰ menu and Project settings).
 - [browser-research.md](browser-research.md): plan: can a web page sign in to OneDrive / Google Drive, download the files and keep them; GitHub Pages hosting; what T132 tests.
+- [browser-app.md](browser-app.md): built (MVP): the browser app on GitHub Pages: React + TypeScript + Vite + Tailwind, English / Finnish by Paraglide JS, projects, the folders to take ticked in the shared folder's tree, OneDrive download into the browser, songs by name, tempo by `playbackRate`, loop, pdf.js sheets; what it leaves out; tests.
+- [browser-mobile.md](browser-mobile.md): plan and built: the browser app on a large phone: one top line of round icon buttons, full-screen song list, tempo panel, the sheet's controls in one menu.
+- [sheet-only.md](sheet-only.md): plan → built: the "Sheet only" view for reading the score alone (no bars, side taps turn, a middle tap shows a slim bar, Back leaves), from a quick look at forScore and MobileSheets.
 - [browser-tests.md](browser-tests.md): built (OneDrive only): the GitHub Pages test page for sign-in, listing, download and storage in a browser; setup and how to run it.
-- [ux.md](ux.md): the 11 UX principles and the checklist every UI task follows.
+- [ux.md](ux.md): the UX principles (11 general, 5 for the web app: pages not modals, one step at a time, empty states, the important first, plain forms) and the checklist every UI task follows.
 - [practice-layout.md](practice-layout.md): small-laptop layout (built): three regions with simple states, keys, rotation, settings; the song list's top (Project ⟳, name, status line) and the ☰ main menu.
 - [player-switching.md](player-switching.md): switching (built): code never sets widgets, loaders work on a snapshot, newest wins.
 - [ideas.md](ideas.md), [todo.md](todo.md), [log.md](log.md): workflow, see CLAUDE.md.

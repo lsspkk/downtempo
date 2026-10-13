@@ -1,0 +1,367 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "app_intro": "Practise your group's songs: the sheets and recordings from the shared folder, each song together, the recording slowed down as much as you need.",
+  "new_project": "New project",
+  "project_is": "A project is one group you play with: a band, a choir, a course.",
+  "name": "Name",
+  "first_project_name": "My band",
+  "default_project_name": "My songs",
+  "link_hint": "Whoever leads the group can copy it from OneDrive: Share → Copy link. You can add it later too.",
+  "cancel": "Cancel",
+  "stays_here": "Everything stays in this browser: the files are saved on this device, nothing is sent anywhere else.",
+  "ok": "OK",
+  "link_label": "Link to the shared folder (OneDrive)",
+  "link_bad": "That doesn't look like a OneDrive link.",
+  "add_folder": "Add folder",
+  "get_songs_of": "Get the songs of {project}",
+  "downloading_file": "Downloading {file}…",
+  "about": "About",
+  "n_songs": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} song",
+        "countPlural=other": "{count} songs"
+      }
+    }
+  ],
+  "from_files": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "from {count} file, {size}.",
+        "countPlural=other": "from {count} files, {size}."
+      }
+    }
+  ],
+  "saved_offline": "The files are saved in this browser, so the songs play without a network later.",
+  "download": "Download",
+  "choose_other_folders": "Choose other folders",
+  "sign_in_once": "OneDrive asks you to sign in once, with any Microsoft account, before it shows the shared folder.",
+  "only_reads": "Downtempo only reads the folder. You come back here after signing in.",
+  "sign_in_onedrive": "Sign in to OneDrive",
+  "look_hint": "Look in the shared folder to see which songs are there.",
+  "look": "Look in the folder",
+  "choose_folders": "Choose folders…",
+  "change_link": "Change the link…",
+  "look_in_these": "Look in these folders",
+  "which_folders": "Which folders do you need?",
+  "which_folders_from": "Which folders do you need from {name}?",
+  "tick_hint": "Tick the folders to download; a ticked folder brings everything inside it. Inside a ticked folder, click a folder to leave it out.",
+  "no_folders_top": "There are no folders inside: the whole shared folder is used.",
+  "n_folders": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} folder",
+        "countPlural=other": "{count} folders"
+      }
+    }
+  ],
+  "nothing_ticked": "Nothing ticked: the whole shared folder.",
+  "clear_ticks": "Clear ticks",
+  "open_folder": "Open {name}",
+  "close_folder": "Close {name}",
+  "n_items": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} item",
+        "countPlural=other": "{count} items"
+      }
+    }
+  ],
+  "no_folders_inside": "No folders inside",
+  "opening": "Opening…",
+  "songs": "Songs",
+  "show_list": "Show song list (Q)",
+  "hide_list": "Hide song list (Q)",
+  "checked_ago": "Checked {ago}",
+  "update_title": "Check the shared folders for new files",
+  "progress": "{done} / {total} · {bytes} of {all}",
+  "sign_in": "Sign in",
+  "ready_to_download": "Ready to download",
+  "menu": "Menu",
+  "projects": "Projects",
+  "new_project_menu": "New project…",
+  "settings_menu": "Settings…",
+  "language_reloads": "The page reloads in the chosen language.",
+  "language_wait": "Wait for the download to finish first.",
+  "settings": "Settings",
+  "signed_in_since": "Signed in since {time}.",
+  "not_signed_in": "Not signed in.",
+  "asks_again": "OneDrive asks again after a day without use.",
+  "sign_out": "Sign out",
+  "shared_folders": "Shared folders",
+  "not_opened": "Not opened yet",
+  "only_folders": "Only {folders}",
+  "all_of_it": "All of it",
+  "folders_not_chosen": "Folders not chosen yet",
+  "n_files": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} file",
+        "countPlural=other": "{count} files"
+      }
+    }
+  ],
+  "folders_button": "Folders…",
+  "remove": "Remove",
+  "confirm_remove_source": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "Remove “{name}” and its {count} file from this device?",
+        "countPlural=other": "Remove “{name}” and its {count} files from this device?"
+      }
+    }
+  ],
+  "no_shared_folders": "No shared folders yet.",
+  "use_these": "Use these folders",
+  "confirm_left_out": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} downloaded file is outside these folders. Remove it from this device?",
+        "countPlural=other": "{count} downloaded files are outside these folders. Remove them from this device?"
+      }
+    }
+  ],
+  "delete_project": "Delete the project",
+  "confirm_delete": "Delete the project “{name}” for good? Its link, chosen folders, downloaded files, loops, regions and everything remembered go. The shared folders on OneDrive aren't touched.",
+  "this_device": "This device",
+  "device_all": "This browser holds {used} of Downtempo's files and allows up to {allowed}.",
+  "kept": "The files are kept: the browser won't clear them by itself, even when the disk runs full.",
+  "may_clear": "The browser may clear the files by itself when the disk runs full. Keep files asks it not to.",
+  "keep_files": "Keep files",
+  "keyboard": "Keyboard",
+  "key_play": "play / pause",
+  "key_tempo": "tempo slower / faster",
+  "key_5s": "back / forward 5 s",
+  "key_10s": "back / forward 10 s",
+  "key_jump": "start (loop start), 10 … 90 %",
+  "key_ab": "loop start / end here",
+  "key_loop": "loop on / off, clear",
+  "key_recording": "next recording",
+  "key_scroll": "scroll the sheet",
+  "key_zoom": "sheet zoom",
+  "key_song": "next / previous song",
+  "key_list": "song list, search",
+  "no_songs": "No songs yet.",
+  "search_songs": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "Search {count} song  ( / )",
+        "countPlural=other": "Search {count} songs  ( / )"
+      }
+    }
+  ],
+  "song_has": "Recordings {audio}, sheets {sheets}",
+  "no_match": "No song matches “{query}”.",
+  "no_recording": "No recording for this song.",
+  "opening_sheet": "Opening the sheet…",
+  "no_sheet": "No sheet for this song.",
+  "play": "Play",
+  "pause": "Pause",
+  "loop_toggle": "Loop on / off (R)",
+  "clear_loop": "Clear the loop",
+  "position": "Position",
+  "tempo": "Tempo",
+  "cant_play_file": "This browser can't play the file.",
+  "click_first": "The browser wants a click first: press ▶.",
+  "cant_play": "Can't play: {reason}",
+  "file_gone": "The file isn't on this device any more: press ⟳ Update.",
+  "cant_open_pdf": "Can't open the PDF: {reason}",
+  "zoom_out": "Smaller",
+  "zoom_in": "Larger",
+  "fit_width": "Fit width (W)",
+  "opening_share": "Opening the shared folder…",
+  "looking_in": "Looking in {folder}…",
+  "n_downloaded": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} file downloaded",
+        "countPlural=other": "{count} files downloaded"
+      }
+    }
+  ],
+  "up_to_date": "Up to date",
+  "n_gone": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} no longer in the shared folder (kept here)",
+        "countPlural=other": "{count} no longer in the shared folder (kept here)"
+      }
+    }
+  ],
+  "stopped": "Stopped. The files that finished are kept.",
+  "download_failed": "Download of {file} answered {status}",
+  "signin_refused": "Sign-in refused: {reason}",
+  "signin_mismatch": "The sign-in answer doesn't match this tab; please sign in again.",
+  "signin_again_code": "Sign in to OneDrive again ({code}).",
+  "signin_first": "Sign in to OneDrive first.",
+  "signin_asks": "OneDrive asks to sign in again.",
+  "onedrive_answered": "OneDrive answered {status}: {reason}",
+  "link_is_file": "The link opens a file, not a folder.",
+  "cant_save": "This browser can't save files here (no createWritable).",
+  "unsafe_name": "Unsafe file name: {path}",
+  "other_files": "Other files",
+  "edit_loop": "Loop editor (E)",
+  "whole_song": "Whole song",
+  "zoom_to_loop": "Zoom to loop",
+  "hear_end": "Hear end",
+  "hear_end_title": "Play the last 2 s and the jump back to the start",
+  "editor_hint": "Click, click or drag to select · wheel zooms · a click on the time ruler seeks",
+  "click_end": "Click to set the end · Esc cancels",
+  "loop_start": "Start",
+  "loop_end": "End",
+  "minus_tenth": "−0.1 s",
+  "plus_tenth": "+0.1 s",
+  "saved_loops": "Regions",
+  "save_loop": "Save",
+  "loop_name_placeholder": "Region {n}",
+  "delete_saved": "Delete {name}",
+  "no_saved": "No regions yet: set a loop and save it.",
+  "waveform_failed": "Can't draw the waveform: {reason}",
+  "key_edit": "loop editor, Esc closes",
+  "project": "Project",
+  "stop_download": "Stop the download",
+  "close_editor": "Close the loop editor (E, Esc)",
+  "not_downloaded": "Not downloaded yet",
+  "audio_n": "Audio {n}/{count}",
+  "recordings": "Recordings (T)",
+  "uploaded": "uploaded {date}",
+  "fit_page": "Fit page: the whole page in view (H)",
+  "full_screen": "Full screen (F)",
+  "sheet_more": "Rotate, open the PDF",
+  "rotate_right": "Rotate right (O)",
+  "rotate_left": "Rotate left",
+  "open_pdf": "Open the PDF in a new tab",
+  "key_screen": "a screen down / up (footswitch)",
+  "key_ends": "sheet top / bottom",
+  "key_fit": "fit width / fit page",
+  "key_rotate": "rotate the sheet",
+  "key_full": "full screen: only the sheet (Esc back)",
+  "leave_out": "Click to leave this folder out of the download",
+  "take_back": "Click to download this folder after all",
+  "n_left_out": [
+    {
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "{count} folder left out",
+        "countPlural=other": "{count} folders left out"
+      }
+    }
+  ],
+  "without_folders": "without {folders}",
+  "step_of": "Step {n} of {total}",
+  "next": "Next",
+  "back": "Back",
+  "skip_link": "Skip, add it later",
+  "ask_name": "What do you call this group?",
+  "ask_link": "Where are the group's songs?",
+  "dark_theme": "Dark theme",
+  "light_theme": "Light theme",
+  "delete_files": "Delete files",
+  "delete_files_hint": "Removes the downloaded files from this device and frees {size}. The project, its folders and your loops stay; ⟳ downloads the files again.",
+  "confirm_delete_files": "Delete {files} of “{name}” ({size}) from this device? The project, its folders and your loops stay; ⟳ downloads the files again.",
+  "delete_project_hint": "Removes the project from the menu with its link, folders, files, loops and everything remembered.",
+  "key_space": "Space",
+  "unkeep_hint": "This can't be undone here: clearing this site's data in the browser's settings removes both the files and the keeping.",
+  "slower": "Slower",
+  "faster": "Faster",
+  "sheet_view": "Sheet view: zoom, fit, rotate",
+  "whole_song_short": "Song",
+  "zoom_to_loop_short": "Loop",
+  "recordings_title": "Recordings",
+  "sheet_title": "Sheet",
+  "loop_editor_title": "Loop editor",
+  "trim_margins": "Trim margins",
+  "trim_off": "Off",
+  "trim_small": "Small, 0.5 cm",
+  "trim_medium": "Medium, 1 cm",
+  "trim_large": "Large, 2 cm",
+  "sheet_only_hint": "Tap the sides to turn, the middle for this bar",
+  "full_screen_title": "Full screen",
+  "about_intro": "Practise your group's songs: the sheet and the recording together, the recording slowed down with its pitch kept.",
+  "about_demo": "This online version is a demonstration. For regular or wide use, please run your own copy: the source code is open on GitHub.",
+  "about_data_title": "Your account and your files",
+  "about_signin": "You sign in on Microsoft's own sign-in page. Downtempo never sees your password.",
+  "about_kept": "The sign-in is kept only in this browser, on this device.",
+  "about_reads": "Downtempo opens only the shared folders you add, and only reads them. Microsoft asks permission to read and write your OneDrive, because a personal account needs it to open a shared link; Downtempo writes nothing there.",
+  "about_copies": "The files are copied only into this browser's own storage, on this device.",
+  "about_no_server": "There is no Downtempo server. The app talks only to Microsoft, for the sign-in and your files; nothing you open, play or set is sent anywhere else, and nothing is tracked.",
+  "about_remove_title": "Removing it",
+  "about_remove": "In Settings, Delete the project removes its files from this device, and Sign out ends the sign-in. Clearing this site's data in your browser removes everything.",
+  "about_source": "Source code on GitHub"
+}

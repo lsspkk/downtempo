@@ -22,11 +22,11 @@ Plan: [project-screen.md](project-screen.md). Replaces the Sources dialog (T46 d
 
 ### Browser player
 
-The user's call (2026-10-11): find out first whether a browser version can sign in and get the files at all, by research, then small test pages on GitHub Pages that the user tries. Each test page says clearly that it is only for testing a browser version of Downtempo. No real links, names or files in the repo: the user pastes a link in the page.
+Earlier (2026-10-11): find out first whether a browser version can sign in and get the files at all, by research, then small test pages on GitHub Pages that the user tries. Each test page says clearly that it is only for testing a browser version of Downtempo. No real links, names or files in the repo: the user pastes a link in the page.
 
-- [ ] T133 Manual test by the user of the OneDrive page per [browser-tests.md](browser-tests.md) (setup there first): sign in, a real share link, download and play, reload and play again, Ask to keep; Chrome and Firefox (and a phone if handy); findings → tasks, and the decision whether the browser player goes on (then T4, T31, T8, T6)
-- [ ] T4 Browser research, the rest after [stretch-research.md](stretch-research.md): pick the worklet for T6 (Signalsmith Stretch Web vs SoundTouchJS vs plain `playbackRate`), check Safari and whether rubberband-web is maintained → short `docs/tempo-browser.md`
-- [ ] T6 `frontends/browser/index.html` MVP: load `data/songs.json`, song dropdown, tempo slider 0.5–1.3x; served by `uv run downtempo serve`, which exposes only the page, the catalog and its files (not the project root: `.env`)
+MVP (the user's call, 2026-10-13, after T133 passed): a React + TypeScript app built by Vite with Tailwind, published by the Pages workflow; proof that the whole app fits in a browser. Has: projects, settings, download, song list, player with slow-down (plain `playbackRate`, pitch kept), PDF viewer. Not: loop editor, view modes, most of the Python player's controls. Built (T135–T146), grown and tried by the user (T147–T194): [browser-app.md](browser-app.md). Left: the tempo stretch.
+
+- [ ] T4 Browser research, the rest after [stretch-research.md](stretch-research.md): pick a worklet to replace the MVP's `playbackRate` (Signalsmith Stretch Web vs SoundTouchJS), check Safari and whether rubberband-web is maintained → short `docs/tempo-browser.md`
 - [ ] T31 Listening test per [stretch-research.md](stretch-research.md#then-listening-test-t31): same 20 s excerpts (drums, solo melody) at 0.5x / 0.75x / 1.3x with R3, R3 + ChannelsTogether, R2, Signalsmith, browser `playbackRate` → `data/scratch/tempo-tests/`; blind listening by the user
 - [ ] T8 Compare Python vs browser by ear (uses T31); write the pick and why into `docs/tempo-decision.md`
 

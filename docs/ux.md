@@ -1,6 +1,6 @@
 # UX principles
 
-**Summary**: Every UI task follows these 11 principles and the checklist: few things clearly, one key per frequent action, labels over icons, visible state, easy way back, 1280×720 first, don't move what the user is editing.
+**Summary**: Every UI task follows these 11 principles and the checklist: few things clearly, one key per frequent action, labels over icons, visible state, easy way back, 1280×720 first, don't move what the user is editing. The browser app adds 5 web-app principles (12–16): pages not modals for settings, one step at a time for the first start, empty states that lead on, the important first and the rest one step away, forms in one plain column.
 
 Every UI task follows these. They come from the saved articles (principles, not layouts to copy) and from decisions already made in this project. A task that learns a new principle adds it here, with its source.
 
@@ -21,6 +21,16 @@ An amateur musician practising alone on a small laptop (about 1280×720), instru
 9. **Remember the practice, not the accident.** Per song: tempo, pitch, recording, sheet; per recording: position and loops; the layout. Only choices that loaded are remembered (heuristics #6).
 10. **Fit the small screen first.** Check every UI change at 1280×720 (`scripts/screenshot.py --size 1280x720`): no wrapping toolbars, long names shorten with "…" and show in full in a tooltip.
 11. **Don't move what the user is working on.** A view that follows playback stops following while the user is editing in it (a loop edge in view); when zoomed, an overview always shows where the view is in the whole song ([audacity-timeline](web/audacity-timeline.txt), [peaksjs-readme](web/peaksjs-readme.txt), [anytune-basics](web/anytune-basics.txt)).
+
+## Web app (browser app, T165)
+
+12. **Pages, not modals, for anything to read or set up.** A modal blocks the page and makes the user drop what they were doing; it is for a short, critical question (a destructive step, information the current action can't go on without), not for browsing or long content. Settings are a full page with a clear way back (a ← link at the top, Esc), and only a confirmation or a quick choice stays a small dialog ([nng-modal-dialogs](web/nng-modal-dialogs.txt)).
+13. **One step at a time where the user is unsure: the first start.** A task in distinct steps (name, link, sign in, folders) goes one step per screen, each with a heading that says what this step asks, the progress ("Step 2 of 4"), Back and one main button; low-confidence users and phones do better this way ([govuk-one-thing-per-page](web/govuk-one-thing-per-page.txt), [govuk-question-pages](web/govuk-question-pages.txt), staged disclosure in [nng-progressive-disclosure](web/nng-progressive-disclosure.txt)).
+14. **Empty states lead on.** An empty place says what will be there, why it's empty, and holds the button that fills it; while something loads it shows progress, never a premature "nothing here" ([nng-empty-states](web/nng-empty-states.txt)).
+15. **The important first, the rest one step away.** On a page with many parts, the frequent ones come first and the rare or advanced ones (delete, keys, storage details) last or behind a clearly labelled link; more than two levels means the design is too complex ([nng-progressive-disclosure](web/nng-progressive-disclosure.txt)).
+16. **Forms in one plain column.** Labels above their fields, fields as wide as their content, no placeholder as the only label, hints stated before the error, errors next to the field and kept, no Reset or Clear beside the main button ([nng-web-forms](web/nng-web-forms.txt)).
+
+Plan from these (T166): Settings becomes a page in the practice view's place (top bar keeps ☰ and the song list toggle; a "← Back to the songs" link and Esc); parts in this order: the project (name, shared folders with Folders… and Add folder), this device (storage, Keep files), OneDrive sign-in, language and theme, keys, and last the danger zone (Delete project). The first start becomes steps: 1 name, 2 link, 3 sign in (skipped when signed in), 4 folders, then the preview and Download; each with Back, and the step count on top.
 
 ## Checklist for a UI task
 
