@@ -2,6 +2,25 @@
 
 Finished tasks, newest first. `- YYYY-MM-DD T<n> what was done: note`. Older entries carry the retired idea numbers (I1–I8).
 
+- 2026-10-14 T214 Phone first start: the info (How it works … Why a link) is hidden behind one full-width "Lisätietoa" / "More information" button with a chevron; the form is reached first; desktop shows it all (pattern from web/nng-mobile-accordions.txt)
+- 2026-10-14 T213 "Where the files go" shortened: a standard feature alongside the ordinary cache, in browsers since 2023 (en + fi)
+- 2026-10-14 T212 "Where the files go": says OPFS is a standard feature in all major browsers since March 2023 (web/mdn-opfs.txt) and links to MDN; dropped the "doesn't empty itself" claim
+- 2026-10-14 T211 English intro line: dropped "each song together"; the recording's tempo is turned down as much as you need
+- 2026-10-14 T210 Link explanation: dropped "the link stays on this device and goes only to Microsoft" (en + fi)
+- 2026-10-14 T209 "Where the files go" cut to three short sentences (origin private file system, not the ordinary cache, works offline, only this site sees it)
+- 2026-10-14 T208 Finnish intro step 2: "jaetun kansion linkki" instead of "kansion jakolinkki"
+- 2026-10-14 T207 Intro step 2 reads "Luot Downtempoon projektin, jossa on kansion jakolinkki." (en + fi)
+- 2026-10-14 T206 Intro "How it works": step 2 ends at the share link; step 3 says Downtempo reads the folder's contents and you choose the folders with the sheets and audio (en + fi)
+- 2026-10-14 T205 Link explanation: dropped the "shared folder = files can be read / without it Downtempo can't find the songs" sentences (en + fi)
+- 2026-10-14 T204 First-start intro has "Where the files go": the browser's private per-site storage (OPFS), not the ordinary cache, offline, only this site sees it, Keep files in Settings; "copies into this browser" reworded to "downloads onto this device"
+- 2026-10-14 T203 First-start page says each thing once: the form is titled Create project / Luo projekti and holds only the fields and a short hint; the link explanation (what, who may open, how it is used, Microsoft guide) lives in the intro column, folded under the form only where there is no intro; no text under the button
+- 2026-10-14 T202 Name field is a plain "Project" / "Projekti" label with the hint "Ryhmä jossa soitat, bändi, kuoro, kurssi, tms." under the input (all New project forms too)
+- 2026-10-14 T201 First start: a language button (English ↔ Suomi) in its top bar; the "why a link" text no longer claims the group shares it, and says shared = files others may read, and that the sharer picks anyone-with-the-link or chosen people (sign in with that account)
+- 2026-10-14 T200 The link is required: Create project stays disabled until a valid OneDrive link is pasted; no "Start without a link"
+- 2026-10-14 T199 Get the songs is a full page with a progress list (Link · Sign in · Folders · Download) instead of "Step n of 4"; ux.md #13 and browser-app.md follow
+- 2026-10-14 T198 Welcome is one full page: intro (concept, how it works, trust) beside one form (name, optional link with why + Microsoft guide); no wizard, no centred card, stacked on a phone
+- 2026-10-14 T197 Skipping the link really skips: a project with no folder shows an empty state (why, Add folder, why-box) instead of "Step 2" again
+- 2026-10-14 T196 First start explains itself: intro page before the wizard (concept, how it works, what it does not do); link step has a "Why does Downtempo ask for a link?" box and a link to Microsoft's OneDrive sharing guide (en + fi)
 - 2026-10-14 T4.7 Docs after the try-out: [tempo-browser.md](tempo-browser.md) built, [browser-app.md](browser-app.md) no longer says "not yet tried"; T31 / T8 compare against Python
 - 2026-10-14 T4.6 Manual test by the user of the Signalsmith build: ok, "sounds great"
 - 2026-10-14 T4.5 Loop editor and position bar on the node: wavesurfer from peaks (`peaks` + `duration`, no media), cursor by `followTime.ts` (`renderProgress`, scrolls along while playing), clicks and drag seek through `interaction`; handles, saved regions and keys still call the same `loop` / `seek`; not run by the user yet

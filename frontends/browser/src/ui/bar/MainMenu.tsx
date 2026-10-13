@@ -7,6 +7,7 @@ import { useStore } from "../../core/store";
 import { m } from "../../paraglide/messages.js";
 import { IconButton } from "../kit/Button";
 import { DropDown, MenuItem, MenuLabel, MenuSeparator } from "../kit/DropDown";
+import { Flag } from "./LanguageSwitch";
 import { canSwitch, LANGUAGES, language, switchTo } from "../language";
 import { look } from "../theme";
 
@@ -56,26 +57,5 @@ export function MainMenu({ project, onSettings, onAbout, onNewProject }: Props) 
         {m.about()}
       </MenuItem>
     </DropDown>
-  );
-}
-
-/** A small grey flag: the Union Jack for English (diagonals under a centred cross), the Nordic cross for Suomi. */
-function Flag({ nordic }: { nordic: boolean }) {
-  return (
-    <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden className="shrink-0">
-      <rect x="0.5" y="0.5" width="17" height="11" rx="1" fill="none" stroke="currentColor" />
-      {nordic ? (
-        <>
-          <rect x="5" y="0.5" width="3" height="11" fill="currentColor" />
-          <rect x="0.5" y="4.5" width="17" height="3" fill="currentColor" />
-        </>
-      ) : (
-        <>
-          <path d="M0.5 0.5 17.5 11.5 M17.5 0.5 0.5 11.5" stroke="currentColor" strokeWidth="1.6" opacity="0.55" />
-          <rect x="7.25" y="0.5" width="3.5" height="11" fill="currentColor" />
-          <rect x="0.5" y="4.25" width="17" height="3.5" fill="currentColor" />
-        </>
-      )}
-    </svg>
   );
 }

@@ -1,14 +1,13 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "app_intro": "Practise your group's songs: the sheets and recordings from the shared folder, each song together, the recording slowed down as much as you need.",
+  "app_intro": "Practise your group's songs: the sheets and recordings from the shared folder, with the recording's tempo turned down as much as you need.",
   "new_project": "New project",
-  "project_is": "A project is one group you play with: a band, a choir, a course.",
+  "project_is": "The group you play with: a band, a choir, a course, etc.",
   "name": "Name",
   "first_project_name": "My band",
   "default_project_name": "My songs",
-  "link_hint": "Whoever leads the group can copy it from OneDrive: Share → Copy link. You can add it later too.",
+  "link_hint": "In OneDrive: Share → Copy link.",
   "cancel": "Cancel",
-  "stays_here": "Everything stays in this browser: the files are saved on this device, nothing is sent anywhere else.",
   "ok": "OK",
   "link_label": "Link to the shared folder (OneDrive)",
   "link_bad": "That doesn't look like a OneDrive link.",
@@ -18,13 +17,8 @@
   "about": "About",
   "n_songs": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} song",
         "countPlural=other": "{count} songs"
@@ -33,13 +27,8 @@
   ],
   "from_files": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "from {count} file, {size}.",
         "countPlural=other": "from {count} files, {size}."
@@ -63,13 +52,8 @@
   "no_folders_top": "There are no folders inside: the whole shared folder is used.",
   "n_folders": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} folder",
         "countPlural=other": "{count} folders"
@@ -82,13 +66,8 @@
   "close_folder": "Close {name}",
   "n_items": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} item",
         "countPlural=other": "{count} items"
@@ -123,13 +102,8 @@
   "folders_not_chosen": "Folders not chosen yet",
   "n_files": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} file",
         "countPlural=other": "{count} files"
@@ -140,13 +114,8 @@
   "remove": "Remove",
   "confirm_remove_source": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "Remove “{name}” and its {count} file from this device?",
         "countPlural=other": "Remove “{name}” and its {count} files from this device?"
@@ -157,13 +126,8 @@
   "use_these": "Use these folders",
   "confirm_left_out": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} downloaded file is outside these folders. Remove it from this device?",
         "countPlural=other": "{count} downloaded files are outside these folders. Remove them from this device?"
@@ -193,13 +157,8 @@
   "no_songs": "No songs yet.",
   "search_songs": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "Search {count} song  ( / )",
         "countPlural=other": "Search {count} songs  ( / )"
@@ -229,13 +188,8 @@
   "looking_in": "Looking in {folder}…",
   "n_downloaded": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} file downloaded",
         "countPlural=other": "{count} files downloaded"
@@ -245,13 +199,8 @@
   "up_to_date": "Up to date",
   "n_gone": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} no longer in the shared folder (kept here)",
         "countPlural=other": "{count} no longer in the shared folder (kept here)"
@@ -310,13 +259,8 @@
   "take_back": "Click to download this folder after all",
   "n_left_out": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} folder left out",
         "countPlural=other": "{count} folders left out"
@@ -328,7 +272,6 @@
   "next": "Next",
   "back": "Back",
   "skip_link": "Skip, add it later",
-  "ask_name": "What do you call this group?",
   "ask_link": "Where are the group's songs?",
   "dark_theme": "Dark theme",
   "light_theme": "Light theme",
@@ -363,5 +306,31 @@
   "about_no_server": "There is no Downtempo server. The app talks only to Microsoft, for the sign-in and your files; nothing you open, play or set is sent anywhere else, and nothing is tracked.",
   "about_remove_title": "Removing it",
   "about_remove": "In Settings, Delete the project removes its files from this device, and Sign out ends the sign-in. Clearing this site's data in your browser removes everything.",
-  "about_source": "Source code on GitHub"
+  "about_source": "Source code on GitHub",
+  "intro_how_title": "How it works",
+  "intro_how_1": "Someone in your group keeps the songs (sheets and recordings) in a shared OneDrive folder.",
+  "intro_how_2": "You create a project in Downtempo that holds the folder's share link.",
+  "intro_how_3": "Downtempo reads the folder's contents, and you choose the folders of the project that hold the sheets and the audio.",
+  "intro_trust_title": "What it does not do",
+  "intro_trust_1": "It never sees your password: you sign in on Microsoft's own page.",
+  "intro_trust_2": "It only reads the folders you add, and changes nothing in OneDrive.",
+  "intro_trust_3": "There is no Downtempo server: nothing is uploaded or tracked. The files stay on this device.",
+  "intro_start": "Start",
+  "link_why_title": "Why does Downtempo ask for a link?",
+  "link_why_what": "The link is the address of a shared OneDrive folder.",
+  "link_why_how": "After this step Microsoft asks you to sign in. Then Downtempo reads the files in that folder and copies the ones you pick into this browser.",
+  "link_help": "What is a OneDrive link? Microsoft's guide to sharing",
+  "create_project": "Create project",
+  "empty_title": "No songs yet",
+  "empty_why": "This project has no shared folder yet, so there is nothing to download. When your group leader sends you the OneDrive link, add it here and the songs come in.",
+  "empty_help": "Add the link",
+  "stage_link": "Link",
+  "stage_signin": "Sign in",
+  "stage_folders": "Folders",
+  "stage_download": "Download",
+  "link_why_who": "In OneDrive, whoever shares a folder chooses who may open it: anyone who has the link, or only chosen people. For the second kind, sign in with the Microsoft account the link was shared with.",
+  "intro_storage_title": "Where the files go",
+  "intro_storage": "The files go into your browser's private storage for this site (origin private file system), a standard feature alongside the ordinary cache, in browsers since 2023. The songs work without a network, and only this site can see them.",
+  "storage_help": "Read more about it (MDN)",
+  "info_show": "More information"
 }

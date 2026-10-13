@@ -19,10 +19,29 @@ export function Progress({ value }: { value: number }) {
   );
 }
 
-/** "Step 2 of 4" over each question of the first start (name, link, sign in, folders). */
-export const Step = ({ n }: { n: number }) => (
-  <p className="text-xs font-medium tracking-wide text-zinc-500 uppercase">{m.step_of({ n, total: 4 })}</p>
-);
+/** Where the musician is on the way to the songs: Link · Sign in · Folders · Download (0-based current). */
+export function Stages({ current }: { current: number }) {
+  const labels = [m.stage_link(), m.stage_signin(), m.stage_folders(), m.stage_download()];
+  return (
+    <ol className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+      {labels.map((label, i) => (
+        <li
+          key={label}
+          aria-current={i === current ? "step" : undefined}
+          className={
+            i === current
+              ? "font-semibold text-accent-700 dark:text-accent-300"
+              : i < current
+                ? "text-zinc-500"
+                : "text-zinc-400 dark:text-zinc-600"
+          }
+        >
+          {i < current ? "✓" : i + 1}. {label}
+        </li>
+      ))}
+    </ol>
+  );
+}
 
 // A made-up waveform: gently changing heights (% of the icon's height).
 const BARS = Array.from({ length: 12 }, (_, i) => Math.round(55 + 30 * Math.sin(i * 0.9) * Math.cos(i * 0.31)));

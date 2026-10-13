@@ -1,5 +1,6 @@
-// A project with nothing on this device yet: the first start's later steps (2 the link if it was
-// skipped, 3 sign in, 4 choose the folders, each with its step count), then "about 12 songs from
+// A project with nothing on this device yet, one full page: no folder yet (an empty state that
+// asks for the link, never forced), then sign in, choose the folders (the progress list shows
+// where we are), then "about 12 songs from
 // 31 files" → Download. Once the first file is in, the songs show instead.
 
 import { useState } from "react";
@@ -10,10 +11,11 @@ import * as projects from "../../core/projects";
 import { useStore } from "../../core/store";
 import { m } from "../../paraglide/messages.js";
 import { FolderPicker } from "../folders/FolderPicker";
-import { Muted, Progress, Step } from "../kit/bits";
+import { Muted, Progress, Stages } from "../kit/bits";
 import { Button } from "../kit/Button";
 import { AddFolder } from "../folders/LinkInput";
 import { signInThenCheck } from "../signin";
+import { WhyLink } from "../start/Welcome";
 
 export function GetSongs({ project, onSettings }: { project: projects.Project; onSettings: () => void }) {
   const status = useStore(download.status);
@@ -24,10 +26,16 @@ export function GetSongs({ project, onSettings }: { project: projects.Project; o
     status.phase !== "idle" && (status.phase === "preview" ? status.preview.project : status.project) === project.id;
 
   let body;
-  let step: number | null = null; // in the first start's steps (Welcome has 1 and 2)
+  let stage = 0; // 0-based place in Stages
   if (!project.sources.length) {
-    step = 2;
-    body = <AddFolder project={project} />;
+    return (
+      <Page>
+        <h2 className="text-xl font-semibold">{m.empty_title()}</h2>
+        <p>{m.empty_why()}</p>
+        <AddFolder project={project} />
+        <WhyLink />
+      </Page>
+    );
   } else if (mine && status.phase === "listing") body = <Working text={status.text} />;
   else if (mine && status.phase === "downloading") {
     body = (
@@ -37,6 +45,7 @@ export function GetSongs({ project, onSettings }: { project: projects.Project; o
       </div>
     );
   } else if (mine && status.phase === "preview") {
+    stage = 3;
     const { songs, files, plan } = status.preview;
     body = (
       <div className="space-y-4">
@@ -62,7 +71,7 @@ export function GetSongs({ project, onSettings }: { project: projects.Project; o
       </div>
     );
   } else if (!signedIn || (mine && status.phase === "failed" && status.signIn)) {
-    step = 3;
+    stage = 1;
     body = (
       <div className="space-y-3">
         <p>{m.sign_in_once()}</p>
@@ -73,7 +82,7 @@ export function GetSongs({ project, onSettings }: { project: projects.Project; o
       </div>
     );
   } else if (choosing) {
-    if (!choosing.folders) step = 4;
+    stage = 2;
     body = (
       <FolderPicker
         key={choosing.id}
@@ -106,15 +115,17 @@ export function GetSongs({ project, onSettings }: { project: projects.Project; o
   }
 
   return (
-    <div className="m-auto w-full max-w-lg p-4">
-      <section className="space-y-4 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
-        {step && <Step n={step} />}
-        <h2 className="text-lg font-semibold">{m.get_songs_of({ project: project.name })}</h2>
-        {body}
-      </section>
-    </div>
+    <Page>
+      <Stages current={stage} />
+      <h2 className="text-xl font-semibold">{m.get_songs_of({ project: project.name })}</h2>
+      {body}
+    </Page>
   );
 }
+
+const Page = ({ children }: { children: React.ReactNode }) => (
+  <div className="mx-auto w-full max-w-2xl space-y-4 px-4 py-8">{children}</div>
+);
 
 function Working({ text }: { text: string }) {
   return (

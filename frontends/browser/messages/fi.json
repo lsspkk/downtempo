@@ -2,13 +2,12 @@
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "app_intro": "Harjoittele kappaleita: lataa nuotit ja äänitteet jaetusta kansiosta, ja hidasta äänitteitä tarpeen mukaan.",
   "new_project": "Uusi projekti",
-  "project_is": "Projekti, jossa soitat: bändi, kuoro, kurssi.",
+  "project_is": "Ryhmä jossa soitat, bändi, kuoro, kurssi, tms.",
   "name": "Nimi",
   "first_project_name": "Bändini",
   "default_project_name": "Kappaleeni",
-  "link_hint": "OneDrivesta: Jaa → Kopioi linkki. Voit lisätä myöhemminkin.",
+  "link_hint": "OneDrivessa: Jaa → Kopioi linkki.",
   "cancel": "Peruuta",
-  "stays_here": "Tiedostot tallennetaan selaimen levytilaan tälle laitteelle, jotta musiikkia voi hidastaa. Mitään ei lähetetä muualle.",
   "ok": "OK",
   "link_label": "Jaetun kansion linkki (OneDrive)",
   "link_bad": "Tämä ei näytä OneDrive-linkiltä.",
@@ -18,13 +17,8 @@
   "about": "Tietoja",
   "n_songs": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} kappale",
         "countPlural=other": "{count} kappaletta"
@@ -33,13 +27,8 @@
   ],
   "from_files": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} tiedostosta, {size}.",
         "countPlural=other": "{count} tiedostosta, {size}."
@@ -63,13 +52,8 @@
   "no_folders_top": "Sisällä ei ole kansioita: koko jaettu kansio otetaan.",
   "n_folders": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} kansio",
         "countPlural=other": "{count} kansiota"
@@ -82,13 +66,8 @@
   "close_folder": "Sulje {name}",
   "n_items": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} kohde",
         "countPlural=other": "{count} kohdetta"
@@ -123,13 +102,8 @@
   "folders_not_chosen": "Kansioita ei ole vielä valittu",
   "n_files": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} tiedosto",
         "countPlural=other": "{count} tiedostoa"
@@ -140,13 +114,8 @@
   "remove": "Poista",
   "confirm_remove_source": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "Poistetaanko “{name}” ja sen {count} tiedosto tältä laitteelta?",
         "countPlural=other": "Poistetaanko “{name}” ja sen {count} tiedostoa tältä laitteelta?"
@@ -157,13 +126,8 @@
   "use_these": "Käytä näitä kansioita",
   "confirm_left_out": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} ladattu tiedosto on näiden kansioiden ulkopuolella. Poistetaanko se tältä laitteelta?",
         "countPlural=other": "{count} ladattua tiedostoa on näiden kansioiden ulkopuolella. Poistetaanko ne tältä laitteelta?"
@@ -193,13 +157,8 @@
   "no_songs": "Ei vielä kappaleita.",
   "search_songs": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "Hae {count} kappaleesta  ( / )",
         "countPlural=other": "Hae {count} kappaleesta  ( / )"
@@ -229,13 +188,8 @@
   "looking_in": "Katsotaan kansiota {folder}…",
   "n_downloaded": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} tiedosto ladattu",
         "countPlural=other": "{count} tiedostoa ladattu"
@@ -245,13 +199,8 @@
   "up_to_date": "Ajan tasalla",
   "n_gone": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} ei enää jaetussa kansiossa (säilyy täällä)",
         "countPlural=other": "{count} ei enää jaetussa kansiossa (säilyvät täällä)"
@@ -310,13 +259,8 @@
   "take_back": "Klikkaa ladataksesi tämän kansion sittenkin",
   "n_left_out": [
     {
-      "declarations": [
-        "input count",
-        "local countPlural = count: plural"
-      ],
-      "selectors": [
-        "countPlural"
-      ],
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
       "match": {
         "countPlural=one": "{count} kansio jätetty pois",
         "countPlural=other": "{count} kansiota jätetty pois"
@@ -328,7 +272,6 @@
   "next": "Seuraava",
   "back": "Takaisin",
   "skip_link": "Ohita, lisään myöhemmin",
-  "ask_name": "Mikä on ryhmän nimi?",
   "ask_link": "Missä ryhmän kappaleet ovat?",
   "dark_theme": "Tumma teema",
   "light_theme": "Vaalea teema",
@@ -363,5 +306,31 @@
   "about_no_server": "Downtempolla ei ole palvelinta. Sovellus on yhteydessä vain Microsoftiin kirjautumista ja tiedostojasi varten; mitään avaamaasi, soittamaasi tai asettamaasi ei lähetetä muualle, eikä käyttöä seurata.",
   "about_remove_title": "Tietojen poistaminen",
   "about_remove": "Asetuksissa Poista projekti poistaa sen tiedostot tältä laitteelta, ja Kirjaudu ulos päättää kirjautumisen. Tämän sivuston tietojen tyhjentäminen selaimesta poistaa kaiken.",
-  "about_source": "Lähdekoodi GitHubissa"
+  "about_source": "Lähdekoodi GitHubissa",
+  "intro_how_title": "Näin se toimii",
+  "intro_how_1": "Joku ryhmässäsi pitää kappaleet (nuotit ja äänitteet) jaetussa OneDrive-kansiossa.",
+  "intro_how_2": "Luot Downtempoon projektin, jossa on jaetun kansion linkki.",
+  "intro_how_3": "Downtempo lataa kansion tiedot, ja voit valita projektiin kansiot, joissa on nuotit ja audiot.",
+  "intro_trust_title": "Mitä se ei tee",
+  "intro_trust_1": "Se ei näe salasanaasi: kirjaudut Microsoftin omalla sivulla.",
+  "intro_trust_2": "Se vain lukee lisäämiäsi kansioita eikä muuta OneDrivessa mitään.",
+  "intro_trust_3": "Downtempolla ei ole palvelinta: mitään ei lähetetä eikä seurata. Tiedostot pysyvät tällä laitteella.",
+  "intro_start": "Aloita",
+  "link_why_title": "Miksi Downtempo kysyy linkkiä?",
+  "link_why_what": "Linkki on jaetun OneDrive-kansion osoite.",
+  "link_why_how": "Tämän jälkeen Microsoft pyytää sinua kirjautumaan. Sitten Downtempo lukee kansion tiedostot ja kopioi valitsemasi tähän selaimeen.",
+  "link_help": "Mikä on OneDrive-linkki? Microsoftin ohje jakamiseen",
+  "create_project": "Luo projekti",
+  "empty_title": "Ei vielä kappaleita",
+  "empty_why": "Tällä projektilla ei ole vielä jaettua kansiota, joten ladattavaa ei ole. Kun ryhmän vetäjä lähettää OneDrive-linkin, lisää se tähän, niin kappaleet tulevat.",
+  "empty_help": "Lisää linkki",
+  "stage_link": "Linkki",
+  "stage_signin": "Kirjautuminen",
+  "stage_folders": "Kansiot",
+  "stage_download": "Lataus",
+  "link_why_who": "OneDrivessa kansion jakaja päättää, kuka sen voi avata: kuka tahansa, jolla on linkki, tai vain valitut henkilöt. Jälkimmäisessä tapauksessa kirjaudu sillä Microsoft-tilillä, jolle linkki jaettiin.",
+  "intro_storage_title": "Minne tiedostot menevät",
+  "intro_storage": "Tiedostot menevät selaimen tämän sivuston yksityiseen tallennustilaan (origin private file system). Tämä tavallista välimuistia täydentävä vakio-ominaisuus on ollut selaimissa vuodesta 2023. Kappaleet toimivat ilman verkkoa, ja vain tämä sivusto näkee ne.",
+  "storage_help": "Lue lisää (MDN)",
+  "info_show": "Lisätietoa"
 }
