@@ -45,7 +45,7 @@ const TrimItems = ({ sheet }: { sheet: Sheet }) => (
   <>
     <MenuLabel>{m.trim_margins()}</MenuLabel>
     {TRIMS.map((cm) => (
-      <MenuItem key={cm} checked={(sheet.view.trim ?? 0) === cm} onSelect={() => sheet.setTrim(cm)}>
+      <MenuItem key={cm} checked={sheet.trim === cm} onSelect={() => sheet.setTrim(cm)}>
         {TRIM_NAMES[cm]()}
       </MenuItem>
     ))}

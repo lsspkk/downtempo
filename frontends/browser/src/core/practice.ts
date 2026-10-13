@@ -12,7 +12,6 @@ export type SongMemory = {
   sheet?: string;
   zoom?: number; // the sheet's page width as a share of the view's
   fit?: "page" | null; // the sheet fits whole pages instead
-  trim?: number; // cm cut from every side of the sheet's pages
 };
 export type SavedLoop = { name: string; start: number; end: number };
 type Memory = {
@@ -51,8 +50,9 @@ export const saveLoop = (project: string, recording: string, loop: SavedLoop) =>
 export const deleteLoop = (project: string, recording: string, index: number) =>
   changeSaved(project, recording, (list) => list.filter((_, i) => i !== index));
 
-/** The sheet's rotation on this device (a laptop turned on the music stand), for every song. */
-export const sheetLook = stored<{ rotate: number }>("downtempo-sheet", { rotate: 0 });
+/** How sheets are read on this device, for every song: the rotation (a laptop turned on the music
+ * stand) and the margins trimmed from the pages (cm). */
+export const sheetLook = stored<{ rotate: number; trim: number }>("downtempo-sheet", { rotate: 0, trim: 0 });
 
 /** Everything remembered about a project: its last song, each song's tempo / loop / sheet, the regions. */
 export function forget(project: string) {

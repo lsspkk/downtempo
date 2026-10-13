@@ -17,6 +17,7 @@
 - [settings-file.md](settings-file.md): one TOML file with a project's sources, skipped folders and sorting to email; import is checked and previewed before anything is written; built (core, CLI, player).
 - [projects.md](projects.md): one folder per project under `data/projects/`, the current one in `data/app.json`; old data moved in once; built (core, CLI, the player's ☰ menu and Project settings).
 - [browser-research.md](browser-research.md): plan: can a web page sign in to OneDrive / Google Drive, download the files and keep them; GitHub Pages hosting; what T132 tests.
+- [tempo-browser.md](tempo-browser.md): built: replaced the browser's `playbackRate` and frame-based loop with Signalsmith Stretch Web (worklet, built-in loop); alternatives and open checks.
 - [browser-app.md](browser-app.md): built (MVP): the browser app on GitHub Pages: React + TypeScript + Vite + Tailwind, English / Finnish by Paraglide JS, projects, the folders to take ticked in the shared folder's tree, OneDrive download into the browser, songs by name, tempo by `playbackRate`, loop, pdf.js sheets; what it leaves out; tests.
 - [browser-mobile.md](browser-mobile.md): plan and built: the browser app on a large phone: one top line of round icon buttons, full-screen song list, tempo panel, the sheet's controls in one menu.
 - [sheet-only.md](sheet-only.md): plan → built: the "Sheet only" view for reading the score alone (no bars, side taps turn, a middle tap shows a slim bar, Back leaves), from a quick look at forScore and MobileSheets.

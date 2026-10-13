@@ -10,8 +10,8 @@ import { useStore } from "../../core/store";
 import { useBackCloses } from "../kit/back";
 import { useKeys } from "../kit/keys";
 
-// zoom: page width as a share of the view's; trim: cm cut from every side of the page (0, 0.5, 1, 2)
-export type SheetView = { zoom: number; fit: "page" | null; trim: number };
+// zoom: page width as a share of the view's (per song); the trim (cm, 0 / 0.5 / 1 / 2) is per device: sheetLook
+export type SheetView = { zoom: number; fit: "page" | null };
 export type PageSize = { w: number; h: number }; // in PDF points (1/72 inch)
 export const TRIMS = [0, 0.5, 1, 2];
 const POINTS_PER_CM = 72 / 2.54;
@@ -43,7 +43,7 @@ export function useSheet({ project, sheet, sheets, pickSheet, view, onView, edge
   const [only, setOnly] = useState(false); // Sheet only: the app's bars and menus hidden (docs/sheet-only.md)
   const [bar, setBar] = useState(false); // in Sheet only: the slim bar with ← shown
   const barTimer = useRef(0);
-  const { rotate } = useStore(sheetLook);
+  const { rotate, trim: trimCm } = useStore(sheetLook);
   const frame = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const pages = useRef<HTMLDivElement>(null);
@@ -91,7 +91,7 @@ export function useSheet({ project, sheet, sheets, pickSheet, view, onView, edge
 
   // Fit page: the page whole in the view, never wider than fit width.
   // Trim margins: what shows of a page is its size less the trim on every side (at most a quarter each way).
-  const trim = (view.trim ?? 0) * POINTS_PER_CM;
+  const trim = trimCm * POINTS_PER_CM;
   const shown = (size: PageSize | undefined) => {
     const page = size ?? { w: 595, h: 842 }; // A4 until the PDF says
     const cut = Math.min(trim, page.w / 4, page.h / 4);
@@ -150,10 +150,10 @@ export function useSheet({ project, sheet, sheets, pickSheet, view, onView, edge
   };
   const setTrim = (cm: number) => {
     fitAt.current = pageAtTop();
-    onView({ ...view, trim: cm });
+    sheetLook.set((look) => ({ ...look, trim: cm }));
     toPage(fitAt.current);
   };
-  const turn = (by: number) => sheetLook.set({ rotate: (rotate + by + 360) % 360 });
+  const turn = (by: number) => sheetLook.set((look) => ({ ...look, rotate: (rotate + by + 360) % 360 }));
   const showBar = (on: boolean, forAMoment = false) => {
     clearTimeout(barTimer.current);
     setBar(on);
@@ -216,6 +216,7 @@ export function useSheet({ project, sheet, sheets, pickSheet, view, onView, edge
     tap,
     sizes,
     setSizes,
+    trim: trimCm,
     shown, // a page's size less the trimmed margins, and how much is cut
     setTrim,
     refs: { frame, scroller, pages },

@@ -1,100 +1,104 @@
-// One recording from this device in an <audio> element: play, seek, tempo with the pitch kept
-// (the browser's own playbackRate stretch), and the A–B loop held while playing.
+// One recording from this device, played by Stretch (stretch.ts): decoded into memory, tempo with the
+// pitch kept, the A–B loop held inside the audio. Gives the player its state (ready, playing, time,
+// duration), its actions, the waveform's peaks and `onTime`, which the waveforms follow at full speed.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as files from "../../core/files";
 import type { Loop } from "../../core/practice";
 import { m } from "../../paraglide/messages.js";
+import { type Peaks, Stretch } from "./stretch";
 
 export type AudioState = { ready: boolean; error: string; playing: boolean; time: number; duration: number };
+type TimeListener = (time: number, playing: boolean) => void;
 
-/** `key`: the recording to load (none: nothing plays); a new key loads it into the same <audio>. */
+const SCREEN_MS = 100; // how often `state.time` (the clock text) is refreshed
+
+/** `key`: the recording to load (none: nothing plays); a new key loads it, the old one is let go. */
 export function useAudio(project: string, key: string | null, rate: number, loop: Loop | null) {
-  const audio = useMemo(() => new Audio(), []);
   const [state, setState] = useState<AudioState>({ ready: false, error: "", playing: false, time: 0, duration: 0 });
+  const [peaks, setPeaks] = useState<Peaks | null>(null);
+  const stretch = useRef<Stretch | null>(null);
+  const listeners = useRef(new Set<TimeListener>());
   const loopRef = useRef(loop);
   loopRef.current = loop;
+  const latest = useRef({ rate, loop });
+  latest.current = { rate, loop };
 
   useEffect(() => {
-    let url = "";
     let gone = false;
+    let shown = 0;
     setState({ ready: false, error: "", playing: false, time: 0, duration: 0 });
+    setPeaks(null);
     if (!key) return;
-    const update = () =>
-      setState((s) => ({ ...s, playing: !audio.paused, time: audio.currentTime, duration: audio.duration || 0 }));
-    const ready = () => setState((s) => ({ ...s, ready: true, duration: audio.duration || 0 }));
-    const failed = () => setState((s) => ({ ...s, error: m.cant_play_file(), playing: false }));
-    audio.addEventListener("loadedmetadata", ready);
-    audio.addEventListener("play", update);
-    audio.addEventListener("pause", update);
-    audio.addEventListener("seeked", update);
-    audio.addEventListener("error", failed);
+    const handlers = {
+      onTime(time: number, playing: boolean) {
+        listeners.current.forEach((listener) => listener(time, playing));
+        const now = performance.now();
+        if (playing && now - shown < SCREEN_MS) return;
+        shown = now;
+        setState((s) => ({ ...s, time, playing }));
+      },
+      onEnded: () => setState((s) => ({ ...s, playing: false })),
+    };
     files
       .open(project, key)
-      .then((file) => {
-        if (gone) return;
-        url = URL.createObjectURL(file);
-        audio.src = url;
+      .then((file) => Stretch.open(file, handlers))
+      .then((opened) => {
+        if (gone) return opened.close();
+        stretch.current = opened;
+        opened.set(latest.current.rate, latest.current.loop);
+        setPeaks(opened.peaks);
+        setState((s) => ({ ...s, ready: true, duration: opened.duration }));
       })
-      .catch(() => !gone && setState((s) => ({ ...s, error: m.file_gone() })));
+      .catch((error: Error) => {
+        if (gone) return;
+        const text = error.name === "NotFoundError" ? m.file_gone() : m.cant_play_file();
+        setState((s) => ({ ...s, error: text }));
+      });
     return () => {
       gone = true;
-      audio.pause();
-      audio.removeEventListener("loadedmetadata", ready);
-      audio.removeEventListener("play", update);
-      audio.removeEventListener("pause", update);
-      audio.removeEventListener("seeked", update);
-      audio.removeEventListener("error", failed);
-      audio.removeAttribute("src");
-      audio.load();
-      if (url) URL.revokeObjectURL(url);
+      stretch.current?.close();
+      stretch.current = null;
     };
-  }, [audio, project, key]);
+  }, [project, key]);
 
-  // A new source resets playbackRate to defaultPlaybackRate, so both are set.
   useEffect(() => {
-    audio.preservesPitch = true;
-    audio.defaultPlaybackRate = rate;
-    audio.playbackRate = rate;
-  }, [audio, rate, state.ready]);
+    stretch.current?.set(rate, loop);
+  }, [rate, loop?.on, loop?.start, loop?.end, state.ready]);
 
-  // While playing: follow the time for the screen and jump back at the loop's end.
-  useEffect(() => {
-    if (!state.playing) return;
-    let frame = 0;
-    let shown = 0;
-    const tick = (now: number) => {
+  const controls = useMemo(() => {
+    const play = async () => {
+      const s = stretch.current;
+      if (!s) return;
+      setState((st) => ({ ...st, error: "" }));
       const l = loopRef.current;
-      if (l?.on && audio.currentTime >= l.end) audio.currentTime = l.start;
-      if (now - shown > 100) {
-        shown = now;
-        setState((s) => ({ ...s, time: audio.currentTime }));
+      if (l?.on && (s.time() < l.start || s.time() >= l.end)) s.seek(l.start);
+      try {
+        if (!(await s.play())) setState((st) => ({ ...st, error: m.click_first() }));
+        else setState((st) => ({ ...st, playing: true }));
+      } catch (error) {
+        setState((st) => ({ ...st, error: m.cant_play({ reason: (error as Error).message }) }));
       }
-      frame = requestAnimationFrame(tick);
     };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [audio, state.playing]);
-
-  const controls = useMemo(
-    () => ({
-      play() {
-        const l = loopRef.current;
-        if (l?.on && (audio.currentTime < l.start || audio.currentTime >= l.end)) audio.currentTime = l.start;
-        setState((s) => ({ ...s, error: "" }));
-        audio.play().catch((error: DOMException) => {
-          const text = error.name === "NotAllowedError" ? m.click_first() : m.cant_play({ reason: error.message });
-          setState((s) => ({ ...s, error: text }));
-        });
-      },
-      pause: () => audio.pause(),
+    const pause = () => {
+      stretch.current?.pause();
+      setState((st) => ({ ...st, playing: false }));
+    };
+    return {
+      play,
+      pause,
+      toggle: () => (stretch.current?.isPlaying() ? pause() : void play()),
       seek(time: number) {
-        audio.currentTime = Math.max(0, Math.min(time, audio.duration || 0));
-        setState((s) => ({ ...s, time: audio.currentTime }));
+        stretch.current?.seek(time);
+        setState((st) => ({ ...st, time: stretch.current?.time() ?? 0 }));
       },
-      now: () => audio.currentTime,
-    }),
-    [audio],
-  );
-  return { element: audio, state, ...controls, toggle: () => (audio.paused ? controls.play() : controls.pause()) };
+      now: () => stretch.current?.time() ?? 0,
+      /** The waveforms' cursor: called with the time on every update; returns the way to stop. */
+      onTime(listener: TimeListener) {
+        listeners.current.add(listener);
+        return () => void listeners.current.delete(listener);
+      },
+    };
+  }, []);
+  return { state, peaks, ...controls };
 }

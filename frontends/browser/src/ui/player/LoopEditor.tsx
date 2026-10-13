@@ -1,6 +1,6 @@
-// The loop editor under the top bar: the recording's waveform (wavesurfer.js, drawn over the player's
-// own <audio>), the loop as a region with handles, a time ruler, zoom; start and end to nudge; the
-// saved regions. Click, click or drag selects; a click on the ruler seeks. E or Esc closes it. On a
+// The loop editor under the top bar: the recording's waveform (wavesurfer.js, drawn from the
+// peaks the player decoded), the loop as a region with handles, a time ruler, zoom; start and end to nudge;
+// the saved regions. Click, click or drag selects; a click on the ruler seeks. E or Esc closes it. On a
 // phone it fills the screen under the top line and the position line (▶ stays at hand).
 
 import {
@@ -25,6 +25,7 @@ import { m } from "../../paraglide/messages.js";
 import { useKeys } from "../kit/keys";
 import { Muted, WaveBuilding } from "../kit/bits";
 import { Button, IconButton } from "../kit/Button";
+import { followTime } from "./followTime";
 import { SavedLoops } from "./SavedLoops";
 import type { Player } from "./usePlayer";
 
@@ -37,9 +38,8 @@ const color = (on: boolean) => (on ? "rgba(245, 158, 11, 0.3)" : "rgba(128, 128,
 export function LoopEditor({ player }: { player: Player }) {
   const { project, loop, setLoop: onLoop } = player;
   const recording = player.recording?.key ?? "";
-  const media = player.audio.element;
-  const ready = player.audio.state.ready;
-  const rate = player.tempo / 100;
+  const audio = player.audio;
+  const peaks = audio.peaks;
   const duration = player.audio.state.duration;
   const onClose = () => player.setEditing(false);
   const box = useRef<HTMLDivElement>(null);
@@ -51,17 +51,18 @@ export function LoopEditor({ player }: { player: Player }) {
   const [problem, setProblem] = useState("");
   const [zoom, setZoom] = useState(1);
   const [mark, setMark] = useState<number | null>(null);
-  const latest = useRef({ loop, onLoop, rate });
-  latest.current = { loop, onLoop, rate };
+  const latest = useRef({ loop, onLoop });
+  latest.current = { loop, onLoop };
 
-  // One wavesurfer per opening; it reads the file the <audio> already plays (same URL: no reload).
+  // One wavesurfer per opening, drawn from the peaks the player already made.
   useEffect(() => {
-    if (!wave.current || !ready) return;
+    if (!wave.current || !peaks) return;
     const dark = document.documentElement.classList.contains("dark");
     const regions = RegionsPlugin.create();
     const ws = WaveSurfer.create({
       container: wave.current,
-      media,
+      peaks: peaks.data,
+      duration: peaks.duration,
       height: WAVE_HEIGHT,
       waveColor: dark ? "#7d87a8" : "#8a94b0",
       progressColor: dark ? "#8f98ff" : "#4f5bd5",
@@ -71,7 +72,6 @@ export function LoopEditor({ player }: { player: Player }) {
       dragToSeek: false,
       autoScroll: true,
       autoCenter: false,
-      audioRate: latest.current.rate,
       plugins: [
         regions,
         TimelinePlugin.create({ height: 18, style: { color: dark ? "#c8c8d0" : "#55555f", fontSize: "10px" } }),
@@ -94,25 +94,21 @@ export function LoopEditor({ player }: { player: Player }) {
       setZoom(Math.max(1, (pxPerSec * ws.getDuration()) / width));
     });
     ws.on("ready", () => {
-      // wavesurfer sets its own rate on the shared <audio>: give back the tempo, pitch kept
-      media.preservesPitch = true;
-      media.playbackRate = latest.current.rate;
       setDrawn(true);
       const l = latest.current.loop;
       if (l) zoomTo(ws, box.current, l);
     });
     ws.on("error", (error) => setProblem(error.message));
-    void ws.load(media.currentSrc || media.src).catch((error: Error) => {
-      if (error.name !== "AbortError") setProblem(error.message);
-    });
+    const unfollow = followTime(ws, audio);
     setSurfer({ ws, regions });
     return () => {
+      unfollow();
       stopDragging();
       ws.destroy();
       setSurfer(null);
       setDrawn(false);
     };
-  }, [media, ready]);
+  }, [audio, peaks]);
 
   // The loop as a region: drawn from the player's loop, resized by its handles.
   useEffect(() => {

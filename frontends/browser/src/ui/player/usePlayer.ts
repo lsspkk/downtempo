@@ -1,4 +1,4 @@
-// The player's state and actions for one song: which recording, the <audio> (useAudio), tempo, loop,
+// The player's state and actions for one song: which recording, the sound (useAudio), tempo, loop,
 // whether the loop editor is open, and the player's keys. Tempo and loop are remembered per song;
 // a new song waits for Play. The parts (controls.tsx, Tempo, RecordingMenu, PositionWave, LoopEditor)
 // take this object; the song page's layouts decide where they go.

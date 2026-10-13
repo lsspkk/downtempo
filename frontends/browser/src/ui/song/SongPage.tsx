@@ -33,7 +33,6 @@ export function SongPage({ project, song, ...layout }: Props) {
   const [view, setView] = useState<SheetView>({
     zoom: memory.zoom ?? 1,
     fit: memory.fit ?? null,
-    trim: memory.trim ?? 0,
   });
 
   const player = usePlayer({
