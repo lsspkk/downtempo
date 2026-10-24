@@ -82,13 +82,16 @@ class Updates:
                 self.status = f"Waiting for the {event.provider} sign-in…"
             case Checking(source=source):
                 self.source, self.status = source, f"Checking {source}…"
-            case Planned(new=new, updated=updated):
-                self.planned += new + updated
-            case Fetching(source=source, path=path, done=done, total=total):
+            case Planned(new=new, updated=updated, compress=compress):
+                self.planned += new + updated + compress
+            case Fetching(
+                source=source, path=path, status=status, done=done, total=total
+            ):
                 part = f" · {done * 100 // total} %" if total else ""
+                verb = "Compressing" if status == "compressed" else "Downloading"
                 self.source = source
                 self.status = (
-                    f"Downloading {self.saved + 1} of {self.planned}: {path.name}{part}"
+                    f"{verb} {self.saved + 1} of {self.planned}: {path.name}{part}"
                 )
                 whole = self.saved + (done / total if total else 0)
                 self.fraction = whole / self.planned if self.planned else 0
@@ -116,6 +119,8 @@ class Updates:
         self.running, self.source = [], ""
         stamp = time.strftime("%H:%M")
         self.result = (summary(result) if result else "Not checked") + f" ({stamp})"
+        if result and result.moved:
+            self.player.files_moved(result.moved)
         self.redraw()
         if result is None or (not result.saved and not result.catalog):
             return

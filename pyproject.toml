@@ -3,10 +3,11 @@ name = "downtempo"
 version = "0.1.0"
 description = "Download song material (mp3, pdf) from shared folders and play it slower with pitch kept."
 readme = "README.md"
-license = "MIT"
+license = "AGPL-3.0-or-later"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dependencies = [
+    "essentia==2.1b6.dev1389",
     "fastapi>=0.143.0",
     "msal>=1.39.0",
     "nicegui>=3.18.0",
@@ -28,3 +29,8 @@ downtempo = "downtempo.cli:main"
 [build-system]
 requires = ["uv_build>=0.9.26,<0.10.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "python-stretch>=0.3.1",
+]

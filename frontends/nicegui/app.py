@@ -30,6 +30,7 @@ from sheets import CACHE_DIR
 from sign_in import SignInCard
 from song_list import SongList
 from state import load_state, save_state
+from tempo_goal import TempoGoal
 from updates import Updates
 from welcome import welcome
 
@@ -195,17 +196,18 @@ def root() -> None:
 
     editor = LoopEditor(player)
     sheet_column = shell.build_grid()
-    controls = Controls(shell, player, editor.open)
+    goal = TempoGoal(player)
+    Controls(shell, player, editor.open, goal)
     sheet = SheetPane(sheet_column, shell, player, editor.open)
     keys.install(
         lambda: owner["client"] == me,
         player,
         shell,
         songs,
-        controls,
         sheet,
         editor,
         screen,
+        goal,
     )
     shell.set_controls(shell.view["controls"])
     songs.show()

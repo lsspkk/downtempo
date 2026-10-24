@@ -6,6 +6,7 @@ decided. Pure: no disk."""
 
 import re
 import unicodedata
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 
 from downtempo.shapes import Memory, Placement, SongMemory
@@ -129,13 +130,26 @@ def rename_sources(memory: Memory, renames: dict[str, str]) -> Memory:
 
     if not renames:
         return memory
+    return rekeyed(memory, renamed, renamed)
+
+
+def rename_files(memory: Memory, ids: dict[str, str]) -> Memory:
+    """Files stored under a new name (a wav kept as mp3): old file id → new, in file keys."""
+    if not ids:
+        return memory
+    return rekeyed(memory, lambda key: ids.get(key, key), lambda key: key)
+
+
+def rekeyed(
+    memory: Memory, file: Callable[[str], str], folder: Callable[[str], str]
+) -> Memory:
     return Memory(
         {
-            id: replace(s, folders=tuple(map(renamed, s.folders)))
+            id: replace(s, folders=tuple(map(folder, s.folders)))
             for id, s in memory.songs.items()
         },
-        {renamed(k): p for k, p in memory.files.items()},
-        {id: tuple(map(renamed, keys)) for id, keys in memory.first.items()},
+        {file(k): p for k, p in memory.files.items()},
+        {id: tuple(map(file, keys)) for id, keys in memory.first.items()},
         memory.words_add,
         memory.words_keep,
     )

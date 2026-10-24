@@ -7,7 +7,7 @@ off the UI thread. Failures are `UserError`s. Frontends never import `downloader
 import shutil
 import threading
 import tomllib
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from downtempo.catalog import Song, list_files, read_catalog
@@ -30,7 +30,7 @@ from downtempo.publishing import (
     rebuild,
     songs_with_new,
 )
-from downtempo.renaming import rename
+from downtempo.renaming import move_files, move_practice, rename
 from downtempo.shapes import FileRef, Grouping
 from downtempo.skipping import free_space, skip_folder, skipped_size, unskip_folder
 from downtempo.sorting import Sorting
@@ -93,6 +93,9 @@ class Account:
 class UpdateResult:
     sources: list[SyncResult]
     catalog: CatalogDiff | None  # None on a dry run
+    moved: dict[str, str] = field(
+        default_factory=dict
+    )  # catalog paths: a wav → its mp3
 
     @property
     def saved(self) -> int:
@@ -330,11 +333,26 @@ class Library:
         """Download what changed in these sources (all when `names` is empty), then rebuild."""
         chosen = [self.source(n) for n in names] if names else self.sources()
         results = update([(s, self.target(s)) for s in chosen], report, cancel, dry_run)
-        if not dry_run:
-            targets = {s.name: self.target(s) for s in chosen}
-            known = {s.name for s in self.sources()}
-            record(self.checked_file, results, targets, known)
-        return UpdateResult(results, None if dry_run else self.rebuild(mark_new=True))
+        if dry_run:
+            return UpdateResult(results, None)
+        moved = {
+            self.catalog_path(wav): self.catalog_path(mp3)
+            for r in results
+            for wav, mp3 in r.moved.items()
+        }
+        move_files(self, moved)
+        targets = {s.name: self.target(s) for s in chosen}
+        known = {s.name for s in self.sources()}
+        record(self.checked_file, results, targets, known)
+        return UpdateResult(results, self.rebuild(mark_new=True), moved)
+
+    def catalog_path(self, path: Path) -> str:
+        return path.relative_to(self.root).as_posix()
+
+    @staticmethod
+    def move_practice(practice: dict, moved: dict[str, str]) -> dict:
+        """A player's practice memory after a download made wavs into mp3s (`UpdateResult.moved`)."""
+        return move_practice(practice, moved)
 
     def checked(self) -> dict[str, str]:
         """When each source was last checked to the end: source name → ISO time."""

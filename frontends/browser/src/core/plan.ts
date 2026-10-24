@@ -1,28 +1,39 @@
 // What a download has to do: compare the shared folders' listings with the files on this device. Pure.
+// A server's wav is kept as an mp3 under its own key (core/compress.ts, docs/compress.md).
 
+import { storedAs } from "./compress";
 import type { RemoteFile } from "./onedrive";
 import type { Local } from "./projects";
 
 export type Listing = { source: string; files: RemoteFile[] };
-export type Fetch = { key: string; file: RemoteFile; fresh: boolean };
-export type Plan = { fetch: Fetch[]; same: number; gone: string[]; bytes: number };
+/** `key`: where it is stored; `listed`: the server's name, which differs for a wav kept as mp3. */
+export type Fetch = { key: string; listed: string; file: RemoteFile; fresh: boolean };
+export type Plan = { fetch: Fetch[]; compress: Fetch[]; same: number; gone: string[]; bytes: number };
 
-/** New and changed files to fetch (a copy counts as current when its size matches and it isn't older),
- * how many are current, and the files on this device the server no longer has (never deleted). */
+const current = (copy: Local | undefined, file: RemoteFile, sameSize = true) =>
+  !!copy && (!sameSize || copy.size === file.size) && copy.modified >= file.modified;
+
+/** New and changed files to fetch (a copy counts as current when its size matches and it isn't older;
+ * an mp3 made from a wav by its time alone), wavs on this device to make into mp3 without fetching
+ * them again, how many are current, and the files the server no longer has (never deleted). */
 export function plan(local: Record<string, Local>, listings: Listing[]): Plan {
   const fetch: Fetch[] = [];
+  const compress: Fetch[] = [];
   const seen = new Set<string>();
   let same = 0;
   for (const { source, files } of listings) {
+    const names = new Set(files.map((f) => f.path.toLowerCase()));
     for (const file of files) {
-      const key = `${source}/${file.path}`;
-      seen.add(key);
-      const copy = local[key];
-      if (copy && copy.size === file.size && copy.modified >= file.modified) same++;
-      else fetch.push({ key, file, fresh: !copy });
+      const listed = `${source}/${file.path}`;
+      const key = `${source}/${storedAs(file.path, names)}`;
+      seen.add(listed).add(key);
+      const item = { key, listed, file, fresh: !local[key] && !local[listed] };
+      if (current(local[key], file, key === listed)) same++;
+      else if (key !== listed && current(local[listed], file)) compress.push(item);
+      else fetch.push(item);
     }
   }
-  const listed = new Set(listings.map((l) => l.source));
-  const gone = Object.keys(local).filter((key) => listed.has(key.split("/")[0]) && !seen.has(key));
-  return { fetch, same, gone, bytes: fetch.reduce((sum, f) => sum + f.file.size, 0) };
+  const sources = new Set(listings.map((l) => l.source));
+  const gone = Object.keys(local).filter((key) => sources.has(key.split("/")[0]) && !seen.has(key));
+  return { fetch, compress, same, gone, bytes: fetch.reduce((sum, f) => sum + f.file.size, 0) };
 }

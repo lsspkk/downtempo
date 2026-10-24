@@ -53,3 +53,5 @@ Why this doesn't decide: a steady sine repeats exactly, which is the ideal case 
 ## Then: listening test (T31)
 
 Render the same 20 s excerpt (one with drums, one solo melody) at 0.5x, 0.75x and 1.3x into `data/scratch/tempo-tests/`, with Rubber Band R3, R3 + ChannelsTogether, R2, Signalsmith (python-stretch) and the browser's `playbackRate` (recorded from a test page). Listen blind, note echo, smear, warble and stereo width, and write the result into T8's `docs/tempo-decision.md`.
+
+**Rendered (T31, 2026-10-24)** by `scripts/stretch_test.py`: per recording a 20 s excerpt from the middle (or `--start`), `original.wav`, and per speed the four candidates as `A.wav` … `D.wav`, shuffled; the answers in `key.json`. Rubber Band runs in real-time mode block by block, as the player does. The browser's `playbackRate` is left out: the browser app no longer uses it (Signalsmith since T4, "sounds great" in T4.6), and python-stretch is the same Signalsmith library. Listening is T31.1.

@@ -1,7 +1,9 @@
-// The loop editor under the top bar: the recording's waveform (wavesurfer.js, drawn from the
-// peaks the player decoded), the loop as a region with handles, a time ruler, zoom; start and end to nudge;
-// the saved regions. Click, click or drag selects; a click on the ruler seeks. E or Esc closes it. On a
-// phone it fills the screen under the top line and the position line (▶ stays at hand).
+// The loop editor under the top bar, laid out as the Python player's Loop tab (docs/loop-editor.md#the-loop-tab-t241):
+// the loop's line (on / off, its length, zoom, Hear end, Clear), the recording's waveform (wavesurfer.js, drawn
+// from the peaks the player decoded) with the loop as a region with handles and a time ruler, Start and End as
+// cards (Set here = the play position, nudges), and the saved loops. Click, click or drag selects; a click on
+// the ruler seeks. E or Esc closes it. On a phone it fills the screen under the top line and the position
+// line (▶ stays at hand).
 
 import {
   ArrowLeft,
@@ -11,6 +13,7 @@ import {
   ChevronsRight,
   Ear,
   Expand,
+  LocateFixed,
   X,
   ZoomIn,
 } from "lucide-react";
@@ -25,6 +28,7 @@ import { m } from "../../paraglide/messages.js";
 import { useKeys } from "../kit/keys";
 import { Muted, WaveBuilding } from "../kit/bits";
 import { Button, IconButton } from "../kit/Button";
+import { Switch } from "../kit/Switch";
 import { followTime } from "./followTime";
 import { SavedLoops } from "./SavedLoops";
 import type { Player } from "./usePlayer";
@@ -165,7 +169,7 @@ export function LoopEditor({ player }: { player: Player }) {
   };
 
   return (
-    <section className="space-y-2 bg-white px-3 py-2 dark:bg-zinc-900 max-sm:fixed max-sm:inset-x-0 max-sm:top-24 max-sm:bottom-0 max-sm:z-30 max-sm:overflow-y-auto shrink-0 border-b border-zinc-200 dark:border-zinc-800">
+    <section className="space-y-3 bg-white px-4 py-3 dark:bg-zinc-900 max-sm:fixed max-sm:inset-x-0 max-sm:top-24 max-sm:bottom-0 max-sm:z-30 max-sm:overflow-y-auto shrink-0 border-b border-zinc-200 dark:border-zinc-800">
       {/* On a phone a page of its own: ← and its title, as any page; the buttons on the line under it. */}
       <div className="-mx-2 -mt-1 flex items-center gap-2 border-b border-zinc-200 pb-1 sm:hidden dark:border-zinc-800">
         <IconButton label={m.back()} onClick={onClose}>
@@ -174,6 +178,16 @@ export function LoopEditor({ player }: { player: Player }) {
         <h2 className="truncate font-semibold">{m.loop_editor_title()}</h2>
       </div>
       <div className="flex flex-wrap items-center gap-1">
+        <Switch
+          on={!!loop?.on}
+          onChange={player.toggleLoop}
+          disabled={!loop}
+          label={m.loop()}
+          title={m.loop_toggle()}
+        />
+        <span className="mr-3 text-xs text-zinc-500 tabular-nums">
+          {loop ? `${(loop.end - loop.start).toFixed(1)} s` : m.loop_none()}
+        </span>
         <Button kind="quiet" onClick={() => surfer && wholeSong(surfer.ws, box.current)}>
           <Expand size={16} /> <span className="sm:hidden">{m.whole_song_short()}</span>
           <span className="max-sm:hidden">{m.whole_song()}</span>
@@ -210,17 +224,41 @@ export function LoopEditor({ player }: { player: Player }) {
           ))}
         <div ref={wave} className={`transition-opacity duration-500 ${drawn ? "opacity-100" : "opacity-0"}`} />
       </div>
-      <div className="grid max-w-2xl grid-cols-1 gap-2 sm:grid-cols-2">
-        <Edge label={m.loop_start()} value={loop?.start} onNudge={(by) => nudge("start", by)} />
-        <Edge label={m.loop_end()} value={loop?.end} onNudge={(by) => nudge("end", by)} />
+      <div className="grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2">
+        <Edge
+          label={m.loop_start()}
+          keyName="A"
+          value={loop?.start}
+          onSet={player.setStart}
+          onNudge={(by) => nudge("start", by)}
+        />
+        <Edge
+          label={m.loop_end()}
+          keyName="B"
+          value={loop?.end}
+          onSet={player.setEnd}
+          onNudge={(by) => nudge("end", by)}
+        />
       </div>
       <SavedLoops project={project} recording={recording} loop={loop} onUse={onLoop} />
     </section>
   );
 }
 
-/** One loop edge, as in the Python player: its name over « ‹ time › » (1 s and 0.1 s). */
-function Edge({ label, value, onNudge }: { label: string; value: number | undefined; onNudge: (by: number) => void }) {
+/** One loop edge as a card, as in the Python player: its name and Set here, the time, « ‹ › » (1 s, 0.1 s). */
+function Edge({
+  label,
+  keyName,
+  value,
+  onSet,
+  onNudge,
+}: {
+  label: string;
+  keyName: string;
+  value: number | undefined;
+  onSet: () => void;
+  onNudge: (by: number) => void;
+}) {
   const off = value === undefined;
   const step = (icon: ReactNode, by: number, title: string) => (
     <Button
@@ -235,12 +273,22 @@ function Edge({ label, value, onNudge }: { label: string; value: number | undefi
     </Button>
   );
   return (
-    <div className="flex flex-col items-center rounded-lg bg-amber-500/10 py-1">
-      <span className="text-xs text-zinc-500 dark:text-zinc-400">{label}</span>
-      <div className="flex items-center">
+    <div className="flex flex-col gap-1 rounded-lg border border-amber-500/25 bg-amber-500/10 p-2">
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-semibold">{label}</span>
+        <Button
+          kind="quiet"
+          className="!px-2 !py-1 text-xs text-amber-700 dark:text-amber-400"
+          onClick={onSet}
+          title={m.set_here_title({ edge: label, key: keyName })}
+        >
+          <LocateFixed size={14} /> {m.set_here()}
+        </Button>
+      </div>
+      <span className="text-center font-mono text-lg tabular-nums">{off ? "–" : clock(value, true)}</span>
+      <div className="flex items-center justify-center">
         {step(<ChevronsLeft size={18} />, -1, "−1 s")}
         {step(<ChevronLeft size={18} />, -0.1, m.minus_tenth())}
-        <span className="w-20 text-center font-mono tabular-nums">{off ? "–" : clock(value, true)}</span>
         {step(<ChevronRight size={18} />, 0.1, m.plus_tenth())}
         {step(<ChevronsRight size={18} />, 1, "+1 s")}
       </div>

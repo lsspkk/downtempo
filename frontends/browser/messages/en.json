@@ -141,6 +141,8 @@
   "kept": "The files are kept: the browser won't clear them by itself, even when the disk runs full.",
   "may_clear": "The browser may clear the files by itself when the disk runs full. Keep files asks it not to.",
   "keep_files": "Keep files",
+  "license_line": "Free software under the AGPL-3.0 license",
+  "source_code": "Source code",
   "keyboard": "Keyboard",
   "key_play": "play / pause",
   "key_tempo": "tempo slower / faster",
@@ -230,18 +232,18 @@
   "loop_end": "End",
   "minus_tenth": "−0.1 s",
   "plus_tenth": "+0.1 s",
-  "saved_loops": "Regions",
-  "save_loop": "Save",
+  "saved_loops": "Saved loops",
+  "save_loop": "Save loop",
   "loop_name_placeholder": "Region {n}",
   "delete_saved": "Delete {name}",
-  "no_saved": "No regions yet: set a loop and save it.",
+  "no_saved": "None yet: set a loop, then Save loop.",
   "waveform_failed": "Can't draw the waveform: {reason}",
   "key_edit": "loop editor, Esc closes",
   "project": "Project",
   "stop_download": "Stop the download",
   "close_editor": "Close the loop editor (E, Esc)",
   "not_downloaded": "Not downloaded yet",
-  "audio_n": "Audio {n}/{count}",
+  "audio_n": "Recording {n}/{count}",
   "recordings": "Recordings (T)",
   "uploaded": "uploaded {date}",
   "fit_page": "Fit page: the whole page in view (H)",
@@ -286,7 +288,7 @@
   "sheet_view": "Sheet view: zoom, fit, rotate",
   "whole_song_short": "Song",
   "zoom_to_loop_short": "Loop",
-  "recordings_title": "Recordings",
+  "recordings_title": "Recording",
   "sheet_title": "Sheet",
   "loop_editor_title": "Loop editor",
   "trim_margins": "Trim margins",
@@ -332,5 +334,65 @@
   "intro_storage_title": "Where the files go",
   "intro_storage": "The files go into your browser's private storage for this site (origin private file system), a standard feature alongside the ordinary cache, in browsers since 2023. The songs work without a network, and only this site can see them.",
   "storage_help": "Read more about it (MDN)",
-  "info_show": "More information"
+  "info_show": "More information",
+  "close": "Close",
+  "bpm_down": "1 BPM slower",
+  "bpm_up": "1 BPM faster",
+  "bpm_open_title": "The recording tempo, the optimal tempo and the Metronome (G taps, X plays at the optimal tempo)",
+  "bpm_title": "BPM",
+  "recording_tempo": "Recording tempo",
+  "tempo_finding": "finding…",
+  "tempo_none_found": "none found",
+  "optimal_tempo": "Optimal tempo",
+  "optimal": "Play at –",
+  "optimal_bpm": "Play at {bpm}",
+  "optimal_title": "Every recording of this song plays at {bpm} BPM (now {percent} %) until you change the tempo; off goes back (X)",
+  "optimal_none_title": "No optimal tempo yet: a click opens the BPM strip to set one (X)",
+  "optimal_needs": "→ {percent} % of this recording",
+  "optimal_out_of_range": "→ {percent} %: the player goes 50–130 %",
+  "tap": "Tap",
+  "tap_title": "Tap the beat of another version: from the 4th tap the recording plays that fast (G)",
+  "tap_needs_bpm": "Tap needs the recording tempo (BPM)",
+  "tapped": "tapped {bpm}",
+  "key_tap": "tap the beat: from the 4th tap the speed follows",
+  "key_optimal": "play at the optimal tempo on / off",
+  "n_compressed": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "{count} wav made into mp3",
+        "countPlural=other": "{count} wavs made into mp3"
+      }
+    }
+  ],
+  "n_kept_wav": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "{count} wav couldn't be compressed (kept as wav)",
+        "countPlural=other": "{count} wavs couldn't be compressed (kept as wav)"
+      }
+    }
+  ],
+  "compressing": "Compressing {done} of {total}: {file}",
+  "compressing_file": "Compressing {file}…",
+  "metronome_on": "Metronome at {bpm} BPM",
+  "metronome_off": "Stop the metronome",
+  "metronome_needs_bpm": "The metronome needs the BPM (BPM strip)",
+  "loop": "Loop",
+  "loop_none": "Set Start and End, or drag over the waveform",
+  "set_here": "Set here",
+  "set_here_title": "{edge} at the play position ({key})",
+  "then_compressed": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "Then the wav file is compressed to mp3 on this device: about a tenth of the size.",
+        "countPlural=other": "Then the {count} wav files are compressed to mp3 on this device: about a tenth of the size."
+      }
+    }
+  ]
 }

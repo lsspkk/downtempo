@@ -17,7 +17,7 @@ const PEAK_BLOCK = 8;
 const UPDATE_SECONDS = 0.03;
 
 let context: AudioContext | null = null;
-const audioContext = () => (context ??= new AudioContext());
+export const audioContext = () => (context ??= new AudioContext());
 
 export class Stretch {
   readonly duration: number;

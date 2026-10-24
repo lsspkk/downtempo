@@ -33,7 +33,8 @@ class Checking:
 
 @dataclass(frozen=True)
 class Planned:
-    """What a source's update will do; `bytes` is what will be downloaded."""
+    """What a source's update will do; `bytes` is what will be downloaded, `compress` the wavs
+    already here to make into mp3."""
 
     source: str
     new: int
@@ -41,15 +42,17 @@ class Planned:
     same: int
     gone: int
     bytes: int
+    compress: int = 0
 
 
 @dataclass(frozen=True)
 class Fetching:
-    """Download progress in bytes: once with `done` 0 when it starts, then about every MB."""
+    """Download progress in bytes: once with `done` 0 when it starts, then about every MB. A wav
+    already here being made into an mp3 (`compressed`) reports only the start."""
 
     source: str
     path: Path
-    status: Literal["new", "updated"]
+    status: Literal["new", "updated", "compressed"]
     done: int
     total: int | None
 
@@ -58,7 +61,7 @@ class Fetching:
 class Saved:
     source: str
     path: Path
-    status: Literal["new", "updated"]
+    status: Literal["new", "updated", "compressed"]
 
 
 @dataclass(frozen=True)
@@ -107,6 +110,7 @@ def plan_line(event: Planned) -> str:
         f"{event.new} new" if event.new else "",
         f"{event.updated} changed" if event.updated else "",
         f"{event.same} up to date" if event.same else "",
+        f"{event.compress} to make into mp3" if event.compress else "",
     ]
     line = ", ".join(p for p in parts if p) or "no files"
     if event.bytes:
@@ -128,9 +132,10 @@ def print_report(event: Event) -> None:
         case Planned(source=source):
             print(f"{source}: {plan_line(event)}", flush=True)
         case Fetching(path=path, status=status, done=0):
-            print(
-                f"{'Updating' if status == 'updated' else 'Downloading'}: {shown(path)}"
+            verb = {"updated": "Updating", "compressed": "Compressing"}.get(
+                status, "Downloading"
             )
+            print(f"{verb}: {shown(path)}")
         case Skipped(path=path, reason=reason):
             print(f"Skipping {path.name}: {reason}")
         case Failed(source=source, error=error):

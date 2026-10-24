@@ -40,20 +40,26 @@ export function GetSongs({ project, onSettings }: { project: projects.Project; o
   else if (mine && status.phase === "downloading") {
     body = (
       <div className="space-y-2">
-        <p>{m.downloading_file({ file: status.text })}</p>
+        <p>
+          {status.compressing ? m.compressing_file({ file: status.text }) : m.downloading_file({ file: status.text })}
+        </p>
         <Progress value={status.allBytes ? status.bytes / status.allBytes : 0} />
       </div>
     );
   } else if (mine && status.phase === "preview") {
     stage = 3;
     const { songs, files, plan } = status.preview;
+    // a wav is kept as an mp3 (core/compress.ts): its key is the mp3's name
+    const wavs = plan.fetch.filter((f) => f.key !== f.listed).length + plan.compress.length;
     body = (
       <div className="space-y-4">
         <p className="text-lg">
           {m.about()} <strong>{m.n_songs({ count: songs })}</strong>{" "}
           {m.from_files({ count: files, size: size(plan.bytes) })}
         </p>
-        <Muted>{m.saved_offline()}</Muted>
+        <Muted>
+          {m.saved_offline()} {wavs > 0 && m.then_compressed({ count: wavs })}
+        </Muted>
         <div className="flex gap-2">
           <Button kind="primary" onClick={() => download.download(status.preview)}>
             {m.download()}

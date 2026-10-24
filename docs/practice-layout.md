@@ -17,7 +17,7 @@ A 13" laptop (about 1280×720 usable) on a music stand or a chair, the accordion
 | Sheet (right, takes the rest) | zoom, fit width / fit page, rotation 0° / 90° / 180° / 270° | toolbar; `+` / `−`, `W` / `H`; ⋮ menu, `O` | fit width, 0°; remembered |
 | Full screen | on / off | toolbar button, `F`; Esc or the corner button back | off; not remembered |
 
-- **Simple** keeps what is needed between run-throughs: waveform (seek, drag a loop), time, to start, play, loop on/off, tempo − value +. Trainer, A/B nudging, saved loops, pitch and volume are only in Full. Same widgets, hidden, so nothing is duplicated or out of sync.
+- **Simple** keeps what is needed between run-throughs: waveform (seek, drag a loop), time, to start, play, loop on/off, the tempo row (− value +, BPM now, Play at). The tabs (Pitch · Trainer · Loop · BPM: A/B nudging, saved loops, pitch, volume, the recording tempo, the Metronome) and Tap are only in Full ([tempo-goal.md](tempo-goal.md)). Same widgets, hidden, so nothing is duplicated or out of sync.
 - **Hidden** gives the sheet the whole width. A small bar in the header (play, time, tempo − value +, loop, recording) stays visible, so the basics are always one click away.
 - **Full screen** hides everything but the sheet (header, song list, controls, sheet toolbar) and makes the window full screen. Keys keep working; a faint button in the corner and Esc lead back. The remembered layout is untouched.
 - **Fit width** (100 %) and **fit page** (the whole page at the top of the view, height and width) are separate buttons, icons ↔ and ↕, next to the zoom; the active one is tinted. Fit page follows rotation, window size, song list, controls and full screen, and turns off with `+` / `−`. With PgDn set to "to next page" it turns whole pages, like a reader. The old "fit width" used the `fit_screen` icon, which looks like full screen.
@@ -35,6 +35,8 @@ Chosen so that the hands-busy actions are the big keys and the footswitch keys o
 | PgUp / PgDn | scroll a screen (or a page, setting) | footswitch |
 | Home / End | sheet top / bottom | reader convention |
 | ← / → | tempo − / + one step | the most changed setting |
+| G | tap the beat: from the 4th tap the speed follows ([tempo-goal.md](tempo-goal.md)) | free key near the left hand |
+| X | Play at switch on / off | free key, one press both ways |
 | + / − | sheet zoom | |
 | `,` / `.` | back / forward 5 s | `<` `>` as arrows |
 | J / L | back / forward 10 s | YouTube |
@@ -59,7 +61,7 @@ Study (T35). The song list was opened by ☰, which reads as the app's main menu
 
 - **Pick (T35)**: a labelled **Songs** button with a music-list icon, at the left where the drawer opens, tinted while the list is shown. The tooltip names the key (`Q`).
 - **Changed (T120)**: ☰ became the app's main menu (projects, project and player settings, shortcuts, dark mode: [project-screen.md](project-screen.md#project-menu)), which is what the icon means. The song list then got the usual sidebar toggle of desktop apps (macOS, VS Code, Notion, Outlook): the panel icon, no label, showing the state (`left_panel_close` while shown, `left_panel_open` while hidden), tooltip "Hide / Show song list (Q)", right after ☰ with a gap. Apps where ☰ toggles the sidebar (Gmail) have no other main menu; here it would mean two things.
-- **Recordings stay with the player, not in the list.** forScore links audio tracks to the score and shows them in its media panel ([forscore-audio](web/forscore-audio.txt)). The list is hidden most of the practice time anyway. So the list only shows a count badge, and the switch (T34) is where playback is: chips in the controls pane (Full and Simple), a "♪ 1/2" menu in the sheet-only bar, and `T` everywhere.
+- **Recordings stay with the player, not in the list.** forScore links audio tracks to the score and shows them in its media panel ([forscore-audio](web/forscore-audio.txt)). The list is hidden most of the practice time anyway. So the list only shows a count badge, and the switch (T34) is where playback is: a labelled dropdown in the controls pane (Full and Simple; T231), a "♪ 1/2" menu in the sheet-only bar, and `T` everywhere.
 
 ## Song list
 

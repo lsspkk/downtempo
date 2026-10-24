@@ -2,7 +2,8 @@
 
 Doesn't know which provider: it asks `provider(type)` for a connection and the connection for
 files. Downloads go to `<name>.part` first and get the server's change time; a cancel stops
-between chunks and keeps every finished file. Nothing local is ever deleted.
+between chunks and keeps every finished file. Wavs are kept as mp3 (docs/compress.md), also
+the ones downloaded before; a wav made into an mp3 is the only file ever deleted.
 """
 
 import os
@@ -14,6 +15,7 @@ from typing import Literal
 
 import requests
 
+from downtempo.compress import stored_as, to_mp3
 from downtempo.config import MEDIA_EXTENSIONS
 from downtempo.downloaders import provider
 from downtempo.downloaders.remote import Connection, RemoteFile
@@ -37,7 +39,18 @@ CHUNK = 1 << 20  # progress is reported, and a cancel noticed, once per chunk
 @dataclass(frozen=True)
 class Item:
     remote: RemoteFile
-    local: Path
+    local: (
+        Path  # where it's stored: `Song.mp3` for a server's `Song.wav` when compressed
+    )
+
+    @property
+    def listed(self) -> Path:
+        """Where it would be under the server's name."""
+        return self.local.with_name(self.remote.path.name)
+
+    @property
+    def compressed(self) -> bool:
+        return self.local != self.listed
 
 
 @dataclass
@@ -47,6 +60,7 @@ class SyncPlan:
     new: list[Item] = field(default_factory=list)
     updated: list[Item] = field(default_factory=list)
     same: list[Item] = field(default_factory=list)
+    compress: list[Item] = field(default_factory=list)  # wavs here, to make into mp3
     gone: list[Path] = field(
         default_factory=list
     )  # local files no longer on the server
@@ -64,6 +78,7 @@ class SyncPlan:
             len(self.same),
             len(self.gone),
             self.bytes,
+            len(self.compress),
         )
 
 
@@ -71,7 +86,8 @@ class SyncPlan:
 class SyncResult:
     source: str
     plan: SyncPlan | None = None
-    saved: list[Path] = field(default_factory=list)
+    saved: list[Path] = field(default_factory=list)  # downloaded
+    moved: dict[Path, Path] = field(default_factory=dict)  # a wav here → its mp3
     error: UserError | None = None
     cancelled: bool = False
 
@@ -86,7 +102,7 @@ def plan(
     """Compare a listing with the files under `target`; reads the disk, changes nothing. Files in
     skipped folders are neither downloaded nor counted as gone."""
     result = SyncPlan(source, target)
-    seen: set[Path] = set()
+    listed: dict[Path, RemoteFile] = {}
     for file in files:
         if cancel.is_set():
             raise Cancelled()
@@ -96,14 +112,21 @@ def plan(
         if local is None:
             result.skipped.append((file.path, "the name can't be saved here"))
             continue
-        seen.add(local)
-        item = Item(file, local)
-        if not local.is_file():
-            result.new.append(item)
-        elif current(local, file):
-            result.same.append(item)
+        listed[local] = file
+    seen: set[Path] = set()
+    names = set(listed)
+    for local, file in listed.items():
+        item = Item(file, stored_as(local, names))
+        seen.update((local, item.local))
+        if item.local.is_file():
+            if current(item.local, file, same_size=not item.compressed):
+                result.same.append(item)
+            else:
+                result.updated.append(item)
+        elif item.compressed and local.is_file():
+            (result.compress if current(local, file) else result.updated).append(item)
         else:
-            result.updated.append(item)
+            result.new.append(item)
     if target.exists():
         result.gone = sorted(
             p
@@ -126,11 +149,12 @@ def safe_path(target: Path, path: PurePosixPath) -> Path | None:
     return target.joinpath(*parts)
 
 
-def current(local: Path, file: RemoteFile) -> bool:
-    """Same size, and not older than the server's copy. Files from before change times were
-    copied (download time, so newer) count as current and get the server's time in `run`."""
+def current(local: Path, file: RemoteFile, same_size: bool = True) -> bool:
+    """Same size (unless compressed), and not older than the server's copy. Files from before
+    change times were copied (download time, so newer) count as current and get the server's
+    time in `run`."""
     stat = local.stat()
-    if file.size is not None and stat.st_size != file.size:
+    if same_size and file.size is not None and stat.st_size != file.size:
         return False
     return (
         file.modified is None or stat.st_mtime > file.modified.timestamp() - SAME_TIME
@@ -143,19 +167,45 @@ def run(
     result = SyncResult(plan.source, plan)
     for item in plan.same:
         stamp_with_server_time(item)
-    work = [(i, "new") for i in plan.new] + [(i, "updated") for i in plan.updated]
+    work = (
+        [(i, "compressed") for i in plan.compress]
+        + [(i, "new") for i in plan.new]
+        + [(i, "updated") for i in plan.updated]
+    )
     for item, status in work:
-        outcome = (
-            "cancelled"
-            if cancel.is_set()
-            else fetch(item, status, connection, plan.source, report, cancel)
-        )
+        had_wav = item.compressed and item.listed.is_file()
+        if cancel.is_set():
+            outcome = "cancelled"
+        elif status == "compressed":
+            outcome = compress(item, plan.source, report, cancel)
+        else:
+            outcome = fetch(item, status, connection, plan.source, report, cancel)
         if outcome == "cancelled":
             result.cancelled = True
             break
-        if outcome == "saved":
-            result.saved.append(item.local)
+        if had_wav and outcome == item.local:
+            result.moved[item.listed] = item.local
+        if isinstance(outcome, Path) and status != "compressed":
+            result.saved.append(outcome)
     return result
+
+
+def compress(
+    item: Item, source: str, report: Report, cancel: threading.Event
+) -> Path | Literal["skipped", "cancelled"]:
+    """Make a wav already here into its mp3 and delete the wav; one that can't be encoded stays."""
+    report(Fetching(source, item.listed, "compressed", 0, None))
+    try:
+        if not to_mp3(item.listed, item.local, cancel):
+            report(Skipped(source, item.listed, "can't be made into an mp3, kept"))
+            return "skipped"
+    except Cancelled:
+        return "cancelled"
+    stamp = item.listed.stat().st_mtime
+    os.utime(item.local, (stamp, stamp))
+    item.listed.unlink()
+    report(Saved(source, item.local, "compressed"))
+    return item.local
 
 
 def stamp_with_server_time(item: Item) -> None:
@@ -173,13 +223,14 @@ def fetch(
     source: str,
     report: Report,
     cancel: threading.Event,
-) -> Literal["saved", "skipped", "cancelled"]:
-    """Download one file through `.part`; a cancel removes the part. A file deleted on the
-    server since the listing is skipped; other failures stop the source."""
+) -> Path | Literal["skipped", "cancelled"]:
+    """Download one file through `.part` (a wav then encoded to mp3) and say where it was saved;
+    a cancel removes the part. A file deleted on the server since the listing is skipped; other
+    failures stop the source."""
     size = item.remote.size
     report(Fetching(source, item.local, status, 0, size))
     item.local.parent.mkdir(parents=True, exist_ok=True)
-    partial = item.local.with_name(item.local.name + ".part")
+    partial = item.listed.with_name(item.listed.name + ".part")
     done = 0
     try:
         url, headers = connection.request(item.remote)
@@ -204,12 +255,23 @@ def fetch(
     if cancel.is_set():
         partial.unlink(missing_ok=True)
         return "cancelled"
+    saved = item.listed
+    if item.compressed:
+        try:
+            encoded = to_mp3(partial, item.local, cancel)
+        except Cancelled:
+            partial.unlink(missing_ok=True)
+            return "cancelled"
+        if encoded:
+            partial.unlink()
+            item.listed.unlink(missing_ok=True)  # the older wav, downloaded before
+            partial = saved = item.local
     if item.remote.modified is not None:
         stamp = item.remote.modified.timestamp()
         os.utime(partial, (stamp, stamp))
-    partial.replace(item.local)
-    report(Saved(source, item.local, status))
-    return "saved"
+    partial.replace(saved)
+    report(Saved(source, saved, status))
+    return saved
 
 
 def update(

@@ -129,6 +129,7 @@ class Shell:
             element.set_visibility(not self.fullscreen)
         for element in self.fullscreen_only:
             element.set_visibility(self.fullscreen)
+        self.player.emit("layout")
 
     def set_audio_less(self, on: bool) -> None:
         """Per song, so the remembered layout stays (docs/ux.md #8)."""

@@ -21,7 +21,7 @@ const at = (value: number) => `calc(8px + (100% - 16px) * ${(value - TEMPO_MIN) 
 
 export function TempoSlider({
   player,
-  className = "relative min-w-36 flex-1 pb-3 sm:w-48 sm:flex-none lg:w-64",
+  className = "relative min-w-36 flex-1 pb-3 sm:w-44 sm:flex-none xl:w-56 2xl:w-64",
 }: {
   player: Player;
   className?: string;

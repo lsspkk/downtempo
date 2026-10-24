@@ -8,6 +8,9 @@ redraw from the Player's fields. Topics (`on` / `emit`):
 - "sheet" (sel, ticket): load this sheet (listeners may be async)
 - "tempo": speed or pitch; "sound": volume or mute; "loop": the loop or the saved loops
 - "trainer": the trainer's settings or on/off; "tick": every 0.1 s
+- "moved": playing started or the position jumped (the click lines up again)
+- "layout": Full / Simple / Sheet or full screen changed (layout.py)
+- "bpm": the recording tempo, the optimal tempo, taps or the Metronome (tempo_goal.py)
 
 Switching (docs/player-switching.md): user actions make a new Selection; the loaders work on that
 snapshot and give up when a newer one of their part (audio, sheet) was asked for.
@@ -159,6 +162,17 @@ class Player:
         elif self.songs:
             await self.open_song(self.songs[0])
 
+    def files_moved(self, moved: dict[str, str]) -> None:
+        """A download made wavs into mp3s (catalog paths, old → new): the practice memory and the
+        open recording follow; it keeps playing from memory."""
+        self.save_position()
+        self.state.update(self.library.move_practice(self.state, moved))
+        self.audio = moved.get(self.audio, self.audio)
+        if self.selection:
+            audio = moved.get(self.selection.audio, self.selection.audio)
+            self.selection = replace(self.selection, audio=audio)
+        save_state(self.state)
+
     async def step_song(self, shown: list[Song], offset: int) -> None:
         if not shown:
             return
@@ -245,11 +259,16 @@ class Player:
     def toggle_play(self) -> None:
         if not self.audio:
             return
-        self.engine.pause() if self.engine.playing else self.engine.play()
+        if self.engine.playing:
+            self.engine.pause()
+        else:
+            self.engine.play()
+            self.emit("moved")
 
     def seek(self, seconds: float) -> None:
         if self.audio:
             self.engine.seek(seconds * self.engine.rate)
+            self.emit("moved")
 
     def skip(self, seconds: float) -> None:
         self.seek(self.now + seconds)

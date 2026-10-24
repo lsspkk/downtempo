@@ -6,6 +6,8 @@ The big things, one line each. Tasks for them are grouped under the same names i
 
 - **Project screen**: a full-screen view of the project: its sources (add a folder, update, sign in) and its songs as rows of files to drag between songs; the downloader UI and the sorting UI in one ([project-screen.md](project-screen.md))
 - **Browser player**: the player as a web page; built and tried by the user (T135–T194: projects, download, songs, tempo, loop editor, sheets, phone layout, English and Finnish: [browser-app.md](browser-app.md)); left: a better tempo stretch than the browser's own (T4, T31, T8 in [todo.md](todo.md#browser-player))
+- **Tap tempo**: tap the beat of another version and the recording plays that fast (DAW tap tempo, T231, T232); the user's try-out T219 in todo ([player.md](player.md))
+- **Tempo detection**: the player estimates a recording's BPM by itself (once, from the file), the user checks it with a metronome, sets the song's optimal tempo and switches to it and back, Tap sets the speed; first design built in both apps (T223–T226), revised (T230, [tempo-goal.md](tempo-goal.md)), rebuilt by T231, T232 (the user's try-outs T231.1, T232.7 next); Essentia in both apps (T221.1), test tool built (T221.2), settings next (T221.3) ([tempo-detection.md](tempo-detection.md))
 - **Parts of a file**: a song uses pages 4–5 of a songbook PDF or 12:30–16:10 of a long rehearsal recording (after Song grouping, which lets one file be in several songs)
 
 ## Later

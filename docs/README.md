@@ -4,11 +4,14 @@
 - [../data/README.md](../data/README.md): what lives in `data/` (sources, downloads, catalog, notes).
 - [onedrive.md](onedrive.md): OneDrive downloader: Entra app registration, MSAL device code flow, Graph calls, scopes, troubleshooting.
 - [why-not-share-link-hacks.md](why-not-share-link-hacks.md): anonymous share access is dead (401 since 2024); cookie and token hacks rejected.
+- [compress.md](compress.md): requirements (both apps): every downloaded wav is kept as an mp3 of the same name, also ones downloaded before; ids, sorting and practice memory follow; built in both apps (the browser's mp3 by Mediabunny's WASM LAME).
 - [songs.md](songs.md): song catalog (a project's `songs.json`): format, how `catalog` builds it.
 - [tempo-python.md](tempo-python.md): pick: pylibrb (Rubber Band real-time) + sounddevice + soundfile; fallback pedalboard.
 - [stretch-theory.md](stretch-theory.md) → [stretch-app-flow.md](stretch-app-flow.md) → [stretch-rubberband.md](stretch-rubberband.md) → [stretch-research.md](stretch-research.md): how tempo changes without pitch change (theory, our engine, the library, open research); start at stretch-theory.md.
+- [tempo-detection.md](tempo-detection.md): plan: find a recording's BPM once with Essentia (same in Python and essentia.js), in pieces, and show it × speed; `scripts/tempo_test.py` tests it on downloaded files; half / double tempo is the open question.
+- [tempo-goal.md](tempo-goal.md): built (T231, T232): recording tempo found by itself, an optimal tempo per song, BPM now, TAP, a metronome button and the Play at switch in the tempo row, a BPM tab (Python) / strip (browser) with the Metronome; Full controls in tabs, the recording dropdown.
 - [player.md](player.md): the Python player: run, features, keyboard, what it remembers, files.
-- [loop-editor.md](loop-editor.md): loop editor (built): click-click or drag selection, handles, zoom by pinch / wheel / ruler drag, Hear end, Undo; checked against Audacity / peaks.js / practice apps (T39).
+- [loop-editor.md](loop-editor.md): loop editor (built): click-click or drag selection, handles, zoom by pinch / wheel / ruler drag, Hear end, Undo; the Python Loop tab beside it (T241: Start / End cards with Set here, saved loops); checked against Audacity / peaks.js / practice apps (T39).
 - [blocks.md](blocks.md): core blocks with one job each behind one `Library` API; the core never prints, frontends never import downloaders; T54 library choices; built up to library, player jobs, projects and bundle (T55–T60, T85, T78, T66), grouping planned.
 - [purpose.md](purpose.md): **why** projects, downloaders and song grouping exist, and what done looks like.
 - [song-grouping.md](song-grouping.md): built: songs' titles, also-called names and folder links are magnets; sure matches join, the rest waits in To sort; placement is sticky, no learned rules.

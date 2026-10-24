@@ -2,7 +2,8 @@
 
 The worker reads the song from the play position (wrapping inside the A–B loop), stretches it and puts
 chunks on a short queue. The audio callback only copies chunks out and ramps the gain, so pause, tempo,
-pitch and loop changes are heard within a fraction of a second. Explained in docs/stretch-app-flow.md.
+pitch and loop changes are heard within a fraction of a second; it also mixes in the click track
+(metronome.py). Explained in docs/stretch-app-flow.md.
 """
 
 import queue
@@ -14,6 +15,7 @@ from pathlib import Path
 import numpy as np
 import sounddevice as sd
 import soundfile as sf
+from metronome import Click
 from pylibrb import Option, RubberBandStretcher
 
 BLOCK = 1024  # input frames per stretcher call
@@ -50,6 +52,7 @@ class Engine:
         self.volume = 1.0
         self.loop: tuple[int, int] | None = None
         self.loop_gap = 0.0  # seconds of silence between repeats
+        self.click = Click()
         self.playing = False
         self.ended = False
         self.position = 0.0
@@ -252,6 +255,7 @@ class Engine:
         target = self.volume if self.playing else 0.0
         outdata.fill(0)
         if target == 0.0 and self._gain == 0.0:
+            self.click.add(outdata, self.rate, self.volume)
             return
         filled = 0
         while filled < frames:
@@ -281,6 +285,7 @@ class Engine:
             self.position = chunk.start + self._offset * chunk.step
         outdata *= np.linspace(self._gain, target, frames, dtype=np.float32)[:, None]
         self._gain = target
+        self.click.add(outdata, self.rate, self.volume)
 
 
 def peaks(audio: np.ndarray, bins: int = PEAK_BINS) -> np.ndarray:

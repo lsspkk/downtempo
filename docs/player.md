@@ -18,16 +18,18 @@ It reads only `data/songs.json` ([songs.md](songs.md)). Use `--browser` for deve
 - **☰ Main menu** (top left): the projects (click one to switch; a search field when there are many), New project…, Project settings…, Export… / Import…, Delete project…, Player settings…, Keyboard shortcuts, Dark mode.
 - **Project settings**: the project's name; per shared folder its link (Copy, **Change link…**), the folder inside the share, skipped folders, Rename…, Remove…, the last error with Try again; + Add folder; the sign-in ([project-screen.md](project-screen.md#project-settings)).
 - **Adding a shared folder**: on the first start the page asks for the link; later + Add folder in Project settings or Edit song list. Sign in if asked, pick the folder (tick Skip on folders you don't need), see "About 12 songs from 31 files, 180 MB", Download.
-- **Recordings**: a song folder with several mp3s gets one chip per recording above the waveform, a "♪ 1/2" menu in the sheet-only header, and `T` / Shift+T for next / previous.
-- **Controls: Full / Simple / Sheet** (header toggle, `V` cycles). Simple keeps waveform, play, loop on/off and tempo −/+; Sheet hides the controls and puts play, time, tempo, loop and recording in the header. Made for small laptops: [practice-layout.md](practice-layout.md).
+- **Recordings**: `Recording [ live 2025 ▾ ] 2 of 3` above the waveform when a song has several (the menu: ✓ on the current one, the name, its recording tempo; ↑ / ↓, Enter, Esc), a "♪ 1/2" menu in the sheet-only header, and `T` / Shift+T for next / previous. One recording: its name as plain text (nothing when it is named after the song).
+- **Controls: Full / Simple / Sheet** (header toggle, `V` cycles). Full is one surface: the recording, the waveform and transport, the tempo row, and the tabs **Pitch · Trainer · Loop · BPM** (the open tab is remembered). Simple keeps waveform, play, loop on/off and the tempo row (`Tempo − 85 % +  75 BPM  ○ Play at 100`); Sheet hides the controls and puts play, time, tempo, loop and recording in the header. Made for small laptops: [practice-layout.md](practice-layout.md).
 - **Waveform**: click plays from there, drag sets a loop (drag out the left or right side: the loop runs to the song's start or end). Shows the play position and the loop.
 - **Songs with only a sheet or only a recording**: no recording → the controls pane narrows to the title and "No recording", the sheet gets the room, the audio keys do nothing; no sheet → a large waveform (click, drag, Loop editor) in the sheet's place. Per song: the remembered layout stays.
 - **New files**: a dot after a song's title in the song list when files joined it since you last opened it; opening the song clears it.
 - **Loop editor** (`E`, "Edit" in the Loop card, or the ⤢ icon next to the loop button in Simple and in the sheet-only bar): the waveform over the whole window to set a loop exactly. Click the start, then the end (scroll and zoom in between); drag the ⠿ handles on the edges; pinch, Ctrl+wheel or dragging the time ruler up / down zooms, two-finger swipe or the overview strip scrolls; Whole song / Zoom to loop; click the time ruler to seek; Hear end (Shift+Space) plays the last 2 s and the jump back; Undo (Ctrl+Z); typed start/end times. `E`, Done or Esc goes back ([loop-editor.md](loop-editor.md)).
-- **Tempo** 50–130 % with the pitch kept: slider with clickable 50 … 130 under it (the current one highlighted), −/+ buttons and ←/→ (step in Settings). "Song takes m:ss" shows the length at this tempo.
-- **Step-up trainer**: raises the tempo by a step every N loop repeats, up to a target.
-- **Loop A–B**: set at the play position, nudge each edge by 0.1 s (‹ ›) or 1 s (« »), save named loops per recording, optional pause between repeats.
-- **Pitch** ±12 semitones, **volume** and mute.
+- **Tempo** 50–130 % with the pitch kept: the tempo row's −/+ and ←/→ (step in Settings), and in Full the slider with clickable 50 … 130 under it (the current one highlighted). The time's tooltip says how long the song takes at this tempo.
+- **Tempo in BPM and the optimal tempo** ([tempo-goal.md](tempo-goal.md)): a recording's tempo is found in the background when it first loads ("finding…", then the number). The tempo row shows **BPM now** (recording tempo × speed), a round **TAP** (G: tap along another version; from the 4th tap the recording plays that fast, every tap refines it, a 2 s pause starts over), a round **metronome** button (a steady tick at the BPM now, on / off) and the **Play at 100** switch (X): on, every recording of the song plays at its optimal tempo (remembered per song); off goes back to the speed before, a change by hand just turns it off. Without an optimal tempo the switch is grey and a click opens the BPM tab. In Sheet only, X and G show a short toast.
+- **BPM tab**: the recording tempo and the optimal tempo (−/+, typed), and under them the speed the optimal tempo needs ("→ 114 % of this recording"); an empty field means none.
+- **Trainer tab** (step-up trainer): raises the tempo by a step every N loop repeats, up to a target.
+- **Loop tab** ([loop-editor.md](loop-editor.md#the-loop-tab-t241)): the loop's line (on / off, its length, the pause between repeats, Clear, **Loop editor**); Start and End as cards, each with **Set here** (A / B) and nudges by 0.1 s (‹ ›) or 1 s (« »); Save loop; the saved loops as one scrolling row of chips. Loops are set at the play position with A / B or by dragging the waveform.
+- **Pitch tab**: ±12 semitones, Reset, **volume** and mute.
 - **Sheet music** (right): the song's PDFs as cropped pages, one tab per PDF (the newest version opens unless you picked another one for this song), zoom, **fit width** / **fit page** (`W` / `H`; fit page keeps the whole page in view and follows window and layout changes). ↑/↓ scroll, PgUp/PgDn (a USB footswitch) scroll a screen or jump to the next page. **Full screen** (`F`, Esc back) shows only the sheet. In the ⋮ menu: **rotate** (`O`) turns the whole sheet view, scrollbar included, for a laptop standing on its side; open in the PDF viewer.
 - **Player settings** (☰): ↑/↓ scroll step, PgUp/PgDn screen or page, ←/→ tempo step, smooth scrolling.
 - **Dark mode** (header button).
@@ -40,6 +42,8 @@ Press `?` in the player for this list. Why these keys: [practice-layout.md](prac
 |---|---|---|---|
 | Space / K | play / pause | ↑ / ↓ | scroll the sheet |
 | ← / → | tempo slower / faster | PgUp / PgDn | a screen or page (footswitch) |
+| G | tap the beat: from the 4th tap the speed follows | | |
+| X | optimal tempo on / off | | |
 | , / . | back / forward 5 s | Home / End | sheet top / bottom |
 | J / L | back / forward 10 s | + / − | sheet zoom |
 | 0 | to start (loop start when looping) | W / H | fit width / fit page |
@@ -54,7 +58,7 @@ Press `?` in the player for this list. Why these keys: [practice-layout.md](prac
 
 ## What it remembers
 
-The project's `practice.json` and `data/app.json` ([state.py](../frontends/nicegui/state.py)); practice memory in the project: per song the chosen recording and the sheet you picked (otherwise the newest opens), tempo, pitch and step-up trainer settings; per recording the position, the active loop, saved loops and the loop editor's zoom; the last song. On the computer (`app.json`): volume, zoom and fit, dark mode, loop pause; the layout (song list shown, controls mode, rotation) and the settings. A recording or sheet is remembered only after it loaded.
+The project's `practice.json` and `data/app.json` ([state.py](../frontends/nicegui/state.py)); practice memory in the project: per song the chosen recording and the sheet you picked (otherwise the newest opens), tempo, pitch and step-up trainer settings; per song the optimal tempo (`goal_bpm`); per recording the position, the active loop, saved loops, the loop editor's zoom and the recording tempo in BPM; the last song. The Metronome and taps are not remembered. On the computer (`app.json`): volume, zoom and fit, dark mode, loop pause; the layout (song list shown, controls mode, the open tab of Full controls, rotation) and the settings. A recording or sheet is remembered only after it loaded.
 
 ## Files
 
@@ -64,7 +68,14 @@ The project's `practice.json` and `data/app.json` ([state.py](../frontends/niceg
 | `player.py` | what plays and what's remembered: song, recording loading, tempo, pitch, volume, loop, trainer, autosave; no widgets |
 | `layout.py` | the window's frame: header (☰ slot, song list toggle, title, Full / Simple / Sheet), song-list drawer, controls / sheet grid, full screen; the player's ☰ items (settings, shortcuts, dark mode) |
 | `song_list.py` | the song list in the drawer: search, next / previous song |
-| `controls.py` | the controls pane (recordings, waveform, transport, tempo, trainer, loop, pitch, volume) and its short form in the header; "No recording" for sheet-only songs |
+| `tempo_goal.py` | the tempo in BPM, no widgets: the recording tempo (found in a process of its own, `python -m downtempo.tempo`), the optimal tempo, the Play at switch, Tap, the Metronome |
+| `tempo_row.py` | the tempo row: −/+, %, BPM now, TAP, the metronome button (`MetronomeButton`), the Play at switch; the slider and its marks in Full |
+| `bpm_tab.py`, `loop_tab.py`, `trainer_tab.py`, `pitch_tab.py` | Full controls' tabs, one module each (the Save loop dialog lives in `loop_tab.py`) |
+| `recordings.py` | the recording dropdown, the menu rows (✓, name, BPM) and the loop editor's chips |
+| `mini_bar.py` | the controls' short form in the header while the pane is hidden (Sheet) |
+| `metronome.py` | the Metronome mixed into the engine's output: a steady tick at one BPM |
+| `tap_tempo.py` | the taps' BPM |
+| `controls.py` | the controls pane as one surface: the recording, the waveform and transport, the tempo row, the tabs; the loading card; "No recording" for sheet-only songs |
 | `waveform.py` | the waveform with play position and loop, click to seek, drag to loop; one in the controls, a large one for songs without sheets |
 | `sheet_pane.py` + `sheet_pane.js` | the sheet: PDF pages, tabs, zoom, fit, rotation; scrolling and fitting in the page; the large waveform when a song has no sheet |
 | `loop_editor.py` | the loop editor dialog: loop, undo, seek, talks to `loop_editor.js` |

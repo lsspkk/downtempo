@@ -6,21 +6,24 @@
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
+from loop_tab import save_loop_dialog
 from nicegui import events, ui
 
 if TYPE_CHECKING:  # the parts import this module for help_dialog
-    from controls import Controls
     from layout import Shell
     from loop_editor import LoopEditor
     from player import Player
     from project_screen import ProjectScreen
     from sheet_pane import SheetPane
     from song_list import SongList
+    from tempo_goal import TempoGoal
 
 SHORTCUTS = {
     "Playing": [
         ("Space / K", "Play / pause"),
         ("← / →", "Tempo slower / faster"),
+        ("G", "Tap the beat: from the 4th tap the speed follows"),
+        ("X", "Play at the optimal tempo on / off"),
         (", / .", "Back / forward 5 s"),
         ("J / L", "Back / forward 10 s"),
         ("0", "To start (loop start when looping)"),
@@ -49,6 +52,7 @@ SHORTCUTS = {
         ("?", "This help"),
     ],
 }
+SOURCE = "https://github.com/lsspkk/downtempo"
 REPEATABLE = {"ArrowLeft", "ArrowRight", "+", "=", "-", ",", "."}
 
 
@@ -64,7 +68,13 @@ def help_dialog() -> ui.dialog:
                         for keys, action in shortcuts:
                             ui.label(keys).classes("font-mono font-medium")
                             ui.label(action)
-        ui.button("Close", on_click=dialog.close).props("flat").classes("self-end")
+        with ui.row().classes("w-full items-center no-wrap"):
+            # AGPL-3.0: users can find the source
+            with ui.row().classes("items-center gap-1 text-caption text-grey"):
+                ui.label("Downtempo · free software under the AGPL-3.0 license ·")
+                ui.link("Source code", SOURCE, new_tab=True).classes("text-grey")
+            ui.space()
+            ui.button("Close", on_click=dialog.close).props("flat")
     return dialog
 
 
@@ -73,11 +83,16 @@ def install(
     player: "Player",
     shell: "Shell",
     songs: "SongList",
-    controls: "Controls",
     sheet: "SheetPane",
     editor: "LoopEditor",
     screen: "ProjectScreen",
+    goal: "TempoGoal",
 ) -> None:
+    def toast(text: str) -> None:
+        """X and G where the tempo row isn't seen (sheet only, full screen)."""
+        if text and (shell.fullscreen or shell.view["controls"] == "hidden"):
+            ui.notify(text, position="top", timeout=1500)
+
     async def on_key(e: events.KeyEventArguments) -> None:
         if screen.is_open:  # the project screen has its own keys; the player's are off
             if is_owner():
@@ -148,13 +163,17 @@ def install(
             case "c":
                 player.clear_loop()
             case "s":
-                controls.save_loop_dialog()
+                save_loop_dialog(player)
             case "n":
                 await songs.step(1)
             case "p":
                 await songs.step(-1)
             case "m":
                 player.toggle_mute()
+            case "g" if not editor.is_open:
+                toast(goal.tap())
+            case "x":
+                toast(goal.toggle_optimal())
             case "/":
                 shell.drawer.show()
                 songs.focus_search()

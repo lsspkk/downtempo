@@ -18,7 +18,7 @@ describe("messages", () => {
   });
   it("no Finnish text is left in English", () => {
     const same = Object.keys(en).filter((k) => k !== "$schema" && JSON.stringify(en[k]) === JSON.stringify(fi[k]));
-    expect(same.sort()).toEqual(["ok", "tempo"]);
+    expect(same.sort()).toEqual(["bpm_title", "ok", "tap", "tempo"]);
   });
   it("plurals pick the form by count", () => {
     expect(m.n_songs({ count: 1 }, { locale: "en" })).toBe("1 song");

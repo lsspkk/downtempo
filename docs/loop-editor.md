@@ -1,6 +1,6 @@
 # Loop editor
 
-**Summary**: Built (T40–T43), pitfalls checked (T39: one fix, the view no longer follows the playhead while a loop edge is in view); the user's test T44 remains. A full-window waveform: click start, click end (or drag), ⠿ handles, zoom by pinch / wheel / ruler drag, Hear end, Undo; `E` opens, Esc leaves.
+**Summary**: Built (T40–T43), pitfalls checked (T39: one fix, the view no longer follows the playhead while a loop edge is in view); the user's test T44 remains. A full-window waveform: click start, click end (or drag), ⠿ handles, zoom by pinch / wheel / ruler drag, Hear end, Undo; `E` opens, Esc leaves. The Python player's **Loop tab** (T241) is the small form beside it: the loop's line, Start / End cards with Set here and nudges, saved loops; its button says "Loop editor".
 
 Plan for the loop editor (T39–T44). **Status: implemented (T40–T43, 2026-10-09), pitfalls checked (T39, 2026-10-10)**; the user's test T44 remains. Code: [loop_editor.js](../frontends/nicegui/loop_editor.js) (drawing, gestures), [loop_editor.py](../frontends/nicegui/loop_editor.py) (dialog, loop, undo). Follows [ux.md](ux.md).
 
@@ -87,3 +87,29 @@ Compared with a DAW ([audacity-selecting-audio](web/audacity-selecting-audio.txt
 - **Changed**: the view following the playhead while a loop plays. Audacity says to turn following off "when using Quick-Play to adjust the start and end of loops", so the edges don't move away. Here, zoomed in on the end with Hear end, each pass jumped the view to the start. Now the view stays while a loop edge is in it.
 - **Already right**: Esc during a drag cancels it and keeps the old loop (as Audacity); dragging past the edge scrolls; edges are grabbed by hovering near them; a too-short loop is refused (0.2 s; wavesurfer has `minLength`); typed start / end with nudges (Audacity's Selection Toolbar); overview + zoomed view (peaks.js, Anytune's double waveform); zoom at the pointer, buttons at the edge being set; hearing the end of the selection (Audacity has keys for the selection's start and end).
 - **Different on purpose, kept**: a ruler drag zooms (Cubase, user's choice) where Audacity makes a loop region; a drag inside the loop makes a new loop where Audacity and wavesurfer move the whole region (a new loop is more common). No Shift-click to extend the nearest edge: click–move–click and the handles cover setting an edge that is off screen.
+
+## The Loop tab (T241)
+
+The Python player's Full controls got more room with the tab slot (T236), so the Loop tab was redrawn with the user (2026-10-25: "clearer, more modern", better separation, toggling and controlling the loop ends; "Edit" renamed).
+
+What practice apps and DAWs do (principles, not layouts):
+- **Set A / B at the play position** is the main gesture; a separate, finer control moves an end afterwards: Music Speed Changer has A and B buttons that take the playhead and a pencil that opens a fine-tune editor with minutes, seconds and milliseconds ([msc-ab-loop-points](web/msc-ab-loop-points.txt)); Anytune's A / B jump to the playhead and are then fine-adjusted. → Each end gets **Set here** next to its time, the nudges under it.
+- **The loop is one object with a length**, shown as its range on the loop's own line (Ableton's loop brace has a position and a length, Transcribe! shows the section's start and length, [design-transcribe-overview](web/design-transcribe-overview.txt)). → The header shows "12.5 s" beside the switch.
+- **Saved parts are a list of named sections** you pick from (Moises' Sections, Anytune's Loopmarks). → Saved loops are their own section with a heading and Save loop, chips that wrap now that there is room.
+- The button to the full view is named for what it opens: **"Loop editor"** (like Logic's "editors", Ableton's Detail View), not a verb like "Edit".
+
+Layout, top to bottom, padding 16 px, 16 px between the three parts:
+
+```
+Loop ●  12.5 s                       [no pause ▾]  ✕  [⤢ Loop editor]
+┌ Start           [⇥ Set here] ┐  ┌ End             [⇥ Set here] ┐
+│          0:12.3              │  │          0:24.8              │
+│        «  ‹  ›  »            │  │        «  ‹  ›  »            │
+└──────────────────────────────┘  └──────────────────────────────┘
+───────────────────────────────────────────────────────────────────
+Saved loops                                         [🔖 Save loop]
+(Verse 0:12–0:24 ✕) (Chorus 0:40–0:58 ✕)
+```
+
+- Clear (✕, C) sits on the loop's line; Clear, Save loop and the switch are grey without a loop, whose line then says how to make one.
+- Built in `frontends/nicegui/loop_tab.py`. The browser app has no tabs: its loop editor panel took the same parts (T242, `ui/player/LoopEditor.tsx`, `SavedLoops.tsx`): the loop's line (switch, length, then its zoom, Hear end and Clear), the waveform, the Start / End cards with Set here, Saved loops under a line with a name field and Save loop. It has no pause between repeats (the Python player's only).

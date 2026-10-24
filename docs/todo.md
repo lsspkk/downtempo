@@ -16,6 +16,16 @@ Plan: [project-screen.md](project-screen.md). Replaces the Sources dialog (T46 d
 - [ ] T83 Manual test by the user: two projects, switch while playing, export one and import it as a new project on a 2nd `DOWNTEMPO_DATA`; findings become tasks
 - [ ] T68 Manual test by the user: export, email it to yourself, import on another computer (or a 2nd `DOWNTEMPO_DATA`), download; findings become tasks
 
+### Tap tempo
+
+- [ ] T219 Manual test by the user: tap along a recording at 100 % and at a slower tempo (G or Tap in the tempo row: from the 4th tap the speed follows), compare with a metronome app; is the average steady enough; findings become tasks
+
+### Tempo detection
+
+- [ ] T231.1 Manual test by the user of the Python player's tempo (T231): Full controls' tabs at 1280×720, the recording dropdown (↑/↓, Enter, Esc), Tap along another version (G, 4 taps), Play at and X (stays on across recordings), the metronome button (■ while it ticks), Simple and Sheet only (the toasts); findings become tasks
+- [ ] T232.7 Manual test by the user of T232.1–T232.6 (`npm run dev`, desktop and phone width): `75 BPM (TAP) (metronome) ○ Play at 100`, the BPM strip, the phone's BPM page, G and X, the recording menu; findings become tasks
+- [ ] T221.3 Iterate `scripts/tempo_test.py` with the user: more files, piece length, BPM range, folding half / double; then pick the method for the player (and essentia.js for the browser) per [tempo-detection.md](tempo-detection.md)
+
 ### Loop editor
 
 - [ ] T44 Manual UX test by the user on the real laptop (mouse and trackpad): `E`, click start / end with a two-finger swipe between, pinch zoom in the native window (unknown whether Qt WebEngine passes it), ⠿ handles, Hear end, Undo, Esc back; findings become tasks
@@ -26,7 +36,8 @@ Earlier (2026-10-11): find out first whether a browser version can sign in and g
 
 MVP (the user's call, 2026-10-13, after T133 passed): a React + TypeScript app built by Vite with Tailwind, published by the Pages workflow; proof that the whole app fits in a browser. Has: projects, settings, download, song list, player with slow-down (plain `playbackRate`, pitch kept), PDF viewer. Not: loop editor, view modes, most of the Python player's controls. Built (T135–T146), grown and tried by the user (T147–T194): [browser-app.md](browser-app.md). Tempo by Signalsmith Stretch: built and tried (T4).
 
-- [ ] T31 Listening test per [stretch-research.md](stretch-research.md#then-listening-test-t31): same 20 s excerpts (drums, solo melody) at 0.5x / 0.75x / 1.3x with R3, R3 + ChannelsTogether, R2, Signalsmith, browser `playbackRate` → `data/scratch/tempo-tests/`; blind listening by the user
+- [ ] T217.4 Manual test by the user of browser compression per [compress.md](compress.md#browser-app-built-t217): a project with wavs downloaded before (they turn into mp3s on ⟳, loops and tempo kept), a new wav on the server, Stop midway, the storage before and after; findings become tasks
+- [ ] T31.1 Blind listening by the user per [stretch-research.md](stretch-research.md#then-listening-test-t31): `data/scratch/tempo-tests/` (made by `uv run python scripts/stretch_test.py <files>`: pick one with drums and one solo melody), note echo, smear, warble and stereo width per letter, then open `key.json`
 - [ ] T8 Compare Python vs browser by ear (uses T31); write the pick and why into `docs/tempo-decision.md`
 
 ## Later

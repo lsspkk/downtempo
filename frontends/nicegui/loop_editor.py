@@ -8,10 +8,10 @@ from pathlib import Path
 from typing import Any
 
 from common import clock_tenths, event_arg, parse_clock, tip
-from controls import recording_chips
 from engine import DETAIL_FRAMES
 from nicegui import events, run, ui
 from player import Player
+from recordings import recording_chips
 
 LOOP_EDITOR_JS = (Path(__file__).parent / "loop_editor.js").read_text(encoding="utf-8")
 CSS = ".le-header { border-bottom: 1px solid rgba(128, 128, 128, 0.25); }"

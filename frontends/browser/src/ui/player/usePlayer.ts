@@ -1,6 +1,6 @@
 // The player's state and actions for one song: which recording, the sound (useAudio), tempo, loop,
-// whether the loop editor is open, and the player's keys. Tempo and loop are remembered per song;
-// a new song waits for Play. The parts (controls.tsx, Tempo, RecordingMenu, PositionWave, LoopEditor)
+// whether the loop editor is open, the tempo in BPM (useTempoGoal), and the player's keys. Tempo and loop
+// are remembered per song; a new song waits for Play. The parts (controls.tsx, Tempo, RecordingMenu, PositionWave, LoopEditor)
 // take this object; the song page's layouts decide where they go.
 
 import { useState } from "react";
@@ -8,8 +8,9 @@ import type { SongFile } from "../../core/grouping";
 import { type Loop, remember, songMemory } from "../../core/practice";
 import * as projects from "../../core/projects";
 import { useKeys } from "../kit/keys";
+import { useTempoGoal } from "../tempo/useTempoGoal";
 import { useAudio } from "./audio";
-import { clampTempo, TEMPO_STEP } from "./Tempo";
+import { clampTempo, TEMPO_MAX, TEMPO_MIN, TEMPO_STEP } from "./Tempo";
 
 export type Player = ReturnType<typeof usePlayer>;
 
@@ -35,6 +36,20 @@ export function usePlayer({ project, song, recording, recordings, pickRecording 
       remember(project, song, { tempo: next });
       return next;
     });
+  /** Any whole %, not only the slider's steps: the optimal tempo and Tap need it. */
+  const setTempoExact = (percent: number) => {
+    const next = Math.min(TEMPO_MAX, Math.max(TEMPO_MIN, Math.round(percent)));
+    setTempoState(next);
+    remember(project, song, { tempo: next });
+  };
+  const goal = useTempoGoal({
+    project,
+    song,
+    recording: recording?.key ?? null,
+    audio,
+    tempo,
+    setTempo: setTempoExact,
+  });
   const setLoop = (next: Loop | null) => {
     setLoopState(next);
     remember(project, song, { loop: next });
@@ -80,6 +95,8 @@ export function usePlayer({ project, song, recording, recordings, pickRecording 
     c: () => setLoop(null),
     e: () => recording && setEditing((open) => !open),
     t: (event) => stepRecording(event.shiftKey ? -1 : 1),
+    g: goal.tap,
+    x: goal.toggleOptimal,
   });
 
   return {
@@ -92,6 +109,7 @@ export function usePlayer({ project, song, recording, recordings, pickRecording 
     audio,
     tempo,
     setTempo,
+    goal,
     loop,
     setLoop,
     toggleLoop,

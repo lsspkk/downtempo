@@ -96,4 +96,8 @@ uv run downtempo download                      # download what's new, then updat
 
 # License
 
-MIT, see [LICENSE](LICENSE). Song material is not included: it stays local in `data/` (git-ignored).
+Copyright (C) 2026 Lasse Pekkarinen
+
+Downtempo is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See [LICENSE](LICENSE) (AGPL-3.0).
+
+In short: use, copy and change it freely; if you give a changed version to others, or run it as a web page others use, offer them its source under the same license. Both apps link to this repository. Song material is not included: it stays local in `data/` (git-ignored).

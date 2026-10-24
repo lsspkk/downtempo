@@ -28,12 +28,14 @@ export function ProjectPanel({ project }: { project: Project }) {
         text = status.text;
         break;
       case "downloading":
-        text = m.progress({
-          done: status.done + 1,
-          total: status.total,
-          bytes: size(status.bytes),
-          all: size(status.allBytes),
-        });
+        text = status.compressing
+          ? m.compressing({ done: status.done + 1, total: status.total, file: status.text })
+          : m.progress({
+              done: status.done + 1,
+              total: status.total,
+              bytes: size(status.bytes),
+              all: size(status.allBytes),
+            });
         fraction = status.allBytes ? status.bytes / status.allBytes : 0;
         break;
       case "failed":

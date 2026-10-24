@@ -1,5 +1,5 @@
-// Saved regions of a recording: the loop kept under a name, a row of them to bring back (the loop
-// turns on), ✕ to delete. Kept in the practice memory (localStorage).
+// Saved loops of a recording, their own section under a line: the heading with a name and Save loop, then
+// the loops kept under a name to bring back (the loop turns on), ✕ to delete. Kept in the practice memory.
 
 import { BookmarkPlus, X } from "lucide-react";
 import { type FormEvent, useState } from "react";
@@ -28,32 +28,9 @@ export function SavedLoops({ project, recording, loop, onUse }: Props) {
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
-      <span className="mr-1 text-xs font-semibold tracking-wide text-zinc-500 uppercase max-sm:w-full">
-        {m.saved_loops()}
-      </span>
-      {list.map((saved, index) => (
-        <span key={index} className="inline-flex items-center">
-          <Button
-            active={same(saved)}
-            className="!rounded-r-none !py-1"
-            onClick={() => onUse({ start: saved.start, end: saved.end, on: true })}
-            title={`${clock(saved.start, true)} – ${clock(saved.end, true)}`}
-          >
-            {saved.name}
-          </Button>
-          <Button
-            className="!rounded-l-none border-l-0 !px-1.5 !py-1 text-zinc-500"
-            onClick={() => deleteLoop(project, recording, index)}
-            aria-label={m.delete_saved({ name: saved.name })}
-            title={m.delete_saved({ name: saved.name })}
-          >
-            <X size={14} />
-          </Button>
-        </span>
-      ))}
-      {!list.length && <Muted>{m.no_saved()}</Muted>}
-      <form onSubmit={save} className="ml-auto flex items-center gap-1">
+    <div className="space-y-2 border-t border-zinc-200 pt-3 dark:border-zinc-800">
+      <form onSubmit={save} className="flex flex-wrap items-center gap-2">
+        <span className="mr-auto text-sm font-semibold">{m.saved_loops()}</span>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -64,6 +41,29 @@ export function SavedLoops({ project, recording, loop, onUse }: Props) {
           <BookmarkPlus size={16} /> {m.save_loop()}
         </Button>
       </form>
+      <div className="flex flex-wrap items-center gap-2">
+        {list.map((saved, index) => (
+          <span key={index} className="inline-flex items-center">
+            <Button
+              active={same(saved)}
+              className="!rounded-r-none !py-1"
+              onClick={() => onUse({ start: saved.start, end: saved.end, on: true })}
+              title={`${clock(saved.start, true)} – ${clock(saved.end, true)}`}
+            >
+              {saved.name}
+            </Button>
+            <Button
+              className="!rounded-l-none border-l-0 !px-1.5 !py-1 text-zinc-500"
+              onClick={() => deleteLoop(project, recording, index)}
+              aria-label={m.delete_saved({ name: saved.name })}
+              title={m.delete_saved({ name: saved.name })}
+            >
+              <X size={14} />
+            </Button>
+          </span>
+        ))}
+        {!list.length && <Muted>{m.no_saved()}</Muted>}
+      </div>
     </div>
   );
 }

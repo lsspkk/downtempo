@@ -1,4 +1,5 @@
-"""Where things live (the data folder, sign-ins), which file endings count, `.env` loading."""
+"""Where things live (the data folder, sign-ins), which file endings count, wav compression,
+`.env` loading."""
 
 import os
 from pathlib import Path
@@ -11,6 +12,10 @@ TOKENS_DIR = DATA_DIR / "tokens"  # sign-ins belong to the computer, not to a li
 AUDIO_EXTENSIONS = {".mp3", ".wav"}
 SHEET_EXTENSIONS = {".pdf"}
 MEDIA_EXTENSIONS = AUDIO_EXTENSIONS | SHEET_EXTENSIONS
+# Downloaded wavs are kept as mp3 (compress.py). Quality: 0.0 best / biggest … 1.0 smallest;
+# 0.5 is about 128 kbit/s, plenty for practice.
+COMPRESS_WAV = True
+MP3_QUALITY = 0.5
 
 
 def load_env(path: Path = PROJECT_DIR / ".env") -> None:

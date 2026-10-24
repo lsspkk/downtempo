@@ -141,6 +141,8 @@
   "kept": "Tiedostot pysyvät: selain ei poista niitä itsestään, vaikka levy täyttyisi.",
   "may_clear": "Selain voi poistaa tiedostot itsestään, kun levy täyttyy. Pidä tiedostot pyytää selainta säilyttämään ne.",
   "keep_files": "Pidä tiedostot",
+  "license_line": "Vapaa ohjelma, AGPL-3.0-lisenssi",
+  "source_code": "Lähdekoodi",
   "keyboard": "Näppäimet",
   "key_play": "soita / tauko",
   "key_tempo": "tempo hitaammin / nopeammin",
@@ -219,7 +221,7 @@
   "cant_save": "Tämä selain ei pysty tallentamaan tiedostoja tänne (ei createWritablea).",
   "unsafe_name": "Vaarallinen tiedostonimi: {path}",
   "other_files": "Muut tiedostot",
-  "edit_loop": "Muokkaa valittua aluetta (E)",
+  "edit_loop": "Valinnan muokkaus (E)",
   "whole_song": "Koko kappale",
   "zoom_to_loop": "Zoomaa valintaan",
   "hear_end": "Kuuntele loppu",
@@ -231,7 +233,7 @@
   "minus_tenth": "−0,1 s",
   "plus_tenth": "+0,1 s",
   "saved_loops": "Tallennetut alueet",
-  "save_loop": "Tallenna",
+  "save_loop": "Tallenna valinta",
   "loop_name_placeholder": "Valinta {n}",
   "delete_saved": "Poista {name}",
   "no_saved": "Ei vielä valittuja alueita: Valitse alue ja tallenna se.",
@@ -286,7 +288,7 @@
   "sheet_view": "Nuotin näkymä: zoomaus, sovitus, kääntö",
   "whole_song_short": "Kappale",
   "zoom_to_loop_short": "Valinta",
-  "recordings_title": "Äänitteet",
+  "recordings_title": "Äänite",
   "sheet_title": "Nuotti",
   "loop_editor_title": "Valinnan muokkaus",
   "trim_margins": "Laajenna sivua",
@@ -332,5 +334,65 @@
   "intro_storage_title": "Minne tiedostot menevät",
   "intro_storage": "Tiedostot menevät selaimen tämän sivuston yksityiseen tallennustilaan (origin private file system). Tämä tavallista välimuistia täydentävä vakio-ominaisuus on ollut selaimissa vuodesta 2023. Kappaleet toimivat ilman verkkoa, ja vain tämä sivusto näkee ne.",
   "storage_help": "Lue lisää (MDN)",
-  "info_show": "Lisätietoa"
+  "info_show": "Lisätietoa",
+  "close": "Sulje",
+  "bpm_down": "1 BPM hitaampi",
+  "bpm_up": "1 BPM nopeampi",
+  "bpm_open_title": "Äänitteen tempo, optimitempo ja metronomi (G napauttaa, X soittaa optimitempossa)",
+  "bpm_title": "BPM",
+  "recording_tempo": "Äänitteen tempo",
+  "tempo_finding": "etsitään…",
+  "tempo_none_found": "ei löytynyt",
+  "optimal_tempo": "Optimitempo",
+  "optimal": "Soita –",
+  "optimal_bpm": "Soita {bpm}",
+  "optimal_title": "Kappaleen jokainen äänite soi {bpm} BPM (nyt {percent} %), kunnes muutat tempoa; pois palaa entiseen (X)",
+  "optimal_none_title": "Optimitempoa ei ole vielä: klikkaus avaa BPM-palkin, jossa sen voi asettaa (X)",
+  "optimal_needs": "→ {percent} % tästä äänitteestä",
+  "optimal_out_of_range": "→ {percent} %: soitin menee 50–130 %",
+  "tap": "Tap",
+  "tap_title": "Napauta toisen version iskua: neljännestä napautuksesta äänite soi yhtä nopeasti (G)",
+  "tap_needs_bpm": "Napautus tarvitsee äänitteen tempon (BPM)",
+  "tapped": "napautettu {bpm}",
+  "key_tap": "napauta iskua: neljännestä napautuksesta nopeus seuraa",
+  "key_optimal": "soita optimitempossa päälle / pois",
+  "n_compressed": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "{count} wav muutettu mp3:ksi",
+        "countPlural=other": "{count} wavia muutettu mp3:ksi"
+      }
+    }
+  ],
+  "n_kept_wav": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "{count} wavia ei voitu pakata (säilyy wavina)",
+        "countPlural=other": "{count} wavia ei voitu pakata (säilyvät waveina)"
+      }
+    }
+  ],
+  "compressing": "Pakataan {done}/{total}: {file}",
+  "compressing_file": "Pakataan {file}…",
+  "metronome_on": "Metronomi {bpm} BPM",
+  "metronome_off": "Pysäytä metronomi",
+  "metronome_needs_bpm": "Metronomi tarvitsee BPM:n (BPM-palkki)",
+  "loop": "Toisto",
+  "loop_none": "Aseta alku ja loppu tai vedä aaltomuodon yli",
+  "set_here": "Tähän",
+  "set_here_title": "{edge} soittokohtaan ({key})",
+  "then_compressed": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "Sen jälkeen wav-tiedosto pakataan tällä laitteella mp3:ksi: noin kymmenesosa koosta.",
+        "countPlural=other": "Sen jälkeen {count} wav-tiedostoa pakataan tällä laitteella mp3:ksi: noin kymmenesosa koosta."
+      }
+    }
+  ]
 }

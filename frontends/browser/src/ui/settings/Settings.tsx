@@ -20,6 +20,8 @@ import { AddFolder } from "../folders/LinkInput";
 import { Muted } from "../kit/bits";
 import { Button } from "../kit/Button";
 
+const SOURCE = "https://github.com/lsspkk/downtempo";
+
 type Props = { project: projects.Project; menu: ReactNode; onClose: () => void };
 
 export function SettingsPage({ project, menu, onClose }: Props) {
@@ -43,6 +45,7 @@ export function SettingsPage({ project, menu, onClose }: Props) {
           <div className="pointer-coarse:hidden">
             <Keys />
           </div>
+          <About />
         </div>
       </div>
     </div>
@@ -213,6 +216,8 @@ const KEYS: [string, () => string][] = [
   // the language is set before this module runs (switching reloads)
   [`${m.key_space()} / K`, m.key_play],
   ["← / →", m.key_tempo],
+  ["G", m.key_tap],
+  ["X", m.key_optimal],
   [", / .", m.key_5s],
   ["J / L", m.key_10s],
   ["0, 1 … 9", m.key_jump],
@@ -243,6 +248,23 @@ function Keys() {
         ))}
       </dl>
     </Part>
+  );
+}
+
+/** The page's last line: the license and where the source is (AGPL-3.0 asks for the link). */
+function About() {
+  return (
+    <Muted className="text-center text-xs">
+      Downtempo · {m.license_line()} ·{" "}
+      <a
+        className="underline hover:text-zinc-900 dark:hover:text-zinc-100"
+        href={SOURCE}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {m.source_code()}
+      </a>
+    </Muted>
   );
 }
 

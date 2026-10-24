@@ -1,6 +1,6 @@
 // A song with a pointer and a keyboard (a laptop, a tablet): one bar with ☰ and the list toggle over
-// the song list, the title, then ♪ Audio, ▶, time, position, tempo, loop, loop editor; under it the
-// song list beside the loop editor and the sheet with its toolbar.
+// the song list, the title, then ♪ Recording, ▶, time, position, tempo, BPM, Tap, Optimal, loop, loop
+// editor; under it the song list beside the loop editor or the BPM strip and the sheet with its toolbar.
 
 import { m } from "../../paraglide/messages.js";
 import { Bar, BarStart, BarTitle, ListButton } from "../bar/Bar";
@@ -9,6 +9,9 @@ import { EditorButton, LoopButton, PlayButton, PlayerError, PlayTime } from "../
 import { LoopEditorPanel, Position } from "../player/lazy";
 import { RecordingMenu } from "../player/RecordingMenu";
 import { TempoSlider } from "../player/Tempo";
+import { BpmStrip } from "../tempo/BpmStrip";
+import { TempoToast } from "../tempo/TempoToast";
+import { BpmButton, MetronomeButton, OptimalSwitch, TapButton } from "../tempo/TempoBar";
 import { SheetToolbar } from "../sheet/SheetControls";
 import { NoSheet, SheetFrame } from "../sheet/SheetFrame";
 import type { LayoutProps } from "./SongPage";
@@ -31,6 +34,13 @@ export function DesktopSong({ song, player, sheet, menu, list, listOpen, onToggl
             <PlayTime player={player} />
             <Position player={player} />
             <TempoSlider player={player} />
+            <BpmButton player={player} />
+            {/* Tap goes first when the bar is narrow; G still taps */}
+            <span className="max-2xl:hidden">
+              <TapButton player={player} />
+            </span>
+            <MetronomeButton player={player} />
+            <OptimalSwitch player={player} />
             <LoopButton player={player} />
             <EditorButton player={player} />
           </div>
@@ -43,10 +53,12 @@ export function DesktopSong({ song, player, sheet, menu, list, listOpen, onToggl
         <main className="flex min-w-0 flex-1 flex-col">
           <PlayerError player={player} />
           <LoopEditorPanel player={player} />
+          <BpmStrip player={player} />
           {sheet.sheet ? (
             <>
               <SheetToolbar sheet={sheet} />
               <SheetFrame sheet={sheet} />
+              <TempoToast player={player} on={sheet.only} />
             </>
           ) : (
             <NoSheet />
