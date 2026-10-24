@@ -1,8 +1,8 @@
 # Loop editor
 
-**Summary**: Built (T40–T43), pitfalls checked (T39: one fix, the view no longer follows the playhead while a loop edge is in view); the user's test T44 remains. A full-window waveform: click start, click end (or drag), ⠿ handles, zoom by pinch / wheel / ruler drag, Hear end, Undo; `E` opens, Esc leaves. The Python player's **Loop tab** (T241) is the small form beside it: the loop's line, Start / End cards with Set here and nudges, saved loops; its button says "Loop editor".
+**Summary**: Built (T40–T43), pitfalls checked (T39: one fix, the view no longer follows the playhead while a loop edge is in view); tried by the user (T44). A full-window waveform: click start, click end (or drag), ⠿ handles, zoom by pinch / wheel / ruler drag, Hear end, Undo; `E` opens, Esc leaves. The Python player's **Loop tab** (T241) is the small form beside it: the loop's line, Start / End cards with Set here and nudges, saved loops; its button says "Loop editor".
 
-Plan for the loop editor (T39–T44). **Status: implemented (T40–T43, 2026-10-09), pitfalls checked (T39, 2026-10-10)**; the user's test T44 remains. Code: [loop_editor.js](../frontends/nicegui/loop_editor.js) (drawing, gestures), [loop_editor.py](../frontends/nicegui/loop_editor.py) (dialog, loop, undo). Follows [ux.md](ux.md).
+Plan for the loop editor (T39–T44). **Status: implemented (T40–T43, 2026-10-09), pitfalls checked (T39, 2026-10-10)**; tried by the user (T44). Code: [loop_editor.js](../frontends/nicegui/loop_editor.js) (drawing, gestures), [loop_editor.py](../frontends/nicegui/loop_editor.py) (dialog, loop, undo). Follows [ux.md](ux.md).
 
 ## What the user wants (2026-10-09)
 

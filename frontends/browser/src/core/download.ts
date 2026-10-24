@@ -32,6 +32,7 @@ export type Status =
   | { phase: "failed"; project: string; text: string; signIn: boolean };
 
 export const status = memory<Status>({ phase: "idle" });
+const PARALLEL = 3; // files downloading at once; a few, to stay polite to OneDrive
 let stopper: AbortController | null = null;
 
 export const busy = () => ["listing", "downloading"].includes(status.get().phase);
@@ -110,29 +111,59 @@ async function run(projectId: string, todo: Plan, signal: AbortSignal) {
     if (mp3) await keepMp3(projectId, item, mp3, signal);
     else kept++;
   }
-  for (const [n, item] of todo.fetch.entries()) {
-    const index = todo.compress.length + n;
-    show(index, item, 0, false);
+  // A few files at once: each one waits for its download URL and a slow start, so one at a time
+  // leaves the line idle. The progress shows the file that moved last and every file's bytes.
+  const inner = new AbortController();
+  const stopAll = () => inner.abort();
+  signal.addEventListener("abort", stopAll, { once: true });
+  const inFlight = new Map<Fetch, number>();
+  let finished = todo.compress.length;
+  const progress = (item: Fetch, got: number, compressing = false) => {
+    inFlight.set(item, got);
+    const moving = [...inFlight.values()].reduce((sum, n) => sum + n, 0);
+    show(finished, item, moving, compressing);
+  };
+  const fetchOne = async (item: Fetch) => {
+    progress(item, 0);
     const { file } = item;
-    const response = await fetch(await onedrive.downloadUrl(file), { signal });
+    const response = await fetch(await onedrive.downloadUrl(file), { signal: inner.signal });
     if (!response.ok || !response.body)
       throw new Error(m.download_failed({ file: file.path, status: response.status }));
     if (item.key === item.listed) {
-      await files.save(projectId, item.key, response.body, (got) => show(index, item, got, false), signal);
+      await files.save(projectId, item.key, response.body, (got) => progress(item, got), inner.signal);
       record(projectId, item.key, file.size, file.modified);
     } else {
-      const wav = await collect(response.body, (got) => show(index, item, got, false), signal);
-      show(index, item, file.size, true);
-      const mp3 = await encode(wav, signal);
-      if (mp3) await keepMp3(projectId, item, mp3, signal);
+      const wav = await collect(response.body, (got) => progress(item, got), inner.signal);
+      progress(item, file.size, true);
+      const mp3 = await encode(wav, inner.signal);
+      if (mp3) await keepMp3(projectId, item, mp3, inner.signal);
       else {
         kept++;
-        await files.save(projectId, item.listed, wav.stream(), () => {}, signal);
+        await files.save(projectId, item.listed, wav.stream(), () => {}, inner.signal);
         record(projectId, item.listed, file.size, file.modified);
       }
     }
+    inFlight.delete(item);
     bytes += file.size;
-  }
+    finished++;
+  };
+  const queue = [...todo.fetch]; // smallest first (plan.ts)
+  let firstError: unknown = null;
+  const worker = async () => {
+    for (let item = queue.shift(); item; item = queue.shift()) {
+      try {
+        await fetchOne(item);
+      } catch (error) {
+        firstError ??= error;
+        stopAll(); // one failure stops the others, so the page shows that one
+        return;
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: PARALLEL }, worker));
+  signal.removeEventListener("abort", stopAll);
+  if (signal.aborted) throw new DOMException("Stopped", "AbortError");
+  if (firstError) throw firstError;
   projects.update(projectId, (p) => ({ ...p, checked: Date.now() }));
   const parts: string[] = [];
   if (todo.fetch.length || !total) parts.push(total ? m.n_downloaded({ count: todo.fetch.length }) : m.up_to_date());

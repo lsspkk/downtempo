@@ -23,9 +23,9 @@ describe("plan", () => {
       { source: "s1", files: [remote("same.mp3"), remote("bigger.mp3"), remote("newer.pdf"), remote("new.pdf", 7)] },
     ]);
     expect(result.fetch.map((f) => [f.key, f.fresh])).toEqual([
+      ["s1/new.pdf", true], // smallest first
       ["s1/bigger.mp3", false],
       ["s1/newer.pdf", false],
-      ["s1/new.pdf", true],
     ]);
     expect(result.same).toBe(1);
     expect(result.gone).toEqual(["s1/gone.mp3"]);

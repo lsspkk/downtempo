@@ -1,6 +1,6 @@
 # Compression
 
-**Summary**: requirements for keeping downloaded wavs as mp3, for both apps. Status: built in the Python app (T215, T216) and in the browser app (T217.1–T217.3, mp3 by Mediabunny's LAME extension chosen in T233); the browser's manual test T217.4 is next.
+**Summary**: requirements for keeping downloaded wavs as mp3, for both apps. Status: built in the Python app (T215, T216) and in the browser app (T217.1–T217.3, mp3 by Mediabunny's LAME extension chosen in T233); tried by the user in both (T217.4).
 
 ## Why
 
@@ -36,4 +36,4 @@ Why mp3 and not Opus or AAC: requirement 6, the file id is the stored name (`tak
 - **T217.1** `core/compress.ts`, pure: `storedAs(path, siblings)` like the Python `stored_as` (wav → mp3 unless the server has the mp3 too); `ui`-free `toMp3(wav: Blob, signal): Promise<Blob>` at about 128 kbit/s, Mediabunny and the encoder loaded with the first wav only (dynamic import, like essentia.js).
 - **T217.2** Download: `plan.ts` maps a server wav to its stored key and counts a compressed copy as current by the change time alone; `download.ts` fetches a wav, encodes it, saves only the mp3 through `.part` (a stop leaves the old file or nothing); a wav that can't be encoded is kept as a wav and tried again next time; the status says "Compressing 2 of 7: take3.wav"; English and Finnish.
 - **T217.3** Wavs already on the device: on the next download they are encoded from the device (not downloaded again), the mp3 saved, the wav removed, and everything that names the file moves with it in the same step: the project's `files`, the practice memory (chosen recording, position, regions, tempos) and the last song. Wavs in skipped folders and wavs the server no longer has stay.
-- **T217.4** The user's manual test: a project with wavs downloaded before (they turn into mp3s on ⟳, loops and tempo kept), a new wav on the server, Stop midway, the storage shown before and after.
+- **T217.4** The user's manual test (done): a project with wavs downloaded before (they turn into mp3s on ⟳, loops and tempo kept), a new wav on the server, Stop midway, the storage shown before and after.

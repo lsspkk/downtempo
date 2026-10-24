@@ -1,6 +1,6 @@
 # Projects: several music projects (built)
 
-**Summary**: Built: core and CLI (T78, T79), the player's ☰ main menu (T82, T120: top left in the player and the project screen; switch, new, Project settings, delete) and Project settings (T116: name, links, folders); the user's try-out T83 waits. A project = one group's sources, songs, sorting and practice memory in `data/projects/<id>/`; sign-ins and layout stay global. Today's `data/` is moved in once, resumably; switching saves, stops playback and builds the page again for the other project (`app.py` `current()` loads the current project per page; the old page's player is `retired` so it can't write into the new one).
+**Summary**: Built: core and CLI (T78, T79), the player's ☰ main menu (T82, T120: top left in the player and the project screen; switch, new, Project settings, delete) and Project settings (T116: name, links, folders); tried by the user (T83). A project = one group's sources, songs, sorting and practice memory in `data/projects/<id>/`; sign-ins and layout stay global. Today's `data/` is moved in once, resumably; switching saves, stops playback and builds the page again for the other project (`app.py` `current()` loads the current project per page; the old page's player is `retired` so it can't write into the new one).
 
 Idea **Projects**; part of [blocks.md](blocks.md); tasks in [todo.md](todo.md).
 

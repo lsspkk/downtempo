@@ -13,7 +13,7 @@ export type Plan = { fetch: Fetch[]; compress: Fetch[]; same: number; gone: stri
 const current = (copy: Local | undefined, file: RemoteFile, sameSize = true) =>
   !!copy && (!sameSize || copy.size === file.size) && copy.modified >= file.modified;
 
-/** New and changed files to fetch (a copy counts as current when its size matches and it isn't older;
+/** New and changed files to fetch, smallest first (a copy counts as current when its size matches and it isn't older;
  * an mp3 made from a wav by its time alone), wavs on this device to make into mp3 without fetching
  * them again, how many are current, and the files the server no longer has (never deleted). */
 export function plan(local: Record<string, Local>, listings: Listing[]): Plan {
@@ -35,5 +35,9 @@ export function plan(local: Record<string, Local>, listings: Listing[]): Plan {
   }
   const sources = new Set(listings.map((l) => l.source));
   const gone = Object.keys(local).filter((key) => sources.has(key.split("/")[0]) && !seen.has(key));
+  // Smallest first: sheets and short takes are usable while the long recordings still come.
+  const smallFirst = (a: Fetch, b: Fetch) => a.file.size - b.file.size;
+  fetch.sort(smallFirst);
+  compress.sort(smallFirst);
   return { fetch, compress, same, gone, bytes: fetch.reduce((sum, f) => sum + f.file.size, 0) };
 }

@@ -2,6 +2,18 @@
 
 Finished tasks, newest first. `- YYYY-MM-DD T<n> what was done: note`. Older entries carry the retired idea numbers (I1–I8).
 
+- 2026-10-25 T248 Browser download runs 3 files at once (the user's ask: too slow): each file waits for its download URL and a slow start, so one at a time left the line idle; the progress adds up every file's bytes and names the one that moved last; one failure or Stop stops the others and the page shows that one (`download.ts` `PARALLEL`); not tried on a real download yet
+- 2026-10-25 T247 Browser download fetches the smallest files first (the user's ask): `plan.ts` sorts the files to fetch and the wavs to compress by size, so sheets and short takes are usable while long recordings still come; plan test updated, all 44 pass
+- 2026-10-25 T217.4 Manual test by the user of browser compression: done, the user is happy with the app (no findings)
+- 2026-10-25 T44 Manual UX test by the user on the real laptop: done, the user is happy with the app (no findings)
+- 2026-10-25 T232.7 Manual test by the user of T232.1–T232.6: done, the user is happy with the app (no findings)
+- 2026-10-25 T231.1 Manual test by the user of the Python player's tempo: done, the user is happy with the app (no findings)
+- 2026-10-25 T219 Manual test by the user: done, the user is happy with the app (no findings)
+- 2026-10-25 T68 Manual test by the user: done, the user is happy with the app (no findings)
+- 2026-10-25 T83 Manual test by the user: done, the user is happy with the app (no findings)
+- 2026-10-25 T99 Manual test by the user of sorting: done, the user is happy with the app (no findings)
+- 2026-10-25 T65 Manual test by the user on a fresh data folder: done, the user is happy with the app (no findings)
+- 2026-10-25 T246 Ideas Browser player, Tap tempo and Tempo detection moved to Done (the user's call); their open tasks stay in todo; the Browser player line now names the tasks still open (T31.1, T8, T217.4; T4 and T31 were done)
 - 2026-10-25 T245 Tempo test script finds recordings itself: every mp3 / wav under a `downloads/` folder anywhere in `data/`, instead of one project's hardcoded folder (`scripts/tempo_test.py`)
 - 2026-10-25 T244 Browser BPM strip: the recording tempo and the optimal tempo have the same shape (label, stepper, a note line under the stepper that keeps its height: "finding…" / "→ 114 % of this recording"), so their labels line up side by side and stacked (`BpmStrip.tsx` `Field`)
 - 2026-10-25 T243 Browser Get songs says before downloading that the wavs are then compressed to mp3 on the device ("Then the 7 wav files are compressed to mp3 on this device: about a tenth of the size.", Finnish too; only when the plan has wavs, `GetSongs.tsx`)
