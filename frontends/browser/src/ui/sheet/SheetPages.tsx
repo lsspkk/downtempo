@@ -1,6 +1,7 @@
 // The PDF's pages, drawn by pdf.js (most of the app's size: this module loads with the first sheet).
 // It reports each page's size to the sheet (for fit page and trimming) and draws the pages at the
-// sheet's width; with trimmed margins a page shows only its middle, in a box exactly that wide.
+// sheet's width (two in a row when side by side); with trimmed margins a page shows only its middle,
+// in a box exactly that wide.
 
 // The legacy build: pdf.js 6 itself uses 2026 JavaScript (Map.getOrInsertComputed) older browsers lack.
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
@@ -65,20 +66,16 @@ export function SheetPages({ sheet }: { sheet: Sheet }) {
 
   if (error) return <Muted className="p-6 text-center">⚠ {error}</Muted>;
   if (!doc || !sheet.ready) return null;
+  const inside = sheet.contentWidth - 2 * sheet.edge;
+  const width = sheet.twoUp ? (inside - sheet.gap) / 2 : inside;
   return (
     <div
       ref={sheet.refs.pages}
-      className="mx-auto flex flex-col items-center"
-      style={{ width: sheet.contentWidth, padding: sheet.edge, gap: Math.max(2, sheet.edge) }}
+      className={`mx-auto flex ${sheet.twoUp ? "flex-row flex-wrap items-start" : "flex-col items-center"}`}
+      style={{ width: sheet.contentWidth, padding: sheet.edge, gap: sheet.gap }}
     >
       {Array.from({ length: doc.numPages }, (_, i) => (
-        <Page
-          key={i}
-          doc={doc}
-          number={i + 1}
-          width={sheet.contentWidth - 2 * sheet.edge}
-          part={sheet.shown(sheet.sizes[i])}
-        />
+        <Page key={i} doc={doc} number={i + 1} width={width} part={sheet.shown(sheet.sizes[i])} />
       ))}
     </div>
   );

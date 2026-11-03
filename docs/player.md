@@ -30,7 +30,7 @@ It reads only `data/songs.json` ([songs.md](songs.md)). Use `--browser` for deve
 - **Trainer tab** (step-up trainer): raises the tempo by a step every N loop repeats, up to a target.
 - **Loop tab** ([loop-editor.md](loop-editor.md#the-loop-tab-t241)): the loop's line (on / off, its length, the pause between repeats, Clear, **Loop editor**); Start and End as cards, each with **Set here** (A / B) and nudges by 0.1 s (‹ ›) or 1 s (« »); Save loop; the saved loops as one scrolling row of chips. Loops are set at the play position with A / B or by dragging the waveform.
 - **Pitch tab**: ±12 semitones, Reset, **volume** and mute.
-- **Sheet music** (right): the song's PDFs as cropped pages, one tab per PDF (the newest version opens unless you picked another one for this song), zoom, **fit width** / **fit page** (`W` / `H`; fit page keeps the whole page in view and follows window and layout changes). ↑/↓ scroll, PgUp/PgDn (a USB footswitch) scroll a screen or jump to the next page. **Full screen** (`F`, Esc back) shows only the sheet. In the ⋮ menu: **rotate** (`O`) turns the whole sheet view, scrollbar included, for a laptop standing on its side; open in the PDF viewer.
+- **Sheet music** (right): the song's PDFs as cropped pages, one tab per PDF (the newest version opens unless you picked another one for this song), zoom, **fit width** / **fit page** (`W` / `H`; fit page keeps the whole page in view and follows window and layout changes), zoom 20–200 %. On a wide window (1400 px or more, a Full HD laptop at 125 % scaling) a sheet of two pages or more gets **two pages side by side** (`D`, remembered on the computer; zoom is then the pair's width). ↑/↓ scroll, PgUp/PgDn (a USB footswitch) scroll a screen or jump to the next page. **Full screen** (`F`, Esc back) shows only the sheet. In the ⋮ menu: **rotate** (`O`) turns the whole sheet view, scrollbar included, for a laptop standing on its side; open in the PDF viewer.
 - **Player settings** (☰): ↑/↓ scroll step, PgUp/PgDn screen or page, ←/→ tempo step, smooth scrolling.
 - **Dark mode** (header button).
 
@@ -42,7 +42,7 @@ Press `?` in the player for this list. Why these keys: [practice-layout.md](prac
 |---|---|---|---|
 | Space / K | play / pause | ↑ / ↓ | scroll the sheet |
 | ← / → | tempo slower / faster | PgUp / PgDn | a screen or page (footswitch) |
-| G | tap the beat: from the 4th tap the speed follows | | |
+| G | tap the beat: from the 4th tap the speed follows | D | two pages side by side (wide window) |
 | X | optimal tempo on / off | | |
 | , / . | back / forward 5 s | Home / End | sheet top / bottom |
 | J / L | back / forward 10 s | + / − | sheet zoom |

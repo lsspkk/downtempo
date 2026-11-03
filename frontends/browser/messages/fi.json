@@ -246,6 +246,7 @@
   "audio_n": "Äänite {n}/{count}",
   "recordings": "Äänitteet (T)",
   "uploaded": "lisätty {date}",
+  "two_pages": "Kaksi sivua rinnakkain (D)",
   "fit_page": "Sovita sivu: koko sivu näkyviin (H)",
   "full_screen": "Koko näyttö (F)",
   "sheet_more": "Käännä, avaa PDF",

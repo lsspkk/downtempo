@@ -1,8 +1,9 @@
 // The sheet's controls, as the Python player's sheet pane: zoom − / % / +, fit width (W), fit page (H),
-// Sheet only (F), trim margins (0.5 / 1 / 2 cm), rotate (O), open the PDF, and which PDF. SheetToolbar is a line over the sheet with
+// two pages side by side (D, on a Full HD wide window), Sheet only (F), trim margins (0.5 / 1 / 2 cm), rotate (O), open the PDF, and which PDF. SheetToolbar is a line over the sheet with
 // a pointer; SheetMenu is one button for a phone's top line with all of it in its drop-down.
 
 import {
+  BookOpen,
   EllipsisVertical,
   ExternalLink,
   Fullscreen,
@@ -101,6 +102,11 @@ export function SheetToolbar({ sheet }: { sheet: Sheet }) {
         <IconButton label={m.fit_page()} active={sheet.view.fit === "page"} onClick={sheet.fitPage}>
           <UnfoldVertical size={18} />
         </IconButton>
+        {sheet.canTwo && (
+          <IconButton label={m.two_pages()} active={sheet.twoUp} onClick={() => sheet.setTwo(!sheet.twoUp)}>
+            <BookOpen size={18} />
+          </IconButton>
+        )}
         <IconButton label={m.full_screen()} onClick={() => sheet.sheetOnly(true)}>
           <Fullscreen size={18} />
         </IconButton>

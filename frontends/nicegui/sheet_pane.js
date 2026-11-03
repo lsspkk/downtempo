@@ -36,7 +36,8 @@ document.addEventListener('keydown', (e) => {
   else if ([' ', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
 });
 // Fit page: the zoom (width %) at which the page at the top of the view fits whole, in the
-// view's own (rotated) axes; never wider than fit width. Waits for the image to load.
+// view's own (rotated) axes; never wider than fit width. Waits for the image to load. Two pages
+// side by side (.two-up, laid out in a row on a wide window): the pair and the 16 px gap fit.
 dt.fitPage = async () => {
   const el = document.querySelector('.sheet-view');
   const imgs = el ? [...el.querySelectorAll('img')] : [];
@@ -48,7 +49,9 @@ dt.fitPage = async () => {
   });
   if (!img.naturalWidth) return null;
   const width = el.clientWidth - 32, height = el.clientHeight - 32;  // minus p-4
-  const zoom = height * img.naturalWidth / img.naturalHeight / width * 100;
+  const page = height * img.naturalWidth / img.naturalHeight;
+  const two = getComputedStyle(img.parentElement).flexDirection === 'row';
+  const zoom = (two ? 2 * page + 16 : page) / width * 100;
   return {zoom: Math.floor(Math.min(100, zoom)), page: imgs.indexOf(img)};
 };
 // After the server changed the zoom: put that page at the top again.

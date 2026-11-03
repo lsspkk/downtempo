@@ -1,5 +1,6 @@
 // The sheet's state and actions for one song, without pdf.js (that loads with SheetPages): which PDF,
-// the view's size, zoom or fit page, rotation (one per device), Sheet only, the scroll keys. The
+// the view's size, zoom or fit page, rotation and two pages side by side (one per device), Sheet only,
+// the scroll keys. The
 // parts (SheetFrame, SheetToolbar, SheetMenu) take this object; the song page's layouts place them.
 
 import { type CSSProperties, useEffect, useRef, useState } from "react";
@@ -9,6 +10,7 @@ import { sheetLook } from "../../core/practice";
 import { useStore } from "../../core/store";
 import { useBackCloses } from "../kit/back";
 import { useKeys } from "../kit/keys";
+import { useWide } from "../kit/phone";
 
 // zoom: page width as a share of the view's (per song); the trim (cm, 0 / 0.5 / 1 / 2) is per device: sheetLook
 export type SheetView = { zoom: number; fit: "page" | null };
@@ -17,7 +19,7 @@ export const TRIMS = [0, 0.5, 1, 2];
 const POINTS_PER_CM = 72 / 2.54;
 export type Sheet = ReturnType<typeof useSheet>;
 
-const ZOOMS = [0.5, 0.67, 0.8, 0.9, 1, 1.25, 1.5, 2, 3];
+const ZOOMS = [0.2, 0.3, 0.4, 0.5, 0.67, 0.8, 0.9, 1, 1.25, 1.5, 2, 3];
 // The view turns as a whole, so its scrollbar, the wheel and the scroll keys follow the page; the
 // frame is a size container, 100cqw / 100cqh its width / height (as the Python player's sheet pane).
 export const TURNS: Record<number, CSSProperties> = {
@@ -43,7 +45,9 @@ export function useSheet({ project, sheet, sheets, pickSheet, view, onView, edge
   const [only, setOnly] = useState(false); // Sheet only: the app's bars and menus hidden (docs/sheet-only.md)
   const [bar, setBar] = useState(false); // in Sheet only: the slim bar with ← shown
   const barTimer = useRef(0);
-  const { rotate, trim: trimCm } = useStore(sheetLook);
+  const { rotate, trim: trimCm, two } = useStore(sheetLook);
+  const canTwo = useWide() && sizes.length > 1; // a Full HD wide window and a sheet of two pages or more
+  const twoUp = two && canTwo;
   const frame = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const pages = useRef<HTMLDivElement>(null);
@@ -97,10 +101,13 @@ export function useSheet({ project, sheet, sheets, pickSheet, view, onView, edge
     const cut = Math.min(trim, page.w / 4, page.h / 4);
     return { w: page.w - 2 * cut, h: page.h - 2 * cut, cut };
   };
+  // Two pages side by side: zoom is the pair's width, the gap between them included.
+  const gap = Math.max(2, edge);
   const fitZoom = () => {
     const part = shown(sizes[fitAt.current] ?? sizes[0]);
-    const shape = part.h / part.w;
-    return Math.min(1, ((size.h - 2 * edge) / shape + 2 * edge) / Math.max(1, size.w));
+    const page = (size.h - 2 * edge) / (part.h / part.w); // the page's width when its height fits
+    const width = twoUp ? 2 * page + gap : page;
+    return Math.min(1, (width + 2 * edge) / Math.max(1, size.w));
   };
   const zoom = view.fit === "page" ? fitZoom() : view.zoom;
 
@@ -153,6 +160,11 @@ export function useSheet({ project, sheet, sheets, pickSheet, view, onView, edge
     sheetLook.set((look) => ({ ...look, trim: cm }));
     toPage(fitAt.current);
   };
+  const setTwo = (on: boolean) => {
+    fitAt.current = pageAtTop();
+    sheetLook.set((look) => ({ ...look, two: on }));
+    toPage(fitAt.current);
+  };
   const turn = (by: number) => sheetLook.set((look) => ({ ...look, rotate: (rotate + by + 360) % 360 }));
   const showBar = (on: boolean, forAMoment = false) => {
     clearTimeout(barTimer.current);
@@ -195,6 +207,7 @@ export function useSheet({ project, sheet, sheets, pickSheet, view, onView, edge
     w: on(fitWidth),
     h: on(fitPage),
     o: on(() => turn(90)),
+    d: on(() => canTwo && setTwo(!two)),
     f: on(() => sheetOnly(!only)),
     Escape: () => only && sheetOnly(false),
   });
@@ -208,6 +221,10 @@ export function useSheet({ project, sheet, sheets, pickSheet, view, onView, edge
     zoom,
     contentWidth: Math.max(size.w * zoom, 200),
     edge,
+    gap,
+    twoUp,
+    canTwo,
+    setTwo,
     ready: size.w > 0,
     rotate,
     only,

@@ -16,7 +16,7 @@ from player import Player
 
 DRAWER_WIDTH = 290
 # Both remembered: state["view"] and state["settings"].
-VIEW = {"library": True, "controls": "full", "rotate": 0}
+VIEW = {"library": True, "controls": "full", "rotate": 0, "two": False}
 SETTINGS = {"scroll_step": 20, "page_mode": "screen", "tempo_step": 5, "smooth": True}
 # Browser full screen; leaving it with Esc (which the browser keeps) tells the server.
 FULLSCREEN_JS = """<script>

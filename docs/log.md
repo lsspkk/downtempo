@@ -2,6 +2,10 @@
 
 Finished tasks, newest first. `- YYYY-MM-DD T<n> what was done: note`. Older entries carry the retired idea numbers (I1–I8).
 
+- 2026-11-03 T252 Browser sheet zooms out to 20 % (the user's ask: 50 % was too little): `ZOOMS` in `useSheet.ts` gets 20, 30 and 40 %; not tried yet
+- 2026-11-03 T251 Python sheet zooms out to 20 %: it already did (− steps 10 %, `set_zoom` clamps to 20–200), nothing changed; the user checks by hand
+- 2026-11-03 T250 Browser two pages side by side: on a window 1400 px or wider and a sheet of two pages or more, a book button (and D) lays the pages in pairs; zoom is the pair's width, fit page fits the pair; one setting per device in `sheetLook` (`useWide` in `kit/phone.ts`); not tried yet
+- 2026-11-03 T249 Python two pages side by side: a book button (and D) on a window 1400 px or wider when the sheet has two pages or more; CSS media query + `.two-up` row of pages, fit page fits the pair (`sheet_pane.js`), remembered in the layout (`view["two"]`); not tried yet
 - 2026-10-25 T248 Browser download runs 3 files at once (the user's ask: too slow): each file waits for its download URL and a slow start, so one at a time left the line idle; the progress adds up every file's bytes and names the one that moved last; one failure or Stop stops the others and the page shows that one (`download.ts` `PARALLEL`); not tried on a real download yet
 - 2026-10-25 T247 Browser download fetches the smallest files first (the user's ask): `plan.ts` sorts the files to fetch and the wavs to compress by size, so sheets and short takes are usable while long recordings still come; plan test updated, all 44 pass
 - 2026-10-25 T217.4 Manual test by the user of browser compression: done, the user is happy with the app (no findings)

@@ -44,6 +44,7 @@ SHORTCUTS = {
         ("+ / −", "Sheet zoom"),
         ("W / H", "Fit width / fit page"),
         ("O", "Rotate the sheet"),
+        ("D", "Two pages side by side (wide window)"),
         ("F", "Full screen (Esc back)"),
         ("V", "Controls: full, simple, none"),
         ("Q", "Song list"),
@@ -126,6 +127,8 @@ def install(
                 sheet.set_zoom(100)
             case "h":
                 await sheet.fit_page()
+            case "d":
+                await sheet.toggle_two()
             case ",":
                 player.skip(-5)
             case ".":

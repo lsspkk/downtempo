@@ -246,6 +246,7 @@
   "audio_n": "Recording {n}/{count}",
   "recordings": "Recordings (T)",
   "uploaded": "uploaded {date}",
+  "two_pages": "Two pages side by side (D)",
   "fit_page": "Fit page: the whole page in view (H)",
   "full_screen": "Full screen (F)",
   "sheet_more": "Rotate, open the PDF",

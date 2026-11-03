@@ -1,5 +1,5 @@
 """The sheet pane: the song's PDFs as pages, tabs per PDF, zoom, fit width / page, rotation,
-full screen button. Scrolling and fitting run in the page (sheet_pane.js)."""
+two pages side by side (on a Full HD wide window), full screen button. Scrolling and fitting run in the page (sheet_pane.js)."""
 
 import json
 import re
@@ -35,6 +35,13 @@ CSS = """
 .sheet-tabs .q-btn .block { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .fullscreen-exit { position: absolute; top: 8px; right: 24px; z-index: 10; opacity: 0.35; }
 .fullscreen-exit:hover { opacity: 1; }
+/* Two pages side by side, only on a wide window (1400 px: a Full HD laptop at 125 % scaling); zoom is the pair's width. */
+.wide-only { display: none; }
+@media (min-width: 1400px) {
+  .wide-only { display: inline-flex; }
+  .sheet-view .two-up { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+  .sheet-view .two-up > img { width: calc(50% - 8px); }
+}
 """
 
 
@@ -88,6 +95,12 @@ class SheetPane:
                         icon="expand", on_click=self.fit_page
                     ).props("flat round dense")
                     self.fit_page_button.tooltip("Fit page: the whole page in view (H)")
+                    self.two_button = ui.button(
+                        icon="auto_stories", on_click=self.toggle_two
+                    ).props("flat round dense")
+                    self.two_button.classes("wide-only").tooltip(
+                        "Two pages side by side (D)"
+                    )
                     ui.button(
                         icon="fullscreen", on_click=lambda: shell.set_fullscreen(True)
                     ).props("flat round dense").tooltip("Full screen (F)")
@@ -149,6 +162,7 @@ class SheetPane:
         ui.on("refit", self.fit_page, throttle=0.3)
         self.set_zoom(self.state.get("zoom", 100), self.state.get("fit"))
         self.show_rotation()
+        self.show_two()
 
     def watch(self) -> None:
         """Refit on resize; once the page is up."""
@@ -205,6 +219,7 @@ class SheetPane:
             return  # overtaken by another song or sheet
         self.player.remember(pdf=sel.pdf)
         self.player.loaded(sel)
+        self.two_button.set_visibility(len(names) > 1)
         self.pages.clear()
         with self.pages:
             for name in names:
@@ -245,6 +260,23 @@ class SheetPane:
             return
         self.set_zoom(fit["zoom"], fit="page")
         ui.run_javascript(f"dt.toPage({int(fit['page'])})")
+
+    def show_two(self) -> None:
+        if self.shell.view["two"]:
+            self.pages.classes(add="two-up")
+            self.two_button.classes(add="song-active")
+        else:
+            self.pages.classes(remove="two-up")
+            self.two_button.classes(remove="song-active")
+
+    async def toggle_two(self) -> None:
+        """Only when the button shows: a wide window and a sheet of two pages or more."""
+        if not self.two_button.visible:
+            return
+        self.shell.set_view(two=not self.shell.view["two"])
+        self.show_two()
+        if self.state.get("fit") == "page":
+            await self.fit_page()
 
     def show_rotation(self) -> None:
         self.view.style(replace=ROTATIONS[self.shell.view["rotate"]])

@@ -108,8 +108,12 @@ export function moveRecording(project: string, from: string, to: string) {
 }
 
 /** How sheets are read on this device, for every song: the rotation (a laptop turned on the music
- * stand) and the margins trimmed from the pages (cm). */
-export const sheetLook = stored<{ rotate: number; trim: number }>("downtempo-sheet", { rotate: 0, trim: 0 });
+ * stand), the margins trimmed from the pages (cm), and two pages side by side (on a Full HD wide window). */
+export const sheetLook = stored<{ rotate: number; trim: number; two: boolean }>("downtempo-sheet", {
+  rotate: 0,
+  trim: 0,
+  two: false,
+});
 
 /** Everything remembered about a project: its last song, each song's tempo / loop / sheet, the regions,
  * the recordings' tempos. */
